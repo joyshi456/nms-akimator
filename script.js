@@ -12,28 +12,28 @@ const CODES = {
 
 // --- Default characters ---
 const DEFAULT_CHARACTERS = [
-  { name: 'Pikachu',     emoji: '\u26A1', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Elsa',        emoji: '\u2744\uFE0F', fromVideoGame: false, fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false },
-  { name: 'Mario',       emoji: '\uD83C\uDF44', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false },
-  { name: 'Batman',      emoji: '\uD83E\uDD87', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false },
-  { name: 'Spider-Man',  emoji: '\uD83D\uDD77\uFE0F', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Sonic',       emoji: '\uD83D\uDCA8', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Harry Potter',emoji: '\uD83E\uDE84', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false },
-  { name: 'Iron Man',    emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: true },
+  { name: 'Pikachu',     emoji: '\u26A1', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true,  isStrong: false, isFunny: false, isScary: false, isSmall: true,  livesInWater: false, hasTeam: false },
+  { name: 'Elsa',        emoji: '\u2744\uFE0F', fromVideoGame: false, fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false, isStrong: false, isFunny: false, isScary: false, isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Mario',       emoji: '\uD83C\uDF44', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false, isStrong: false, isFunny: true,  isScary: false, isSmall: true,  livesInWater: false, hasTeam: true },
+  { name: 'Batman',      emoji: '\uD83E\uDD87', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false, isStrong: true,  isFunny: false, isScary: true,  isSmall: false, livesInWater: false, hasTeam: true },
+  { name: 'Spider-Man',  emoji: '\uD83D\uDD77\uFE0F', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: true,  isStrong: true,  isFunny: true,  isScary: false, isSmall: false, livesInWater: false, hasTeam: true },
+  { name: 'Sonic',       emoji: '\uD83D\uDCA8', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true,  isStrong: false, isFunny: true,  isScary: false, isSmall: true,  livesInWater: false, hasTeam: true },
+  { name: 'Harry Potter',emoji: '\uD83E\uDE84', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false, isStrong: false, isFunny: false, isScary: false, isSmall: false, livesInWater: false, hasTeam: true },
+  { name: 'Iron Man',    emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: true,  isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: true,  isStrong: true,  isFunny: true,  isScary: false, isSmall: false, livesInWater: false, hasTeam: true },
   // Portal
-  { name: 'Chell',       emoji: '\uD83D\uDD2B', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false },
-  { name: 'GLaDOS',      emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: true, hasWeapon: false, isFast: false },
-  { name: 'Wheatley',    emoji: '\uD83D\uDCA1', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: true, hasWeapon: false, isFast: false },
+  { name: 'Chell',       emoji: '\uD83D\uDD2B', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false, isStrong: false, isFunny: false, isScary: false, isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'GLaDOS',      emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: true, hasWeapon: false, isFast: false, isStrong: false, isFunny: true,  isScary: true,  isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Wheatley',    emoji: '\uD83D\uDCA1', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: true, hasWeapon: false, isFast: false, isStrong: false, isFunny: true,  isScary: false, isSmall: true,  livesInWater: false, hasTeam: false },
   // Minecraft
-  { name: 'Steve',       emoji: '\u26CF\uFE0F', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false },
-  { name: 'Creeper',     emoji: '\uD83D\uDCA5', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: false },
-  { name: 'Enderman',    emoji: '\uD83D\uDC7E', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Ender Dragon',emoji: '\uD83D\uDC32', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Wither',      emoji: '\uD83D\uDC80', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: false, hasWeapon: true, isFast: false },
+  { name: 'Steve',       emoji: '\u26CF\uFE0F', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: true, isFast: false, isStrong: true,  isFunny: false, isScary: false, isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Creeper',     emoji: '\uD83D\uDCA5', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: false, isStrong: false, isFunny: false, isScary: true,  isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Enderman',    emoji: '\uD83D\uDC7E', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: true,  isStrong: true,  isFunny: false, isScary: true,  isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Ender Dragon',emoji: '\uD83D\uDC32', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: false, hasWeapon: false, isFast: true,  isStrong: true,  isFunny: false, isScary: true,  isSmall: false, livesInWater: false, hasTeam: false },
+  { name: 'Wither',      emoji: '\uD83D\uDC80', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false, isVillain: true, isRobot: false, hasWeapon: true, isFast: false, isStrong: true,  isFunny: false, isScary: true,  isSmall: false, livesInWater: false, hasTeam: false },
   // Geometry Dash
-  { name: 'Cube (GD)',   emoji: '\uD83D\uDFE8', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'Ship (GD)',   emoji: '\uD83D\uDE80', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true },
-  { name: 'RobTop',      emoji: '\uD83C\uDFAE', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false },
+  { name: 'Cube (GD)',   emoji: '\uD83D\uDFE8', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true,  isStrong: false, isFunny: false, isScary: false, isSmall: true,  livesInWater: false, hasTeam: false },
+  { name: 'Ship (GD)',   emoji: '\uD83D\uDE80', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false, isVillain: false, isRobot: false, hasWeapon: false, isFast: true,  isStrong: false, isFunny: false, isScary: false, isSmall: true,  livesInWater: false, hasTeam: false },
+  { name: 'RobTop',      emoji: '\uD83C\uDFAE', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true, isVillain: false, isRobot: false, hasWeapon: false, isFast: false, isStrong: false, isFunny: true,  isScary: false, isSmall: false, livesInWater: false, hasTeam: false },
 ];
 
 const TRAIT_LABELS = {
@@ -47,19 +47,31 @@ const TRAIT_LABELS = {
   isRobot: 'Robot',
   hasWeapon: 'Weapon',
   isFast: 'Fast',
+  isStrong: 'Strong',
+  isFunny: 'Funny',
+  isScary: 'Scary',
+  isSmall: 'Small',
+  livesInWater: 'Water',
+  hasTeam: 'Team',
 };
 
 const QUESTIONS = [
   { key: 'fromVideoGame', label: 'Is the character from a video game?' },
-  { key: 'fromMovie',     label: 'Is the character from a movie?' },
-  { key: 'hasMagic',      label: 'Can the character use magic?' },
-  { key: 'wearsMask',     label: 'Does the character wear a mask?' },
+  { key: 'fromMovie',     label: 'Is the character from a movie or TV show?' },
+  { key: 'hasMagic',      label: 'Can the character use magic or special powers?' },
+  { key: 'wearsMask',     label: 'Does the character wear a mask or helmet?' },
   { key: 'canFly',        label: 'Can the character fly?' },
-  { key: 'isHuman',       label: 'Is the character human?' },
+  { key: 'isHuman',       label: 'Is the character a human person?' },
   { key: 'isVillain',     label: 'Is the character a villain or bad guy?' },
   { key: 'isRobot',       label: 'Is the character a robot or machine?' },
-  { key: 'hasWeapon',     label: 'Does the character use a weapon or tool?' },
-  { key: 'isFast',        label: 'Is the character super fast?' },
+  { key: 'hasWeapon',     label: 'Does the character use a weapon or tool to fight?' },
+  { key: 'isFast',        label: 'Is the character known for being super fast?' },
+  { key: 'isStrong',      label: 'Is the character super strong?' },
+  { key: 'isFunny',       label: 'Is the character funny or makes jokes?' },
+  { key: 'isScary',       label: 'Is the character scary or creepy?' },
+  { key: 'isSmall',       label: 'Is the character small or tiny?' },
+  { key: 'livesInWater',  label: 'Does the character live in or near water?' },
+  { key: 'hasTeam',       label: 'Does the character work with a team or group?' },
 ];
 
 // --- State ---
