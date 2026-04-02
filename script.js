@@ -20,6 +20,20 @@ const DEFAULT_CHARACTERS = [
   { name: 'Sonic',       emoji: '\uD83D\uDCA8', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false },
   { name: 'Harry Potter',emoji: '\uD83E\uDE84', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: true,  isHuman: true },
   { name: 'Iron Man',    emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: true,  canFly: true,  isHuman: true },
+  // Portal
+  { name: 'Chell',       emoji: '\uD83D\uDD2B', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true },
+  { name: 'GLaDOS',      emoji: '\uD83E\uDD16', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false },
+  { name: 'Wheatley',    emoji: '\uD83D\uDCA1', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false },
+  // Minecraft
+  { name: 'Steve',       emoji: '\u26CF\uFE0F', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: true },
+  { name: 'Creeper',     emoji: '\uD83D\uDCA5', fromVideoGame: true,  fromMovie: true,  hasMagic: false, wearsMask: false, canFly: false, isHuman: false },
+  { name: 'Enderman',    emoji: '\uD83D\uDC7E', fromVideoGame: true,  fromMovie: true,  hasMagic: true,  wearsMask: false, canFly: false, isHuman: false },
+  { name: 'Ender Dragon',emoji: '\uD83D\uDC32', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false },
+  { name: 'Wither',      emoji: '\uD83D\uDC80', fromVideoGame: true,  fromMovie: false, hasMagic: true,  wearsMask: false, canFly: true,  isHuman: false },
+  // Geometry Dash
+  { name: 'Cube (GD)',   emoji: '\uD83D\uDFE8', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: false },
+  { name: 'Ship (GD)',   emoji: '\uD83D\uDE80', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: true,  isHuman: false },
+  { name: 'RobTop',      emoji: '\uD83C\uDFAE', fromVideoGame: true,  fromMovie: false, hasMagic: false, wearsMask: false, canFly: false, isHuman: true },
 ];
 
 const TRAIT_LABELS = {
@@ -76,11 +90,17 @@ function init() {
 // PERSISTENCE
 // ============================================================
 function loadCharacters() {
-  const saved = localStorage.getItem('akinator-characters');
-  if (saved) {
-    try { characters = JSON.parse(saved); return; } catch (e) { /* fall through */ }
+  const currentVersion = DEFAULT_CHARACTERS.length + '-' + DEFAULT_CHARACTERS.map(c => c.name).join(',');
+  const savedVersion = localStorage.getItem('akinator-char-version');
+  if (savedVersion === currentVersion) {
+    const saved = localStorage.getItem('akinator-characters');
+    if (saved) {
+      try { characters = JSON.parse(saved); return; } catch (e) { /* fall through */ }
+    }
   }
   characters = JSON.parse(JSON.stringify(DEFAULT_CHARACTERS));
+  localStorage.setItem('akinator-char-version', currentVersion);
+  saveCharacters();
 }
 
 function saveCharacters() {
