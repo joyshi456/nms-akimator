@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Akinator for Kids</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Mini Akinator for Kids</h1>
+    <p class="subtitle">Learn how yes/no questions help you guess a character!</p>
+  </header>
+
+  <div class="learning-panel">
+    <div class="learning-icon">💡</div>
+    <div class="learning-text">
+      <p>Each yes/no question makes the mystery smaller.</p>
+      <p>Good questions split the group into two almost equal teams.</p>
+      <p>If there are fewer choices left, guessing gets easier!</p>
+    </div>
+  </div>
+
+  <nav class="stage-tabs">
+    <button class="tab active" data-stage="1">1. Characters</button>
+    <button class="tab locked" data-stage="2">🔒 2. Questions</button>
+    <button class="tab locked" data-stage="3">🔒 3. Guessing Game</button>
+    <button class="tab locked" data-stage="4">🔒 4. Best Question</button>
+  </nav>
+
+  <!-- STAGE 1: Character Explorer -->
+  <section id="stage-1" class="stage">
+    <div class="lock-overlay" id="lock-1">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <h2>Stage 1: Character Explorer</h2>
+        <p>Enter the secret code to unlock!</p>
+        <input type="text" id="code-1" placeholder="Enter code..." autocomplete="off">
+        <button onclick="tryUnlock(1)">Unlock</button>
+        <p class="error-msg" id="error-1"></p>
+      </div>
+    </div>
+    <div class="stage-content" id="content-1">
+      <h2>Meet the Characters</h2>
+      <p>These are the characters in our game. You can edit them or add new ones!</p>
+      <div id="character-grid" class="character-grid"></div>
+      <button class="btn-add" onclick="openAddCharacter()">+ Add New Character</button>
+    </div>
+  </section>
+
+  <!-- STAGE 2: Question Explorer -->
+  <section id="stage-2" class="stage hidden">
+    <div class="lock-overlay" id="lock-2">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <h2>Stage 2: Question Explorer</h2>
+        <p>Enter the secret code to unlock!</p>
+        <input type="text" id="code-2" placeholder="Enter code..." autocomplete="off">
+        <button onclick="tryUnlock(2)">Unlock</button>
+        <p class="error-msg" id="error-2"></p>
+      </div>
+    </div>
+    <div class="stage-content" id="content-2">
+      <h2>Explore Questions</h2>
+      <p>Click a question to see how it splits the characters into YES and NO groups.</p>
+      <div id="question-buttons" class="question-buttons"></div>
+      <div id="split-view" class="split-view" style="display:none">
+        <h3 id="current-question-label"></h3>
+        <div class="split-score-box" id="split-score-box"></div>
+        <div class="split-groups">
+          <div class="split-group yes-group">
+            <h4>✅ YES</h4>
+            <div id="yes-list"></div>
+          </div>
+          <div class="split-group no-group">
+            <h4>❌ NO</h4>
+            <div id="no-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3: Decision Tree Game -->
+  <section id="stage-3" class="stage hidden">
+    <div class="lock-overlay" id="lock-3">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <h2>Stage 3: Guessing Game</h2>
+        <p>Enter the secret code to unlock!</p>
+        <input type="text" id="code-3" placeholder="Enter code..." autocomplete="off">
+        <button onclick="tryUnlock(3)">Unlock</button>
+        <p class="error-msg" id="error-3"></p>
+      </div>
+    </div>
+    <div class="stage-content" id="content-3">
+      <h2>Play the Guessing Game!</h2>
+      <p>Think of a character. Answer the questions and watch the list shrink!</p>
+      <div id="game-area">
+        <div id="game-remaining" class="game-remaining"></div>
+        <div id="game-question-area" class="game-question-area"></div>
+        <div id="game-result" class="game-result" style="display:none"></div>
+      </div>
+      <button class="btn-restart" id="btn-restart" onclick="startGame()" style="display:none">🔄 Play Again</button>
+    </div>
+  </section>
+
+  <!-- STAGE 4: Best Question Helper -->
+  <section id="stage-4" class="stage hidden">
+    <div class="lock-overlay" id="lock-4">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <h2>Stage 4: Best Question Helper</h2>
+        <p>Enter the secret code to unlock!</p>
+        <input type="text" id="code-4" placeholder="Enter code..." autocomplete="off">
+        <button onclick="tryUnlock(4)">Unlock</button>
+        <p class="error-msg" id="error-4"></p>
+      </div>
+    </div>
+    <div class="stage-content" id="content-4">
+      <h2>Find the Best Question</h2>
+      <p>Click the button to find which question splits the characters most evenly!</p>
+      <button class="btn-best" onclick="findBestQuestion()">🧠 Find Best Question</button>
+      <div id="best-result" class="best-result"></div>
+      <div id="all-scores" class="all-scores"></div>
+    </div>
+  </section>
+
+  <!-- Character Edit Modal -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none">
+    <div class="modal">
+      <h2 id="modal-title">Edit Character</h2>
+      <label>Name:
+        <input type="text" id="modal-name" placeholder="Character name">
+      </label>
+      <label>Emoji (optional):
+        <input type="text" id="modal-emoji" placeholder="e.g. ⚡" maxlength="4">
+      </label>
+      <div class="trait-toggles" id="modal-traits"></div>
+      <div class="modal-buttons">
+        <button class="btn-save" onclick="saveCharacter()">Save</button>
+        <button class="btn-delete" id="btn-modal-delete" onclick="deleteCharacter()">Delete</button>
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
