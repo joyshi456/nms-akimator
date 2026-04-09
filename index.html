@@ -3,146 +3,519 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini Akinator for Kids</title>
+  <title>Number Bases Explorer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Mini Akinator for Kids</h1>
-    <p class="subtitle">Learn how yes/no questions help you guess a character!</p>
+    <h1>Number Bases Explorer</h1>
+    <p class="subtitle">Learn how numbers work in any base — from binary to hexadecimal!</p>
   </header>
 
   <div class="learning-panel">
-    <div class="learning-icon">💡</div>
+    <div class="learning-icon">🔢</div>
     <div class="learning-text">
-      <p>Each yes/no question makes the mystery smaller.</p>
-      <p>Good questions split the group into two almost equal teams.</p>
-      <p>If there are fewer choices left, guessing gets easier!</p>
+      <p>We usually count in <strong>base 10</strong> (0-9), but numbers can use any base!</p>
+      <p>In <strong>base 2</strong> (binary), we only use 0 and 1. In <strong>base 16</strong> (hex), we use 0-9 and A-F.</p>
+      <p>Work through each lesson and solve the practice problems!</p>
     </div>
   </div>
 
   <nav class="stage-tabs">
-    <button class="tab active" data-stage="1">1. Characters</button>
-    <button class="tab locked" data-stage="2">🔒 2. Questions</button>
-    <button class="tab locked" data-stage="3">🔒 3. Guessing Game</button>
-    <button class="tab locked" data-stage="4">🔒 4. Best Question</button>
+    <button class="tab active" data-stage="1">1. What Are Bases?</button>
+    <button class="tab" data-stage="2">2. Counting</button>
+    <button class="tab" data-stage="3">3. Arithmetic</button>
+    <button class="tab" data-stage="4">4. Converting</button>
+    <button class="tab" data-stage="5">5. Real World!</button>
+    <button class="tab" data-stage="6">6. Challenge!</button>
   </nav>
 
-  <!-- STAGE 1: Character Explorer -->
+  <!-- STAGE 1: What Are Number Bases? -->
   <section id="stage-1" class="stage">
-    <div class="lock-overlay" id="lock-1">
-      <div class="lock-box">
-        <div class="lock-icon">🔒</div>
-        <h2>Stage 1: Character Explorer</h2>
-        <p>Enter the secret code to unlock!</p>
-        <input type="text" id="code-1" placeholder="Enter code..." autocomplete="off">
-        <button onclick="tryUnlock(1)">Unlock</button>
-        <p class="error-msg" id="error-1"></p>
-      </div>
-    </div>
-    <div class="stage-content" id="content-1">
-      <h2>Meet the Characters</h2>
-      <p>These are the characters in our game. You can edit them or add new ones!</p>
-      <div id="character-grid" class="character-grid"></div>
-      <button class="btn-add" onclick="openAddCharacter()">+ Add New Character</button>
-    </div>
-  </section>
+    <div class="stage-content">
+      <h2>What Are Number Bases?</h2>
+      <p>Every digit in a number has a <strong>place value</strong> that depends on the base.</p>
 
-  <!-- STAGE 2: Question Explorer -->
-  <section id="stage-2" class="stage hidden">
-    <div class="lock-overlay" id="lock-2">
-      <div class="lock-box">
-        <div class="lock-icon">🔒</div>
-        <h2>Stage 2: Question Explorer</h2>
-        <p>Enter the secret code to unlock!</p>
-        <input type="text" id="code-2" placeholder="Enter code..." autocomplete="off">
-        <button onclick="tryUnlock(2)">Unlock</button>
-        <p class="error-msg" id="error-2"></p>
-      </div>
-    </div>
-    <div class="stage-content" id="content-2">
-      <h2>Explore Questions</h2>
-      <p>Click a question to see how it splits the characters into YES and NO groups.</p>
-      <div id="question-buttons" class="question-buttons"></div>
-      <div id="split-view" class="split-view" style="display:none">
-        <h3 id="current-question-label"></h3>
-        <div class="split-score-box" id="split-score-box"></div>
-        <div class="split-groups">
-          <div class="split-group yes-group">
-            <h4>✅ YES</h4>
-            <div id="yes-list"></div>
+      <div class="lesson-card">
+        <h3>Place Values in Base 10</h3>
+        <p>You already know base 10! Each place is a power of 10:</p>
+        <div class="place-value-demo" id="place-value-demo">
+          <div class="pv-row header">
+            <span>10<sup>3</sup> = 1000</span>
+            <span>10<sup>2</sup> = 100</span>
+            <span>10<sup>1</sup> = 10</span>
+            <span>10<sup>0</sup> = 1</span>
           </div>
-          <div class="split-group no-group">
-            <h4>❌ NO</h4>
-            <div id="no-list"></div>
+          <div class="pv-row digits" id="pv-digits-10">
+            <span>0</span><span>9</span><span>6</span><span>3</span>
+          </div>
+          <div class="pv-expansion" id="pv-expansion-10">
+            963 = 9 &times; 100 + 6 &times; 10 + 3 &times; 1
           </div>
         </div>
       </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Try It! Expand a Number</h3>
+        <p>Enter a number and pick a base to see the expansion:</p>
+        <div class="input-row">
+          <label>Number: <input type="text" id="expand-number" value="432" maxlength="8" class="short-input"></label>
+          <label>Base:
+            <select id="expand-base">
+              <option value="2">2 (Binary)</option>
+              <option value="3">3 (Ternary)</option>
+              <option value="5">5 (Quinary)</option>
+              <option value="7">7 (Septenary)</option>
+              <option value="8">8 (Octal)</option>
+              <option value="10" selected>10 (Decimal)</option>
+              <option value="16">16 (Hexadecimal)</option>
+            </select>
+          </label>
+          <button class="btn-action" onclick="showExpansion()">Expand!</button>
+        </div>
+        <div id="expansion-result" class="result-box"></div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Powers Table</h3>
+        <p>Here are the place values for common bases:</p>
+        <div class="table-scroll">
+          <table class="powers-table">
+            <thead>
+              <tr>
+                <th>Base</th>
+                <th>Name</th>
+                <th>b<sup>4</sup></th>
+                <th>b<sup>3</sup></th>
+                <th>b<sup>2</sup></th>
+                <th>b<sup>1</sup></th>
+                <th>b<sup>0</sup></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>2</td><td>Binary</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+              <tr><td>3</td><td>Ternary</td><td>81</td><td>27</td><td>9</td><td>3</td><td>1</td></tr>
+              <tr><td>5</td><td>Quinary</td><td>625</td><td>125</td><td>25</td><td>5</td><td>1</td></tr>
+              <tr><td>7</td><td>Septenary</td><td>2401</td><td>343</td><td>49</td><td>7</td><td>1</td></tr>
+              <tr><td>8</td><td>Octal</td><td>4096</td><td>512</td><td>64</td><td>8</td><td>1</td></tr>
+              <tr><td>10</td><td>Decimal</td><td>10000</td><td>1000</td><td>100</td><td>10</td><td>1</td></tr>
+              <tr><td>16</td><td>Hexadecimal</td><td>65536</td><td>4096</td><td>256</td><td>16</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Key Idea</h3>
+        <div class="key-idea">
+          <p>In base <strong>b</strong>, you can only use digits <strong>0</strong> through <strong>b &minus; 1</strong>.</p>
+          <p>Base 2: digits are 0, 1</p>
+          <p>Base 5: digits are 0, 1, 2, 3, 4</p>
+          <p>Base 10: digits are 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+          <p>Base 16: digits are 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F</p>
+        </div>
+      </div>
+
+      <!-- Practice problems for Stage 1 -->
+      <div class="practice-section">
+        <h3>Practice Problems</h3>
+        <div id="practice-1"></div>
+      </div>
     </div>
   </section>
 
-  <!-- STAGE 3: Decision Tree Game -->
+  <!-- STAGE 2: Counting in Different Bases -->
+  <section id="stage-2" class="stage hidden">
+    <div class="stage-content">
+      <h2>Counting in Different Bases</h2>
+      <p>When you reach the base number, you "carry" to the next place — just like going from 9 to 10 in base 10!</p>
+
+      <div class="lesson-card interactive-card">
+        <h3>Interactive Counter</h3>
+        <p>Watch how counting works in different bases! Click + to count up.</p>
+        <div class="counter-controls">
+          <label>Base:
+            <select id="counter-base" onchange="resetCounter()">
+              <option value="2">2 (Binary)</option>
+              <option value="3">3 (Ternary)</option>
+              <option value="4" selected>4 (Base 4)</option>
+              <option value="5">5 (Quinary)</option>
+              <option value="6">6 (Base 6)</option>
+              <option value="8">8 (Octal)</option>
+            </select>
+          </label>
+        </div>
+        <div class="counter-display">
+          <button class="btn-counter" onclick="counterStep(-1)">&minus;</button>
+          <div class="counter-value" id="counter-value">0</div>
+          <button class="btn-counter" onclick="counterStep(1)">+</button>
+        </div>
+        <div class="counter-info">
+          <span>Decimal value: <strong id="counter-decimal">0</strong></span>
+        </div>
+        <div class="counter-history" id="counter-history">
+          <p class="history-label">Counting sequence:</p>
+          <div id="counter-sequence" class="sequence-display"></div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Example: Counting in Base 4</h3>
+        <div class="example-box">
+          <p>Digits allowed: <strong>0, 1, 2, 3</strong> (no 4!)</p>
+          <div class="count-grid">
+            <span>1</span><span>2</span><span>3</span><span class="carry">10</span>
+            <span>11</span><span>12</span><span>13</span><span class="carry">20</span>
+            <span>21</span><span>22</span><span>23</span><span class="carry">30</span>
+            <span>31</span><span>32</span><span>33</span><span class="carry">100</span>
+          </div>
+          <p class="example-note">After 3 comes 10 (not 4!). After 33 comes 100. The 21st number is <strong>111</strong>.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Example: Counting in Base 2 (Binary)</h3>
+        <div class="example-box">
+          <p>Digits allowed: <strong>0, 1</strong> only!</p>
+          <div class="count-grid binary-grid">
+            <span class="carry">1</span>
+            <span class="carry">10</span><span>11</span>
+            <span class="carry">100</span><span>101</span><span>110</span><span>111</span>
+            <span class="carry">1000</span>
+          </div>
+          <p class="example-note">The 8th number is <strong>1000</strong> (which equals 8 in decimal).</p>
+        </div>
+      </div>
+
+      <div class="practice-section">
+        <h3>Practice Problems</h3>
+        <div id="practice-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3: Arithmetic in Other Bases -->
   <section id="stage-3" class="stage hidden">
-    <div class="lock-overlay" id="lock-3">
-      <div class="lock-box">
-        <div class="lock-icon">🔒</div>
-        <h2>Stage 3: Guessing Game</h2>
-        <p>Enter the secret code to unlock!</p>
-        <input type="text" id="code-3" placeholder="Enter code..." autocomplete="off">
-        <button onclick="tryUnlock(3)">Unlock</button>
-        <p class="error-msg" id="error-3"></p>
+    <div class="stage-content">
+      <h2>Arithmetic in Other Bases</h2>
+      <p>Addition, subtraction, and multiplication work the same way — just carry at the base instead of 10!</p>
+
+      <div class="lesson-card">
+        <h3>Addition Rules</h3>
+        <div class="example-box">
+          <p><strong>Base 6:</strong> When the sum reaches 6, write 0 and carry 1.</p>
+          <div class="arithmetic-examples">
+            <div class="arith-item">1 + 1 = <strong>2</strong></div>
+            <div class="arith-item">2 + 4 = <strong>10</strong><sub>6</sub></div>
+            <div class="arith-item">3 + 5 = <strong>12</strong><sub>6</sub></div>
+          </div>
+          <p class="example-note">2 + 4 = 6, but 6 doesn't exist in base 6, so we write <strong>10</strong> (1 six and 0 ones).</p>
+        </div>
       </div>
-    </div>
-    <div class="stage-content" id="content-3">
-      <h2>Play the Guessing Game!</h2>
-      <p>Think of a character. Answer the questions and watch the list shrink!</p>
-      <div id="game-area">
-        <div id="game-remaining" class="game-remaining"></div>
-        <div id="game-question-area" class="game-question-area"></div>
-        <div id="game-result" class="game-result" style="display:none"></div>
+
+      <div class="lesson-card">
+        <h3>Addition in Base 2 (Binary)</h3>
+        <div class="example-box">
+          <div class="arithmetic-examples">
+            <div class="arith-item">1 + 1 = <strong>10</strong><sub>2</sub></div>
+            <div class="arith-item">1 + 11 = <strong>100</strong><sub>2</sub></div>
+            <div class="arith-item">11 + 11 = <strong>110</strong><sub>2</sub></div>
+          </div>
+          <p class="example-note">In binary, 1 + 1 = 10 (that's 2 in decimal).</p>
+        </div>
       </div>
-      <button class="btn-restart" id="btn-restart" onclick="startGame()" style="display:none">🔄 Play Again</button>
+
+      <div class="lesson-card">
+        <h3>Subtraction with Borrowing</h3>
+        <div class="example-box">
+          <p><strong>Base 5:</strong> When borrowing, you borrow a <em>five</em> (not a ten).</p>
+          <div class="arithmetic-examples">
+            <div class="arith-item">12<sub>5</sub> &minus; 4<sub>5</sub> = <strong>3</strong><sub>5</sub></div>
+          </div>
+          <p class="example-note">You can't do 2 &minus; 4, so borrow from the fives column: that "1" becomes 5. Now 5 + 2 &minus; 4 = 3.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Multiplication</h3>
+        <div class="example-box">
+          <p><strong>Base 8:</strong> Multiply normally, but carry at 8 instead of 10.</p>
+          <div class="arithmetic-examples">
+            <div class="arith-item">2 &times; 4 = <strong>10</strong><sub>8</sub></div>
+            <div class="arith-item">2 &times; 6 = <strong>14</strong><sub>8</sub></div>
+            <div class="arith-item">3 &times; 6 = <strong>22</strong><sub>8</sub></div>
+          </div>
+          <p class="example-note">2 &times; 6 = 12 in decimal. 12 = 1 &times; 8 + 4, so we write <strong>14</strong> in base 8.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Base Arithmetic Calculator</h3>
+        <p>Try arithmetic in any base! Enter numbers already written in that base.</p>
+        <div class="calc-row">
+          <input type="text" id="calc-a" class="short-input" placeholder="e.g. 32" maxlength="12">
+          <select id="calc-op">
+            <option value="+">+</option>
+            <option value="-">&minus;</option>
+            <option value="*">&times;</option>
+          </select>
+          <input type="text" id="calc-b" class="short-input" placeholder="e.g. 13" maxlength="12">
+          <label>Base:
+            <select id="calc-base">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="16">16</option>
+            </select>
+          </label>
+          <button class="btn-action" onclick="doBaseCalc()">Calculate</button>
+        </div>
+        <div id="calc-result" class="result-box"></div>
+      </div>
+
+      <div class="practice-section">
+        <h3>Practice Problems</h3>
+        <div id="practice-3"></div>
+      </div>
     </div>
   </section>
 
-  <!-- STAGE 4: Best Question Helper -->
+  <!-- STAGE 4: Converting Between Bases -->
   <section id="stage-4" class="stage hidden">
-    <div class="lock-overlay" id="lock-4">
-      <div class="lock-box">
-        <div class="lock-icon">🔒</div>
-        <h2>Stage 4: Best Question Helper</h2>
-        <p>Enter the secret code to unlock!</p>
-        <input type="text" id="code-4" placeholder="Enter code..." autocomplete="off">
-        <button onclick="tryUnlock(4)">Unlock</button>
-        <p class="error-msg" id="error-4"></p>
+    <div class="stage-content">
+      <h2>Converting Between Bases</h2>
+
+      <div class="lesson-card">
+        <h3>Base b &rarr; Base 10</h3>
+        <p>Multiply each digit by its place value and add up.</p>
+        <div class="example-box">
+          <p><strong>42<sub>5</sub></strong> &rarr; base 10:</p>
+          <p class="solution-line">4 &times; 5<sup>1</sup> + 2 &times; 5<sup>0</sup> = 20 + 2 = <strong>22</strong></p>
+          <p><strong>123<sub>8</sub></strong> &rarr; base 10:</p>
+          <p class="solution-line">1 &times; 64 + 2 &times; 8 + 3 &times; 1 = 64 + 16 + 3 = <strong>83</strong></p>
+        </div>
       </div>
-    </div>
-    <div class="stage-content" id="content-4">
-      <h2>Find the Best Question</h2>
-      <p>Click the button to find which question splits the characters most evenly!</p>
-      <button class="btn-best" onclick="findBestQuestion()">🧠 Find Best Question</button>
-      <div id="best-result" class="best-result"></div>
-      <div id="all-scores" class="all-scores"></div>
+
+      <div class="lesson-card">
+        <h3>Base 10 &rarr; Base b (Division Method)</h3>
+        <p>Repeatedly divide by the base and collect remainders (read bottom to top).</p>
+        <div class="example-box">
+          <p><strong>26</strong> &rarr; base 3:</p>
+          <div class="division-steps">
+            <div class="div-step">26 &divide; 3 = 8 remainder <strong>2</strong></div>
+            <div class="div-step">8 &divide; 3 = 2 remainder <strong>2</strong></div>
+            <div class="div-step">2 &divide; 3 = 0 remainder <strong>2</strong></div>
+          </div>
+          <p class="solution-line">Read remainders bottom to top: <strong>222<sub>3</sub></strong></p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Base a &rarr; Base b</h3>
+        <p>Convert to base 10 first, then convert from base 10 to the target base.</p>
+        <div class="example-box">
+          <p><strong>332<sub>5</sub></strong> &rarr; base 8:</p>
+          <p class="solution-line">Step 1: 332<sub>5</sub> = 3&times;25 + 3&times;5 + 2 = 92<sub>10</sub></p>
+          <p class="solution-line">Step 2: 92 &divide; 8 = 11 R <strong>4</strong>; 11 &divide; 8 = 1 R <strong>3</strong>; 1 &divide; 8 = 0 R <strong>1</strong></p>
+          <p class="solution-line">Answer: <strong>134<sub>8</sub></strong></p>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Base Converter</h3>
+        <p>Convert any number between bases!</p>
+        <div class="converter-row">
+          <input type="text" id="conv-number" class="short-input" placeholder="e.g. 42" maxlength="16">
+          <label>from base
+            <select id="conv-from">
+              <option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option>
+              <option value="6">6</option><option value="7">7</option>
+              <option value="8">8</option><option value="9">9</option>
+              <option value="10" selected>10</option><option value="16">16</option>
+            </select>
+          </label>
+          <span class="arrow-icon">&rarr;</span>
+          <label>to base
+            <select id="conv-to">
+              <option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option>
+              <option value="6">6</option><option value="7">7</option>
+              <option value="8" selected>8</option><option value="9">9</option>
+              <option value="10">10</option><option value="16">16</option>
+            </select>
+          </label>
+          <button class="btn-action" onclick="doConvert()">Convert!</button>
+        </div>
+        <div id="conv-result" class="result-box"></div>
+        <div id="conv-steps" class="steps-box"></div>
+      </div>
+
+      <div class="practice-section">
+        <h3>Practice Problems</h3>
+        <div id="practice-4"></div>
+      </div>
     </div>
   </section>
 
-  <!-- Character Edit Modal -->
-  <div id="modal-overlay" class="modal-overlay" style="display:none">
-    <div class="modal">
-      <h2 id="modal-title">Edit Character</h2>
-      <label>Name:
-        <input type="text" id="modal-name" placeholder="Character name">
-      </label>
-      <label>Emoji (optional):
-        <input type="text" id="modal-emoji" placeholder="e.g. ⚡" maxlength="4">
-      </label>
-      <div class="trait-toggles" id="modal-traits"></div>
-      <div class="modal-buttons">
-        <button class="btn-save" onclick="saveCharacter()">Save</button>
-        <button class="btn-delete" id="btn-modal-delete" onclick="deleteCharacter()">Delete</button>
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+  <!-- STAGE 5: Real World Uses -->
+  <section id="stage-5" class="stage hidden">
+    <div class="stage-content">
+      <h2>Real World Uses</h2>
+      <p>Number bases aren't just for math class — they're everywhere in technology!</p>
+
+      <!-- HEX COLORS -->
+      <div class="lesson-card interactive-card">
+        <h3>Hex Colors (Base 16)</h3>
+        <p>Every color on your screen is made of <strong>Red</strong>, <strong>Green</strong>, and <strong>Blue</strong> — each from 0 to 255 (FF in hex).</p>
+        <p>A color code like <strong>#FF6600</strong> means: Red=FF (255), Green=66 (102), Blue=00 (0).</p>
+
+        <div class="color-mixer">
+          <div class="color-sliders">
+            <div class="slider-row">
+              <span class="slider-label" style="color:#d32f2f">R:</span>
+              <input type="range" id="color-r" min="0" max="255" value="30" class="color-slider slider-r" oninput="updateColorPreview()">
+              <span class="slider-hex" id="hex-r">1E</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label" style="color:#388e3c">G:</span>
+              <input type="range" id="color-g" min="0" max="255" value="136" class="color-slider slider-g" oninput="updateColorPreview()">
+              <span class="slider-hex" id="hex-g">88</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label" style="color:#1565c0">B:</span>
+              <input type="range" id="color-b" min="0" max="255" value="229" class="color-slider slider-b" oninput="updateColorPreview()">
+              <span class="slider-hex" id="hex-b">E5</span>
+            </div>
+          </div>
+          <div class="color-preview-area">
+            <div class="color-swatch" id="color-swatch"></div>
+            <div class="color-code" id="color-code">#1E88E5</div>
+            <div class="color-decimal" id="color-decimal">rgb(30, 136, 229)</div>
+          </div>
+        </div>
+
+        <div class="color-presets">
+          <p><strong>Try these famous colors:</strong></p>
+          <div class="preset-buttons">
+            <button class="color-preset" data-r="255" data-g="0" data-b="0" style="background:#FF0000;color:white" onclick="setColorPreset(this)">Red #FF0000</button>
+            <button class="color-preset" data-r="0" data-g="255" data-b="0" style="background:#00FF00;color:black" onclick="setColorPreset(this)">Green #00FF00</button>
+            <button class="color-preset" data-r="0" data-g="0" data-b="255" style="background:#0000FF;color:white" onclick="setColorPreset(this)">Blue #0000FF</button>
+            <button class="color-preset" data-r="255" data-g="255" data-b="0" style="background:#FFFF00;color:black" onclick="setColorPreset(this)">Yellow #FFFF00</button>
+            <button class="color-preset" data-r="255" data-g="105" data-b="180" style="background:#FF69B4;color:white" onclick="setColorPreset(this)">Pink #FF69B4</button>
+            <button class="color-preset" data-r="0" data-g="0" data-b="0" style="background:#000000;color:white" onclick="setColorPreset(this)">Black #000000</button>
+          </div>
+        </div>
+
+        <div class="key-idea" style="margin-top:16px">
+          <p><strong>Why hex?</strong> Each digit 0-F represents 4 binary bits. Two hex digits = 8 bits = 1 byte = values 0 to 255. It's a compact way to write binary!</p>
+          <p>FF<sub>16</sub> = 1111 1111<sub>2</sub> = 255<sub>10</sub></p>
+        </div>
+      </div>
+
+      <!-- BINARY IN REAL LIFE -->
+      <div class="lesson-card">
+        <h3>Binary (Base 2) Is Everywhere!</h3>
+        <p>Computers think in binary — every photo, game, song, and text is stored as 0s and 1s.</p>
+
+        <div class="example-box">
+          <h4>Light Switches</h4>
+          <p>A light switch has two states: <strong>OFF (0)</strong> and <strong>ON (1)</strong>. That's one binary digit — a <strong>bit</strong>!</p>
+          <p>With 8 light switches (8 bits = 1 <strong>byte</strong>), you can make 2<sup>8</sup> = <strong>256</strong> different patterns.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Secret Messages with ASCII</h4>
+          <p>Every letter has a number code. In binary:</p>
+          <div class="ascii-examples">
+            <div class="ascii-item"><span class="ascii-char">A</span> = 65 = <span class="ascii-bin">01000001</span></div>
+            <div class="ascii-item"><span class="ascii-char">B</span> = 66 = <span class="ascii-bin">01000010</span></div>
+            <div class="ascii-item"><span class="ascii-char">C</span> = 67 = <span class="ascii-bin">01000011</span></div>
+            <div class="ascii-item"><span class="ascii-char">Z</span> = 90 = <span class="ascii-bin">01011010</span></div>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Finger Binary</h4>
+          <p>You can count to <strong>31</strong> on one hand using binary!</p>
+          <p>Each finger is a bit: thumb = 1, index = 2, middle = 4, ring = 8, pinky = 16.</p>
+          <p>Hold up thumb + middle + pinky = 1 + 4 + 16 = <strong>21</strong>!</p>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE: BINARY MESSAGE ENCODER -->
+      <div class="lesson-card interactive-card">
+        <h3>Binary Message Encoder</h3>
+        <p>Type a message and see it in binary! (Letters and spaces only)</p>
+        <div class="input-row">
+          <input type="text" id="binary-message" class="short-input" style="width:250px" placeholder="e.g. HELLO" maxlength="16" oninput="encodeBinaryMessage()">
+        </div>
+        <div id="binary-output" class="result-box" style="font-family:'Courier New',monospace;letter-spacing:1px"></div>
+      </div>
+
+      <!-- INTERACTIVE: BINARY LIGHT SWITCHES -->
+      <div class="lesson-card interactive-card">
+        <h3>Binary Light Switches</h3>
+        <p>Click the switches to turn bits on/off and see the decimal number!</p>
+        <div class="light-switches" id="light-switches">
+          <div class="switch-labels">
+            <span>128</span><span>64</span><span>32</span><span>16</span><span>8</span><span>4</span><span>2</span><span>1</span>
+          </div>
+          <div class="switch-row" id="switch-row"></div>
+        </div>
+        <div class="switch-result">
+          <span>Binary: <strong id="switch-binary">00000000</strong></span>
+          <span>Decimal: <strong id="switch-decimal">0</strong></span>
+          <span>Hex: <strong id="switch-hex">00</strong></span>
+        </div>
+      </div>
+
+      <!-- OTHER BASES IN REAL LIFE -->
+      <div class="lesson-card">
+        <h3>Other Bases in Daily Life</h3>
+        <div class="example-box">
+          <h4>Base 60 — Time!</h4>
+          <p>60 seconds in a minute, 60 minutes in an hour. The ancient Babylonians used base 60!</p>
+          <p>When you say "2 hours 30 minutes 15 seconds", that's like writing <strong>2:30:15</strong> in base 60.</p>
+        </div>
+        <div class="example-box">
+          <h4>Base 12 — Dozens!</h4>
+          <p>We buy eggs by the dozen (12). A "gross" is 12&times;12 = 144. The clock has 12 hours.</p>
+        </div>
+        <div class="example-box">
+          <h4>Base 8 (Octal) — File Permissions</h4>
+          <p>On computers, file permissions use octal. "chmod 755" means the owner can read, write, and execute (7 = 4+2+1).</p>
+        </div>
+      </div>
+
+      <div class="practice-section">
+        <h3>Practice Problems</h3>
+        <div id="practice-5"></div>
       </div>
     </div>
+  </section>
+
+  <!-- STAGE 6: Challenge Problems -->
+  <section id="stage-6" class="stage hidden">
+    <div class="stage-content">
+      <h2>Challenge Problems</h2>
+      <p>Test your skills with these competition-style problems!</p>
+
+      <div class="practice-section">
+        <div id="practice-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Score tracker -->
+  <div class="score-bar" id="score-bar">
+    <span id="score-display">Score: 0 / 0</span>
+    <button class="btn-reset-score" onclick="resetScore()">Reset</button>
   </div>
 
   <script src="script.js"></script>
