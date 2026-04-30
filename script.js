@@ -1,19 +1,322 @@
 // ============================================================
-// Number Bases Explorer — script.js
+// Estimathon! Fermi Problem Lab — script.js
 // ============================================================
 
 let currentStage = 1;
-let score = { correct: 0, total: 0 };
-
-
+let practiceScore = { correct: 0, total: 0 };
 
 // ============================================================
-// TABS & NAVIGATION
+// PROBLEM BANKS
+// ============================================================
+
+// Stage 1: Multiple choice "thinking like Fermi"
+const FERMI_THINKING = [
+  {
+    q: 'Question: <strong>How many basketballs would fit in a school gym?</strong> What\'s the best first step?',
+    options: [
+      { label: 'A', text: 'Look up the volume of a basketball online.' },
+      { label: 'B', text: 'Estimate the gym\'s length, width, and height in feet — then estimate a basketball\'s size.' },
+      { label: 'C', text: 'Count basketballs at your school until you have a rough idea.' },
+    ],
+    correct: 'B',
+    explain: 'Break it down! Estimate volumes first — that\'s the Fermi way. You divide gym volume by ball volume.'
+  },
+  {
+    q: 'Question: <strong>How many slices of pizza does the USA eat per year?</strong> What\'s the best breakdown?',
+    options: [
+      { label: 'A', text: '(US population) × (slices per person per year)' },
+      { label: 'B', text: '(Number of pizzerias) × (1000)' },
+      { label: 'C', text: 'Just guess a really big number.' },
+    ],
+    correct: 'A',
+    explain: 'Multiply the population by an average per-person rate. Most Americans probably eat ~30-50 slices per year.'
+  },
+  {
+    q: 'Question: <strong>How many heartbeats in your lifetime?</strong> Which estimate makes sense?',
+    options: [
+      { label: 'A', text: '(beats per second) × (seconds in a lifetime)' },
+      { label: 'B', text: '(beats per minute) × (minutes per day) × (days per year) × (years lived)' },
+      { label: 'C', text: 'Both A and B work — they\'re the same idea, just different units!' },
+    ],
+    correct: 'C',
+    explain: 'Both work! Pick whichever units feel easiest. ~70 bpm × 60 min × 24 hr × 365 days × 80 years ≈ 3 billion.'
+  },
+  {
+    q: 'Fermi\'s rule: which sentence is the BEST estimator mindset?',
+    options: [
+      { label: 'A', text: '"I need the exact answer or I won\'t guess at all."' },
+      { label: 'B', text: '"If I\'m within 10× of the right answer, I\'m doing great!"' },
+      { label: 'C', text: '"Bigger numbers are usually right."' },
+    ],
+    correct: 'B',
+    explain: 'Estimation is about ballparks, not exact numbers. Same order of magnitude is the goal.'
+  },
+];
+
+// Stage 2: Order of magnitude practice
+const OOM_PROBLEMS = [
+  {
+    q: 'What is the order of magnitude of <strong>4,300</strong>?',
+    options: [
+      { label: 'A', text: '10² (hundreds)' },
+      { label: 'B', text: '10³ (thousands)' },
+      { label: 'C', text: '10⁴ (ten thousands)' },
+    ],
+    correct: 'B',
+    explain: '4,300 is between 1,000 and 10,000, so its order of magnitude is 10³.'
+  },
+  {
+    q: 'You guessed <strong>500</strong>. The real answer is <strong>1,200</strong>. How many points (using our scoring)?',
+    options: [
+      { label: 'A', text: '10 points (within 2×)' },
+      { label: 'B', text: '7 points (within 5×)' },
+      { label: 'C', text: '5 points (within 10×)' },
+      { label: 'D', text: '0 points (way off)' },
+    ],
+    correct: 'B',
+    explain: '1200 ÷ 500 = 2.4. That\'s within 5×, so you get 7 points. (You\'d need within 2× for 10 pts.)'
+  },
+  {
+    q: 'You guessed <strong>1,000,000</strong>. The real answer is <strong>50</strong>. Score?',
+    options: [
+      { label: 'A', text: '5 points' },
+      { label: 'B', text: '2 points' },
+      { label: 'C', text: '0 points' },
+    ],
+    correct: 'C',
+    explain: '1,000,000 ÷ 50 = 20,000. That\'s WAY more than 100×, so 0 points. You overshot by 4 orders of magnitude!'
+  },
+  {
+    q: 'About how many seconds are in 32 years?',
+    options: [
+      { label: 'A', text: '~10⁶ (1 million)' },
+      { label: 'B', text: '~10⁹ (1 billion)' },
+      { label: 'C', text: '~10¹² (1 trillion)' },
+    ],
+    correct: 'B',
+    explain: '32 yr × 365 days × 24 hr × 3600 sec ≈ 1 billion. A useful fact for Fermi problems!'
+  },
+];
+
+// Stage 3: Warm-up problems (easier, with definite answers)
+const WARMUP_PROBLEMS = [
+  {
+    q: 'How many seconds are in a single day?',
+    answer: 86400,
+    answerLabel: '86,400',
+    breakdown: '24 hours × 60 minutes × 60 seconds = 86,400 seconds.'
+  },
+  {
+    q: 'How many minutes are in a year?',
+    answer: 525600,
+    answerLabel: '525,600',
+    breakdown: '365 days × 24 hours × 60 minutes ≈ 525,600 minutes. (The musical "Rent" sang about this!)'
+  },
+  {
+    q: 'About how many hairs are on a typical human head?',
+    answer: 100000,
+    answerLabel: '~100,000',
+    breakdown: 'Most people have between 80,000 and 150,000 head hairs. About 100,000 is a great estimate.'
+  },
+  {
+    q: 'How many pages are there in roughly all 7 Harry Potter books combined?',
+    answer: 4100,
+    answerLabel: '~4,100',
+    breakdown: 'The 7 Harry Potter books total about 4,100 pages (3,407 in the US edition, ~4,100 with bigger UK editions).'
+  },
+  {
+    q: 'How many feet tall is the Statue of Liberty (including the pedestal)?',
+    answer: 305,
+    answerLabel: '305 feet',
+    breakdown: 'The statue itself is 151 ft, the pedestal adds ~154 ft, total ≈ 305 ft (93 meters).'
+  },
+  {
+    q: 'How many heartbeats does a person have in an 80-year lifetime?',
+    answer: 3000000000,
+    answerLabel: '~3 billion',
+    breakdown: '~70 beats/min × 60 min × 24 hr × 365 days × 80 years ≈ 3 billion heartbeats.'
+  },
+  {
+    q: 'How many words are in the King James Bible?',
+    answer: 783000,
+    answerLabel: '~783,000',
+    breakdown: 'About 783,000 words across both testaments. (For comparison: the Harry Potter series has ~1.1 million words.)'
+  },
+  {
+    q: 'How many breaths does an average person take in one day?',
+    answer: 23000,
+    answerLabel: '~23,000',
+    breakdown: '~16 breaths/minute × 60 min × 24 hours ≈ 23,000 breaths per day.'
+  },
+];
+
+// Stage 4: Classic hard Fermi problems
+const CLASSIC_PROBLEMS = [
+  {
+    q: 'How many piano tuners are there in Chicago?',
+    answer: 150,
+    answerLabel: '~150',
+    breakdown: 'Fermi\'s original problem! Chicago ~3M people / ~3 per household = 1M households. ~1 in 20 has a piano = 50,000 pianos. Tuned once a year, with each tuner doing ~1000 tunings/year → ~50-150 tuners. Real answer: ~150.',
+    hint: 'Population of Chicago → households → pianos → tunings per year → tuners needed.'
+  },
+  {
+    q: 'How many cats live in the United States?',
+    answer: 73000000,
+    answerLabel: '~73 million',
+    breakdown: 'US has ~330 million people, ~120 million households. About 1 in 4 households owns cats, with avg ~2 cats per cat-owning home. So ~30M × 2.5 ≈ 75 million cats. (Real estimates: 60–95 million.)',
+    hint: 'Households × fraction with cats × cats per household.'
+  },
+  {
+    q: 'How many golf balls would fit in a typical school bus?',
+    answer: 600000,
+    answerLabel: '~500,000-700,000',
+    breakdown: 'A school bus is roughly 35 ft × 8 ft × 6 ft ≈ 1,680 cubic feet ≈ 2.9 million cubic inches. A golf ball volume is ~2.5 cubic inches, but with packing inefficiency, a ball "uses" ~5 cubic inches. So ~600,000 balls.',
+    hint: 'Volume of bus / effective volume per golf ball (account for empty space between balls).'
+  },
+  {
+    q: 'How many slices of pizza does the USA eat per year?',
+    answer: 3000000000,
+    answerLabel: '~3 billion',
+    breakdown: '330M Americans × ~9 slices/person/year ≈ 3 billion. (Some estimates go up to 10 billion if you count all pizza-portions.)',
+    hint: 'Population × average slices per person per year.'
+  },
+  {
+    q: 'How many ants are alive on Earth right now?',
+    answer: 20000000000000000,
+    answerLabel: '~20 quadrillion (2×10¹⁶)',
+    breakdown: 'Recent biology studies estimate around 20,000,000,000,000,000 ants on Earth — roughly 2.5 million ants per human!',
+    hint: 'This one is wild. Try ants per square meter × Earth\'s land surface area.'
+  },
+  {
+    q: 'How many hot dogs do Americans eat at baseball games each year?',
+    answer: 20000000,
+    answerLabel: '~20 million',
+    breakdown: '~30 MLB teams × ~80 home games × ~30,000 fans × ~25% who eat a hot dog ≈ 18-20 million hot dogs per year.',
+    hint: 'Teams × games × fans per game × fraction who buy a hot dog.'
+  },
+  {
+    q: 'How many trees are in the Amazon rainforest?',
+    answer: 390000000000,
+    answerLabel: '~390 billion',
+    breakdown: 'Studies estimate ~390 billion trees across the ~5.5 million km² of Amazon rainforest — about 70,000 trees per km².',
+    hint: 'Trees per square meter × area of Amazon (~5.5 million km²).'
+  },
+  {
+    q: 'How many smartphones are active in the world today?',
+    answer: 7000000000,
+    answerLabel: '~7 billion',
+    breakdown: 'World population is ~8 billion. With smartphone adoption near 85% globally, that\'s ~6.8-7 billion active devices.',
+    hint: 'World population × fraction who own a smartphone.'
+  },
+  {
+    q: 'How many breaths does a person take in a 75-year lifetime?',
+    answer: 600000000,
+    answerLabel: '~600 million',
+    breakdown: '~16 breaths/min × 60 × 24 × 365 × 75 ≈ 630 million breaths.',
+    hint: 'Breaths per minute × minutes per year × years lived.'
+  },
+  {
+    q: 'How much money would a stack of 1 million $1 bills be worth in height (in inches)?',
+    answer: 4300,
+    answerLabel: '~4,300 inches (358 ft tall!)',
+    breakdown: 'A dollar bill is ~0.0043 inches thick. 1,000,000 × 0.0043 = ~4,300 inches, or 358 feet — taller than the Statue of Liberty!',
+    hint: 'Thickness of one bill × 1 million.'
+  },
+  {
+    q: 'How many words has a typical 20-year-old spoken in their lifetime?',
+    answer: 150000000,
+    answerLabel: '~150 million',
+    breakdown: 'Average ~16,000 words/day × 365 days × ~20 years (excluding babyhood) ≈ 100-150 million words.',
+    hint: 'Words per day × days × years (subtract a few baby years).'
+  },
+  {
+    q: 'How many gallons of milk do Americans drink per year?',
+    answer: 6000000000,
+    answerLabel: '~6 billion gallons',
+    breakdown: '330M Americans × ~18 gal/year per person ≈ 6 billion gallons. (Per capita milk consumption has been falling for years.)',
+    hint: 'Population × gallons per person per year.'
+  },
+];
+
+// Estimathon game question pool (similar to classics, but a bigger pool)
+const GAME_QUESTIONS = [
+  { q: 'How many cats live in the United States?', answer: 73000000, label: '~73 million' },
+  { q: 'How many golf balls fit in a school bus?', answer: 600000, label: '~600,000' },
+  { q: 'How many slices of pizza are eaten in the US per year?', answer: 3000000000, label: '~3 billion' },
+  { q: 'How many ants are alive on Earth?', answer: 20000000000000000, label: '~20 quadrillion' },
+  { q: 'How many hot dogs do MLB fans eat per year?', answer: 20000000, label: '~20 million' },
+  { q: 'How many trees are in the Amazon rainforest?', answer: 390000000000, label: '~390 billion' },
+  { q: 'How many active smartphones are in the world?', answer: 7000000000, label: '~7 billion' },
+  { q: 'How many breaths in a 75-year human lifetime?', answer: 600000000, label: '~600 million' },
+  { q: 'How many piano tuners are in Chicago?', answer: 150, label: '~150' },
+  { q: 'How many hairs on a typical human head?', answer: 100000, label: '~100,000' },
+  { q: 'How many heartbeats in an 80-year life?', answer: 3000000000, label: '~3 billion' },
+  { q: 'How many seconds are in a year?', answer: 31536000, label: '~31.5 million' },
+  { q: 'How many McDonald\'s restaurants are in the world?', answer: 40000, label: '~40,000' },
+  { q: 'How many books has the average person read by age 80?', answer: 1000, label: '~1,000' },
+  { q: 'How many languages are spoken in the world today?', answer: 7000, label: '~7,000' },
+  { q: 'How many stars in the Milky Way galaxy?', answer: 200000000000, label: '~200 billion' },
+  { q: 'How many bricks in the Empire State Building?', answer: 10000000, label: '~10 million' },
+  { q: 'How many words in the entire Wikipedia (English)?', answer: 4500000000, label: '~4.5 billion' },
+  { q: 'How many Lego bricks have been made in history?', answer: 700000000000, label: '~700 billion' },
+  { q: 'How many honey bees in a typical hive?', answer: 50000, label: '~50,000' },
+  { q: 'How many words in the average paperback novel?', answer: 90000, label: '~90,000' },
+  { q: 'How many gallons of water in an Olympic swimming pool?', answer: 660000, label: '~660,000' },
+  { q: 'How many people fly on US airlines each day?', answer: 2500000, label: '~2.5 million' },
+  { q: 'How many YouTube videos are uploaded per minute?', answer: 500, label: '~500 hours of video' },
+  { q: 'How many eggs do Americans eat per year (in dozens)?', answer: 8000000000, label: '~8 billion eggs' },
+];
+
+// ============================================================
+// SCORING
+// ============================================================
+function scoreGuess(guess, real) {
+  const g = Math.abs(parseFloat(guess));
+  const r = Math.abs(parseFloat(real));
+  if (!isFinite(g) || g <= 0) return { points: 0, tier: 'miss', label: 'Invalid guess' };
+  const ratio = Math.max(g, r) / Math.min(g, r);
+  if (ratio < 2)   return { points: 10, tier: 'excellent', label: '🎯 Bullseye!' };
+  if (ratio < 5)   return { points: 7,  tier: 'great',     label: '🌟 Great guess!' };
+  if (ratio < 10)  return { points: 5,  tier: 'good',      label: '👍 Same order of magnitude!' };
+  if (ratio < 100) return { points: 2,  tier: 'ok',        label: '😅 Off by 1-2 orders' };
+  return { points: 0, tier: 'miss', label: '❌ Way off' };
+}
+
+function formatBig(n) {
+  const abs = Math.abs(n);
+  if (abs >= 1e15) return (n/1e15).toPrecision(3) + ' quadrillion';
+  if (abs >= 1e12) return (n/1e12).toPrecision(3) + ' trillion';
+  if (abs >= 1e9)  return (n/1e9).toPrecision(3) + ' billion';
+  if (abs >= 1e6)  return (n/1e6).toPrecision(3) + ' million';
+  if (abs >= 1e3)  return Math.round(n).toLocaleString();
+  return n.toLocaleString();
+}
+
+function parseGuess(str) {
+  if (!str) return NaN;
+  let s = String(str).trim().toLowerCase().replace(/,/g, '').replace(/\s+/g, '');
+  // Handle "k", "m", "b", "t", "quad" suffixes
+  const suffixes = [
+    { re: /quadrillion|quad/, mul: 1e15 },
+    { re: /trillion|^t$|t$/, mul: 1e12 },
+    { re: /billion|^b$|b$/, mul: 1e9 },
+    { re: /million|^m$|mil|m$/, mul: 1e6 },
+    { re: /thousand|^k$|k$/, mul: 1e3 },
+  ];
+  for (const { re, mul } of suffixes) {
+    if (re.test(s)) {
+      const num = parseFloat(s);
+      if (!isNaN(num)) return num * mul;
+    }
+  }
+  return parseFloat(s);
+}
+
+// ============================================================
+// NAVIGATION
 // ============================================================
 document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    showStage(parseInt(tab.dataset.stage));
-  });
+  tab.addEventListener('click', () => showStage(parseInt(tab.dataset.stage)));
 });
 
 function showStage(stage) {
@@ -23,770 +326,421 @@ function showStage(stage) {
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', parseInt(t.dataset.stage) === stage);
   });
+  window.scrollTo(0, 0);
 }
 
 // ============================================================
-// SCORE
+// PRACTICE SCORE
 // ============================================================
-function loadScore() {
-  const saved = localStorage.getItem('numbases-score');
+function loadPracticeScore() {
+  const saved = localStorage.getItem('estimathon-score');
   if (saved) {
-    try { score = JSON.parse(saved); } catch (e) { /* ignore */ }
+    try { practiceScore = JSON.parse(saved); } catch (e) { /* ignore */ }
   }
-  updateScoreDisplay();
+  updatePracticeScoreDisplay();
 }
 
-function saveScore() {
-  localStorage.setItem('numbases-score', JSON.stringify(score));
-  updateScoreDisplay();
+function savePracticeScore() {
+  localStorage.setItem('estimathon-score', JSON.stringify(practiceScore));
+  updatePracticeScoreDisplay();
 }
 
-function updateScoreDisplay() {
-  document.getElementById('score-display').textContent = `Score: ${score.correct} / ${score.total}`;
+function updatePracticeScoreDisplay() {
+  document.getElementById('score-display').textContent =
+    `Practice score: ${practiceScore.correct} / ${practiceScore.total}`;
 }
 
-function resetScore() {
-  score = { correct: 0, total: 0 };
-  saveScore();
-  // Reset all problem cards
-  document.querySelectorAll('.problem-card').forEach(card => {
-    card.classList.remove('correct', 'incorrect');
-  });
-  document.querySelectorAll('.problem-input').forEach(inp => {
-    inp.classList.remove('correct', 'incorrect');
-    inp.value = '';
-    inp.disabled = false;
-  });
+function resetPracticeScore() {
+  practiceScore = { correct: 0, total: 0 };
+  savePracticeScore();
+  // Also reset all visible state
   document.querySelectorAll('.mc-option').forEach(opt => {
     opt.classList.remove('correct', 'incorrect', 'selected');
     opt.style.pointerEvents = '';
   });
-  document.querySelectorAll('.problem-feedback').forEach(fb => {
+  document.querySelectorAll('.mc-feedback').forEach(fb => {
     fb.textContent = '';
-    fb.className = 'problem-feedback';
+    fb.className = 'mc-feedback';
   });
-  document.querySelectorAll('.btn-check').forEach(btn => {
-    btn.disabled = false;
+  document.querySelectorAll('.problem-card').forEach(c => c.classList.remove('scored'));
+  document.querySelectorAll('.guess-input').forEach(inp => {
+    inp.value = ''; inp.disabled = false;
+  });
+  document.querySelectorAll('.reveal-block, .hint-block').forEach(b => b.remove());
+  document.querySelectorAll('.btn-reveal').forEach(b => b.disabled = false);
+}
+
+// ============================================================
+// STAGE 1 & 2 RENDER: Multiple choice
+// ============================================================
+function renderMCProblems(containerId, problems) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  problems.forEach((prob, idx) => {
+    const id = `${containerId}-${idx}`;
+    const card = document.createElement('div');
+    card.className = 'problem-card';
+    card.innerHTML = `
+      <div class="problem-number">Question ${idx + 1}</div>
+      <div class="problem-text">${prob.q}</div>
+      <div class="mc-options" id="opts-${id}">
+        ${prob.options.map(opt =>
+          `<button class="mc-option" data-value="${opt.label}">${opt.label}) ${opt.text}</button>`
+        ).join('')}
+      </div>
+      <div class="mc-feedback" id="fb-${id}"></div>
+    `;
+    container.appendChild(card);
+    // wire up clicks
+    card.querySelectorAll('.mc-option').forEach(btn => {
+      btn.addEventListener('click', () => answerMC(id, btn.dataset.value, prob));
+    });
   });
 }
 
-// ============================================================
-// STAGE 1: EXPANSION TOOL
-// ============================================================
-function showExpansion() {
-  const numStr = document.getElementById('expand-number').value.trim().toUpperCase();
-  const base = parseInt(document.getElementById('expand-base').value);
-  const result = document.getElementById('expansion-result');
+function answerMC(id, choice, prob) {
+  const fb = document.getElementById(`fb-${id}`);
+  const opts = document.querySelectorAll(`#opts-${id} .mc-option`);
+  // already answered?
+  if (fb.dataset.answered) return;
+  fb.dataset.answered = '1';
 
-  if (!numStr) { result.innerHTML = 'Please enter a number.'; return; }
+  const correct = choice === prob.correct;
+  practiceScore.total++;
+  if (correct) practiceScore.correct++;
+  savePracticeScore();
 
-  // Validate digits for the base
-  for (let ch of numStr) {
-    const d = parseInt(ch, base);
-    if (isNaN(d) || d >= base) {
-      result.innerHTML = `<span style="color:#c62828">Digit "${ch}" is not valid in base ${base}. ` +
-        `Use digits 0 to ${base - 1}${base > 10 ? ' (A=' + 10 + '...' + ')' : ''}.</span>`;
-      return;
-    }
-  }
+  opts.forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o.dataset.value === prob.correct) o.classList.add('correct');
+    else if (o.dataset.value === choice) o.classList.add('incorrect');
+  });
 
-  const digits = numStr.split('').map(ch => parseInt(ch, base));
-  const len = digits.length;
-
-  let terms = [];
-  let values = [];
-  for (let i = 0; i < len; i++) {
-    const power = len - 1 - i;
-    const placeVal = Math.pow(base, power);
-    terms.push(`${digits[i]} &times; ${base}<sup>${power}</sup>`);
-    values.push(`${digits[i]} &times; ${placeVal}`);
-  }
-
-  const decimalVal = digits.reduce((sum, d, i) => sum + d * Math.pow(base, len - 1 - i), 0);
-
-  result.innerHTML =
-    `<strong>${numStr}<sub>${base}</sub></strong> = ${terms.join(' + ')}<br>` +
-    `= ${values.join(' + ')}<br>` +
-    `= <strong>${decimalVal}<sub>10</sub></strong>`;
+  fb.innerHTML = (correct ? '✅ Correct! ' : `❌ Not quite. The answer is ${prob.correct}. `) +
+    `<em>${prob.explain}</em>`;
+  fb.className = 'mc-feedback ' + (correct ? 'correct' : 'incorrect');
 }
 
 // ============================================================
-// STAGE 2: INTERACTIVE COUNTER
+// STAGE 2: OOM TOOLS
 // ============================================================
-let counterValue = 0;
-let counterHistory = [];
-
-function resetCounter() {
-  counterValue = 0;
-  counterHistory = [0];
-  updateCounterDisplay();
-}
-
-function counterStep(dir) {
-  counterValue += dir;
-  if (counterValue < 0) counterValue = 0;
-  if (!counterHistory.includes(counterValue)) {
-    counterHistory.push(counterValue);
-    counterHistory.sort((a, b) => a - b);
-  }
-  updateCounterDisplay();
-}
-
-function updateCounterDisplay() {
-  const base = parseInt(document.getElementById('counter-base').value);
-  document.getElementById('counter-value').textContent = counterValue.toString(base).toUpperCase();
-  document.getElementById('counter-decimal').textContent = counterValue;
-
-  const seqEl = document.getElementById('counter-sequence');
-  // Show sequence from 0 to current
-  let nums = [];
-  for (let i = 0; i <= Math.min(counterValue, 40); i++) {
-    const isCurrent = i === counterValue;
-    nums.push(`<span class="seq-num${isCurrent ? ' current' : ''}">${i.toString(base).toUpperCase()}</span>`);
-  }
-  if (counterValue > 40) nums.push('<span class="seq-num">...</span>');
-  seqEl.innerHTML = nums.join('');
-}
-
-// ============================================================
-// STAGE 3: BASE ARITHMETIC CALCULATOR
-// ============================================================
-function doBaseCalc() {
-  const aStr = document.getElementById('calc-a').value.trim().toUpperCase();
-  const bStr = document.getElementById('calc-b').value.trim().toUpperCase();
-  const op = document.getElementById('calc-op').value;
-  const base = parseInt(document.getElementById('calc-base').value);
-  const result = document.getElementById('calc-result');
-
-  if (!aStr || !bStr) { result.innerHTML = 'Enter both numbers.'; return; }
-
-  // Validate
-  const aVal = parseInt(aStr, base);
-  const bVal = parseInt(bStr, base);
-  if (isNaN(aVal)) { result.innerHTML = `<span style="color:#c62828">"${aStr}" is not valid in base ${base}.</span>`; return; }
-  if (isNaN(bVal)) { result.innerHTML = `<span style="color:#c62828">"${bStr}" is not valid in base ${base}.</span>`; return; }
-
-  // Check digits are valid
-  for (let ch of aStr) {
-    if (parseInt(ch, base) >= base || isNaN(parseInt(ch, base))) {
-      result.innerHTML = `<span style="color:#c62828">Digit "${ch}" is not valid in base ${base}.</span>`;
-      return;
-    }
-  }
-  for (let ch of bStr) {
-    if (parseInt(ch, base) >= base || isNaN(parseInt(ch, base))) {
-      result.innerHTML = `<span style="color:#c62828">Digit "${ch}" is not valid in base ${base}.</span>`;
-      return;
-    }
-  }
-
-  let res;
-  let opSymbol;
-  switch (op) {
-    case '+': res = aVal + bVal; opSymbol = '+'; break;
-    case '-': res = aVal - bVal; opSymbol = '&minus;'; break;
-    case '*': res = aVal * bVal; opSymbol = '&times;'; break;
-  }
-
-  if (res < 0) {
-    result.innerHTML = `<span style="color:#c62828">Result is negative (${res} in decimal). The first number must be larger for subtraction.</span>`;
+function showOOM() {
+  const v = parseGuess(document.getElementById('oom-input').value);
+  const out = document.getElementById('oom-result');
+  if (!isFinite(v) || v <= 0) {
+    out.innerHTML = '<span style="color:#c62828">Enter a positive number.</span>';
     return;
   }
-
-  const resBase = res.toString(base).toUpperCase();
-  result.innerHTML =
-    `<strong>${aStr}<sub>${base}</sub> ${opSymbol} ${bStr}<sub>${base}</sub> = ${resBase}<sub>${base}</sub></strong><br>` +
-    `<span style="color:#888">(In decimal: ${aVal} ${op === '*' ? '&times;' : op === '-' ? '&minus;' : '+'} ${bVal} = ${res})</span>`;
+  const oom = Math.round(Math.log10(v));
+  const tenPow = Math.pow(10, oom);
+  out.innerHTML =
+    `<strong>${v.toLocaleString()}</strong> is closest to <strong>10<sup>${oom}</sup> = ${tenPow.toLocaleString()}</strong>.<br>` +
+    `Its order of magnitude is <strong>${oom}</strong>.`;
 }
 
-// ============================================================
-// STAGE 4: BASE CONVERTER
-// ============================================================
-function doConvert() {
-  const numStr = document.getElementById('conv-number').value.trim().toUpperCase();
-  const fromBase = parseInt(document.getElementById('conv-from').value);
-  const toBase = parseInt(document.getElementById('conv-to').value);
-  const result = document.getElementById('conv-result');
-  const steps = document.getElementById('conv-steps');
-
-  if (!numStr) { result.innerHTML = 'Enter a number.'; steps.innerHTML = ''; return; }
-
-  // Validate
-  for (let ch of numStr) {
-    const d = parseInt(ch, fromBase);
-    if (isNaN(d) || d >= fromBase) {
-      result.innerHTML = `<span style="color:#c62828">Digit "${ch}" is not valid in base ${fromBase}.</span>`;
-      steps.innerHTML = '';
-      return;
-    }
-  }
-
-  const decVal = parseInt(numStr, fromBase);
-  const converted = decVal.toString(toBase).toUpperCase();
-
-  result.innerHTML = `<strong>${numStr}<sub>${fromBase}</sub> = ${converted}<sub>${toBase}</sub></strong>`;
-
-  // Show steps
-  let stepsHtml = '';
-
-  // Step 1: to decimal
-  if (fromBase !== 10) {
-    const digits = numStr.split('').map(ch => parseInt(ch, fromBase));
-    const len = digits.length;
-    let terms = digits.map((d, i) => `${d}&times;${fromBase}<sup>${len-1-i}</sup>`);
-    stepsHtml += `<strong>Step 1:</strong> ${numStr}<sub>${fromBase}</sub> to decimal<br>`;
-    stepsHtml += terms.join(' + ') + ` = <strong>${decVal}</strong><br><br>`;
-  }
-
-  // Step 2: to target base
-  if (toBase !== 10) {
-    stepsHtml += `<strong>${fromBase !== 10 ? 'Step 2' : 'Steps'}:</strong> ${decVal}<sub>10</sub> to base ${toBase} (division method)<br>`;
-    let n = decVal;
-    let remainders = [];
-    if (n === 0) {
-      stepsHtml += '0 is 0 in any base.<br>';
-    } else {
-      while (n > 0) {
-        const rem = n % toBase;
-        const quot = Math.floor(n / toBase);
-        const remStr = rem >= 10 ? String.fromCharCode(55 + rem) : rem.toString();
-        stepsHtml += `${n} &divide; ${toBase} = ${quot} remainder <strong>${remStr}</strong><br>`;
-        remainders.push(remStr);
-        n = quot;
-      }
-      stepsHtml += `Read remainders bottom &rarr; top: <strong>${remainders.reverse().join('')}<sub>${toBase}</sub></strong>`;
-    }
-  }
-
-  steps.innerHTML = stepsHtml;
-}
-
-// ============================================================
-// PRACTICE PROBLEMS
-// ============================================================
-
-const PROBLEMS = {
-  1: [
-    {
-      q: 'What is the largest digit you can use in base 5?',
-      answer: '4',
-      hint: 'In base b, digits go from 0 to b-1.',
-      type: 'input'
-    },
-    {
-      q: 'How many different digits does base 8 use?',
-      answer: '8',
-      hint: 'Base b uses digits 0, 1, 2, ..., b-1. How many is that?',
-      type: 'input'
-    },
-    {
-      q: 'Expand 32 in base 8: what is 3&times;8 + 2?',
-      answer: '26',
-      hint: '3 eights plus 2 ones.',
-      type: 'input'
-    },
-    {
-      q: 'Expand 32 in base 5: what is 3&times;5 + 2?',
-      answer: '17',
-      hint: '3 fives plus 2 ones.',
-      type: 'input'
-    },
-    {
-      q: 'What is 4321<sub>10</sub> expanded? (Pick the correct expansion)',
-      answer: 'B',
-      type: 'mc',
-      options: [
-        { label: 'A', text: '4&times;10 + 3&times;10 + 2&times;10 + 1' },
-        { label: 'B', text: '4&times;1000 + 3&times;100 + 2&times;10 + 1&times;1' },
-        { label: 'C', text: '4&times;10000 + 3&times;1000 + 2&times;100 + 1&times;10' },
-      ],
-      hint: 'The leftmost digit multiplies the highest power of 10.'
-    },
-    {
-      q: 'In base 2 (binary), what digits can you use?',
-      answer: 'A',
-      type: 'mc',
-      options: [
-        { label: 'A', text: '0 and 1 only' },
-        { label: 'B', text: '0, 1, and 2' },
-        { label: 'C', text: '1 and 2 only' },
-      ],
-      hint: 'Base 2 means digits from 0 to 2-1.'
-    },
-  ],
-  2: [
-    {
-      q: 'In base 4, what comes after 3?',
-      answer: '10',
-      hint: '3 is the largest digit in base 4. What happens when you go one more?',
-      type: 'input'
-    },
-    {
-      q: 'In base 5, what is the 20th counting number? (Count: 1, 2, 3, 4, 10, 11, ...)',
-      answer: '40',
-      hint: '20 = 4&times;5 + 0. Convert 20 to base 5.',
-      type: 'input'
-    },
-    {
-      q: 'In base 8, what is the 20th counting number?',
-      answer: '24',
-      hint: '20 = 2&times;8 + 4. Convert 20 to base 8.',
-      type: 'input'
-    },
-    {
-      q: 'In base 2, what is the 8th counting number?',
-      answer: '1000',
-      hint: '8 in binary is 2^3 = 1000.',
-      type: 'input'
-    },
-    {
-      q: 'In base 4, what is the 21st counting number?',
-      answer: '111',
-      hint: '21 = 1&times;16 + 1&times;4 + 1&times;1. Convert 21 to base 4.',
-      type: 'input'
-    },
-    {
-      q: 'In base 2, what comes after 111?',
-      answer: '1000',
-      hint: '111 in binary is 7. What is 8 in binary?',
-      type: 'input'
-    },
-  ],
-  3: [
-    {
-      q: 'In base 6: 2 + 4 = ?',
-      answer: '10',
-      hint: '2+4=6, but 6 is the base! Write 10 in base 6.',
-      type: 'input'
-    },
-    {
-      q: 'In base 6: 3 + 5 = ?',
-      answer: '12',
-      hint: '3+5=8. 8 = 1&times;6 + 2 = 12 in base 6.',
-      type: 'input'
-    },
-    {
-      q: 'In base 2: 1 + 1 = ?',
-      answer: '10',
-      hint: '1+1=2, and 2 in binary is 10.',
-      type: 'input'
-    },
-    {
-      q: 'In base 2: 11 + 11 = ?',
-      answer: '110',
-      hint: '11 is 3 in decimal. 3+3=6. Convert 6 to binary.',
-      type: 'input'
-    },
-    {
-      q: 'In base 5: 12<sub>5</sub> &minus; 4<sub>5</sub> = ?',
-      answer: '3',
-      hint: 'Borrow from the fives column: 12 in base 5 is 7 in decimal. 7-4=3.',
-      type: 'input'
-    },
-    {
-      q: 'In base 5: 32<sub>5</sub> + 13<sub>5</sub> = ?',
-      answer: '100',
-      hint: '32 in base 5 is 17, 13 in base 5 is 8. 17+8=25. Convert 25 to base 5.',
-      type: 'input'
-    },
-    {
-      q: 'In base 8: 2 &times; 4 = ?',
-      answer: '10',
-      hint: '2&times;4=8, but 8 is the base! That is 10 in base 8.',
-      type: 'input'
-    },
-    {
-      q: 'In base 8: 2 &times; 6 = ?',
-      answer: '14',
-      hint: '2&times;6=12. 12 = 1&times;8 + 4 = 14 in base 8.',
-      type: 'input'
-    },
-  ],
-  4: [
-    {
-      q: 'Convert 42<sub>5</sub> to base 10.',
-      answer: '22',
-      hint: '4&times;5 + 2 = ?',
-      type: 'input'
-    },
-    {
-      q: 'Convert 123<sub>8</sub> to base 10.',
-      answer: '83',
-      hint: '1&times;64 + 2&times;8 + 3&times;1 = ?',
-      type: 'input'
-    },
-    {
-      q: 'Convert 35<sub>7</sub> to base 10.',
-      answer: '26',
-      hint: '3&times;7 + 5 = ?',
-      type: 'input'
-    },
-    {
-      q: 'Convert 26 (base 10) to base 3.',
-      answer: '222',
-      hint: '26 &divide; 3 = 8 R2, 8 &divide; 3 = 2 R2, 2 &divide; 3 = 0 R2.',
-      type: 'input'
-    },
-    {
-      q: 'Convert 35 (base 10) to base 3.',
-      answer: '1022',
-      hint: '35 &divide; 3 = 11 R2, 11 &divide; 3 = 3 R2, 3 &divide; 3 = 1 R0, 1 &divide; 3 = 0 R1. Read remainders: 1022.',
-      type: 'input'
-    },
-    {
-      q: 'Convert 125 (base 10) to base 8.',
-      answer: '175',
-      hint: '125 &divide; 8 = 15 R5, 15 &divide; 8 = 1 R7, 1 &divide; 8 = 0 R1. Read: 175.',
-      type: 'input'
-    },
-    {
-      q: 'Convert 332<sub>5</sub> to base 8.',
-      answer: '134',
-      hint: 'First convert to base 10: 3&times;25+3&times;5+2=92. Then 92 to base 8.',
-      type: 'input'
-    },
-    {
-      q: 'What is 245 (base 10) in binary (base 2)?',
-      answer: '11110101',
-      hint: '245 = 128+64+32+16+0+4+0+1.',
-      type: 'input'
-    },
-  ],
-  5: [
-    {
-      q: 'What hex color code is pure red? (Write as 6 hex digits, no #)',
-      answer: 'FF0000',
-      hint: 'Red=FF (max), Green=00, Blue=00.',
-      type: 'input'
-    },
-    {
-      q: 'The hex color #00FF00 is which color?',
-      answer: 'B',
-      type: 'mc',
-      options: [
-        { label: 'A', text: 'Red' },
-        { label: 'B', text: 'Green' },
-        { label: 'C', text: 'Blue' },
-        { label: 'D', text: 'Yellow' },
-      ],
-      hint: 'The middle two hex digits (FF) control green.'
-    },
-    {
-      q: 'What decimal number is FF in hex (base 16)?',
-      answer: '255',
-      hint: 'F=15. FF = 15&times;16 + 15 = ?',
-      type: 'input'
-    },
-    {
-      q: 'The letter "A" has ASCII code 65. What is 65 in binary?',
-      answer: '1000001',
-      hint: '65 = 64 + 1 = 2^6 + 2^0.',
-      type: 'input'
-    },
-    {
-      q: 'Using finger binary (thumb=1, index=2, middle=4, ring=8, pinky=16), what number is thumb + middle + ring?',
-      answer: '13',
-      hint: '1 + 4 + 8 = ?',
-      type: 'input'
-    },
-    {
-      q: 'How many different values can 8 binary bits represent?',
-      answer: '256',
-      hint: '2^8 = ?',
-      type: 'input'
-    },
-  ],
-  6: [
-    {
-      q: 'Find base b: if 21<sub>b</sub> &times; 54<sub>b</sub> = 1354<sub>b</sub>, what is b?',
-      answer: '8',
-      hint: '(2b+1)(5b+4) = b\u00B3+3b\u00B2+5b+4. Expand and simplify.',
-      type: 'input'
-    },
-    {
-      q: '15<sub>b</sub> &times; 15<sub>b</sub> = 321<sub>b</sub>. What is b?',
-      answer: '6',
-      hint: '(b+5)\u00B2 = 3b\u00B2+2b+1. Solve the quadratic.',
-      type: 'input'
-    },
-    {
-      q: 'What is the sum of 101<sub>2</sub> and 1011<sub>2</sub>? Give your answer in base 2.',
-      answer: '10000',
-      hint: '101 is 5, 1011 is 11. 5+11=16. Convert 16 to binary.',
-      type: 'input'
-    },
-    {
-      q: 'The base-10 numbers 235 and 57 are multiplied. What is the units digit of the product in base 6?',
-      answer: '3',
-      hint: 'Only the units digit matters. 235&times;57 mod 6 = (235 mod 6)&times;(57 mod 6) mod 6.',
-      type: 'input'
-    },
-    {
-      q: 'In base 3: 2012<sub>3</sub> &times; 201<sub>3</sub> = ? Give your answer in base 3.',
-      answer: '1112112',
-      hint: 'Do long multiplication in base 3, or convert both to decimal, multiply, convert back.',
-      type: 'input'
-    },
-    {
-      q: 'b is the smallest positive integer base where 301<sub>b</sub> is a perfect square. What is b?',
-      answer: '4',
-      hint: '301 in base b = 3b\u00B2+1. Try b=4: 3(16)+1=49=7\u00B2.',
-      type: 'input'
-    },
-    {
-      q: 'When 363 (base 10) is written as 123<sub>b</sub>, what is b?',
-      answer: '18',
-      hint: 'b\u00B2 + 2b + 3 = 363. Solve: b\u00B2 + 2b - 360 = 0.',
-      type: 'input'
-    },
-    {
-      q: 'In another world, people use base y. If 4&times;6=30 and 4&times;7=34 in their system, what is y?',
-      answer: '8',
-      hint: '4&times;6=24 in decimal. 30 in base y means 3y. So 3y=24, y=8.',
-      type: 'input'
-    },
-    {
-      q: 'How many zeros does 100! end with in base 6?',
-      answer: '48',
-      hint: 'In base 6, a trailing zero needs a factor of 6=2&times;3. Count factors of 3 in 100! (there are fewer 3s than 2s).',
-      type: 'input'
-    },
-    {
-      q: 'The repeating base-3 decimal 0.121212...<sub>3</sub> equals what fraction (base 10)? Write as a/b in lowest terms.',
-      answer: '5/8',
-      hint: 'x = 0.12 repeating in base 3. Multiply by 3\u00B2=9: 9x = 12.12... So 9x - x = 12 (base 3) = 5. Thus 8x = 5.',
-      type: 'input'
-    },
-  ]
-};
-
-function renderAllProblems() {
-  for (let stage = 1; stage <= 6; stage++) {
-    const container = document.getElementById(`practice-${stage}`);
-    if (!container) continue;
-    container.innerHTML = '';
-
-    PROBLEMS[stage].forEach((prob, idx) => {
-      const id = `p${stage}-${idx}`;
-      const card = document.createElement('div');
-      card.className = 'problem-card';
-      card.id = `card-${id}`;
-
-      let inputHtml = '';
-      if (prob.type === 'mc') {
-        inputHtml = `<div class="mc-options" id="mc-${id}">` +
-          prob.options.map(opt =>
-            `<button class="mc-option" data-value="${opt.label}" onclick="selectMC('${id}', '${opt.label}')">${opt.label}) ${opt.text}</button>`
-          ).join('') +
-          '</div>';
-      } else {
-        inputHtml = `<div class="problem-input-row">
-          <input type="text" class="problem-input" id="input-${id}" placeholder="Answer..."
-            onkeydown="if(event.key==='Enter') checkAnswer('${id}', ${stage}, ${idx})">
-          <button class="btn-check" id="btn-${id}" onclick="checkAnswer('${id}', ${stage}, ${idx})">Check</button>
-          <button class="btn-hint" onclick="showHint('${id}', ${stage}, ${idx})">Hint</button>
-        </div>`;
-      }
-
-      card.innerHTML = `
-        <div class="problem-number">Problem ${idx + 1}</div>
-        <div class="problem-text">${prob.q}</div>
-        ${inputHtml}
-        ${prob.type === 'mc' ? `<div class="problem-input-row" style="margin-top:8px">
-          <button class="btn-check" id="btn-${id}" onclick="checkAnswer('${id}', ${stage}, ${idx})">Check</button>
-          <button class="btn-hint" onclick="showHint('${id}', ${stage}, ${idx})">Hint</button>
-        </div>` : ''}
-        <div class="problem-feedback" id="fb-${id}"></div>
-      `;
-      container.appendChild(card);
-    });
-  }
-}
-
-let selectedMC = {};
-
-function selectMC(id, value) {
-  selectedMC[id] = value;
-  document.querySelectorAll(`#mc-${id} .mc-option`).forEach(opt => {
-    opt.classList.toggle('selected', opt.dataset.value === value);
-  });
-}
-
-function checkAnswer(id, stage, idx) {
-  const prob = PROBLEMS[stage][idx];
-  const card = document.getElementById(`card-${id}`);
-  const fb = document.getElementById(`fb-${id}`);
-  const btn = document.getElementById(`btn-${id}`);
-
-  let userAnswer;
-  if (prob.type === 'mc') {
-    userAnswer = selectedMC[id] || '';
-  } else {
-    const input = document.getElementById(`input-${id}`);
-    userAnswer = input.value.trim().toUpperCase();
-  }
-
-  if (!userAnswer) {
-    fb.textContent = 'Please enter an answer!';
-    fb.className = 'problem-feedback incorrect';
+function calcScore() {
+  const guess = parseGuess(document.getElementById('score-guess').value);
+  const real  = parseGuess(document.getElementById('score-real').value);
+  const out = document.getElementById('score-calc-result');
+  if (!isFinite(guess) || guess <= 0 || !isFinite(real) || real <= 0) {
+    out.innerHTML = '<span style="color:#c62828">Enter two positive numbers.</span>';
     return;
   }
-
-  // Already answered
-  if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
-
-  const correct = userAnswer === prob.answer.toUpperCase();
-
-  score.total++;
-  if (correct) {
-    score.correct++;
-    fb.textContent = 'Correct! Great job!';
-    fb.className = 'problem-feedback correct';
-    card.classList.add('correct');
-  } else {
-    fb.textContent = `Not quite. The answer is ${prob.answer}.`;
-    fb.className = 'problem-feedback incorrect';
-    card.classList.add('incorrect');
-  }
-
-  // Disable input
-  if (prob.type === 'mc') {
-    document.querySelectorAll(`#mc-${id} .mc-option`).forEach(opt => {
-      opt.style.pointerEvents = 'none';
-      if (opt.dataset.value === prob.answer.toUpperCase()) opt.classList.add('correct');
-      else if (opt.dataset.value === userAnswer) opt.classList.add('incorrect');
-    });
-  } else {
-    const input = document.getElementById(`input-${id}`);
-    input.disabled = true;
-    input.classList.add(correct ? 'correct' : 'incorrect');
-  }
-  btn.disabled = true;
-
-  saveScore();
+  const r = scoreGuess(guess, real);
+  const ratio = (Math.max(guess, real) / Math.min(guess, real)).toFixed(2);
+  out.innerHTML =
+    `Your guess <strong>${guess.toLocaleString()}</strong> vs. answer <strong>${real.toLocaleString()}</strong><br>` +
+    `Ratio: <strong>${ratio}×</strong> &nbsp; → &nbsp; ${r.label} &nbsp; <strong>(${r.points} pts)</strong>`;
 }
 
-function showHint(id, stage, idx) {
-  const prob = PROBLEMS[stage][idx];
-  const fb = document.getElementById(`fb-${id}`);
+// ============================================================
+// STAGE 3 & 4: Warm-up + Classic problems
+// ============================================================
+function renderEstimateProblems(containerId, problems, includeHint) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  problems.forEach((prob, idx) => {
+    const id = `${containerId}-${idx}`;
+    const card = document.createElement('div');
+    card.className = 'problem-card';
+    card.id = `card-${id}`;
+    card.innerHTML = `
+      <div class="problem-number">Problem ${idx + 1}</div>
+      <div class="problem-text">${prob.q}</div>
+      <div class="problem-row">
+        <input type="text" class="guess-input" id="g-${id}" placeholder="Your guess..."
+          onkeydown="if(event.key==='Enter') revealEstimate('${id}', ${JSON.stringify(containerId)}, ${idx})">
+        <button class="btn-reveal" onclick="revealEstimate('${id}', '${containerId}', ${idx})">🎲 Reveal Answer</button>
+        ${includeHint && prob.hint ? `<button class="btn-hint-toggle" onclick="toggleHint('${id}', '${containerId}', ${idx})">💡 Hint</button>` : ''}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function toggleHint(id, source, idx) {
   const card = document.getElementById(`card-${id}`);
-  if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
-  fb.textContent = 'Hint: ' + prob.hint;
-  fb.className = 'problem-feedback hint';
+  let block = card.querySelector('.hint-block');
+  if (block) { block.remove(); return; }
+  const problems = source === 'classic-problems' ? CLASSIC_PROBLEMS : WARMUP_PROBLEMS;
+  block = document.createElement('div');
+  block.className = 'hint-block';
+  block.innerHTML = `💡 <strong>Hint:</strong> ${problems[idx].hint}`;
+  card.appendChild(block);
 }
 
-// ============================================================
-// STAGE 5: HEX COLOR MIXER
-// ============================================================
-function updateColorPreview() {
-  const r = parseInt(document.getElementById('color-r').value);
-  const g = parseInt(document.getElementById('color-g').value);
-  const b = parseInt(document.getElementById('color-b').value);
+function revealEstimate(id, source, idx) {
+  const card = document.getElementById(`card-${id}`);
+  const input = document.getElementById(`g-${id}`);
+  if (card.classList.contains('scored')) return;
 
-  const hexR = r.toString(16).toUpperCase().padStart(2, '0');
-  const hexG = g.toString(16).toUpperCase().padStart(2, '0');
-  const hexB = b.toString(16).toUpperCase().padStart(2, '0');
+  const problems = source === 'classic-problems' ? CLASSIC_PROBLEMS : WARMUP_PROBLEMS;
+  const prob = problems[idx];
+  const guessRaw = input.value.trim();
+  const guess = parseGuess(guessRaw);
 
-  document.getElementById('hex-r').textContent = hexR;
-  document.getElementById('hex-g').textContent = hexG;
-  document.getElementById('hex-b').textContent = hexB;
-
-  const hex = `#${hexR}${hexG}${hexB}`;
-  document.getElementById('color-swatch').style.background = hex;
-  document.getElementById('color-code').textContent = hex;
-  document.getElementById('color-decimal').textContent = `rgb(${r}, ${g}, ${b})`;
-
-  // Also change the header color as a fun demo
-  document.querySelector('header').style.background =
-    `linear-gradient(135deg, ${hex}, ${shiftColor(hex, -40)})`;
-}
-
-function shiftColor(hex, amount) {
-  const r = Math.max(0, Math.min(255, parseInt(hex.slice(1,3), 16) + amount));
-  const g = Math.max(0, Math.min(255, parseInt(hex.slice(3,5), 16) + amount));
-  const b = Math.max(0, Math.min(255, parseInt(hex.slice(5,7), 16) + amount));
-  return `rgb(${r},${g},${b})`;
-}
-
-function setColorPreset(btn) {
-  document.getElementById('color-r').value = btn.dataset.r;
-  document.getElementById('color-g').value = btn.dataset.g;
-  document.getElementById('color-b').value = btn.dataset.b;
-  updateColorPreview();
-}
-
-// ============================================================
-// STAGE 5: BINARY MESSAGE ENCODER
-// ============================================================
-function encodeBinaryMessage() {
-  const msg = document.getElementById('binary-message').value.toUpperCase();
-  const output = document.getElementById('binary-output');
-  if (!msg) { output.innerHTML = ''; return; }
-
-  let lines = [];
-  for (let ch of msg) {
-    const code = ch.charCodeAt(0);
-    if (code >= 32 && code <= 126) {
-      const bin = code.toString(2).padStart(8, '0');
-      lines.push(`<span style="color:#1565c0;font-weight:700">${ch === ' ' ? '(space)' : ch}</span> = ${bin}`);
-    }
+  const block = document.createElement('div');
+  if (!isFinite(guess) || guess <= 0) {
+    block.className = 'reveal-block ok';
+    block.innerHTML = `
+      <div>You didn't enter a guess this time — that's okay!</div>
+      <div class="reveal-answer">Answer: ${prob.answerLabel}</div>
+      <div class="reveal-explanation">${prob.breakdown}</div>
+    `;
+  } else {
+    const r = scoreGuess(guess, prob.answer);
+    practiceScore.total += 10;
+    practiceScore.correct += r.points;
+    savePracticeScore();
+    block.className = 'reveal-block ' + r.tier;
+    const ratio = (Math.max(guess, prob.answer) / Math.min(guess, prob.answer)).toFixed(2);
+    block.innerHTML = `
+      <div>You guessed <strong>${guess.toLocaleString()}</strong></div>
+      <div class="reveal-answer">Real answer: ${prob.answerLabel}</div>
+      <div class="reveal-points">${r.label} — <strong>${r.points} / 10 points</strong> (off by ${ratio}×)</div>
+      <div class="reveal-explanation">${prob.breakdown}</div>
+    `;
   }
-  output.innerHTML = lines.join('<br>');
+  card.appendChild(block);
+  card.classList.add('scored');
+  input.disabled = true;
+  card.querySelector('.btn-reveal').disabled = true;
 }
 
 // ============================================================
-// STAGE 5: BINARY LIGHT SWITCHES
+// STAGE 5: ESTIMATHON GAME
 // ============================================================
-let switchBits = [0, 0, 0, 0, 0, 0, 0, 0];
+let game = null; // { p1, p2, p1Score, p2Score, rounds, currentRound, questions, p1Guess, p2Guess, history, phase }
 
-function initSwitches() {
-  const row = document.getElementById('switch-row');
-  if (!row) return;
-  row.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'bit-switch';
-    btn.textContent = '0';
-    btn.dataset.index = i;
-    btn.addEventListener('click', () => toggleBit(i));
-    row.appendChild(btn);
+function startGame() {
+  const p1 = (document.getElementById('p1-name').value.trim() || 'Player 1');
+  const p2 = (document.getElementById('p2-name').value.trim() || 'Player 2');
+  const rounds = parseInt(document.getElementById('game-rounds').value);
+
+  // pick `rounds` random questions (no repeats)
+  const pool = [...GAME_QUESTIONS];
+  const questions = [];
+  for (let i = 0; i < rounds && pool.length > 0; i++) {
+    const idx = Math.floor(Math.random() * pool.length);
+    questions.push(pool.splice(idx, 1)[0]);
   }
-  updateSwitchDisplay();
+
+  game = {
+    p1, p2,
+    p1Score: 0, p2Score: 0,
+    rounds, currentRound: 0,
+    questions,
+    p1Guess: null, p2Guess: null,
+    history: [],
+    phase: 'p1'
+  };
+
+  document.getElementById('game-setup').classList.add('hidden');
+  document.getElementById('game-final').classList.add('hidden');
+  document.getElementById('game-active').classList.remove('hidden');
+  document.getElementById('p1-display').textContent = p1;
+  document.getElementById('p2-display').textContent = p2;
+  document.getElementById('phase-p1-label').innerHTML = `📝 <strong>${p1}</strong>, enter your guess (${p2}, look away!):`;
+  document.getElementById('phase-p2-label').innerHTML = `📝 <strong>${p2}</strong>, your turn! Enter your guess:`;
+
+  loadRound();
 }
 
-function toggleBit(i) {
-  switchBits[i] = switchBits[i] ? 0 : 1;
-  updateSwitchDisplay();
+function loadRound() {
+  const q = game.questions[game.currentRound];
+  document.getElementById('game-question-text').textContent = q.q;
+  document.getElementById('round-num').textContent = `${game.currentRound + 1} / ${game.rounds}`;
+  document.getElementById('p1-pts').textContent = game.p1Score;
+  document.getElementById('p2-pts').textContent = game.p2Score;
+
+  // Highlight leader
+  const p1Box = document.getElementById('p1-score-box');
+  const p2Box = document.getElementById('p2-score-box');
+  p1Box.classList.toggle('leader', game.p1Score > game.p2Score);
+  p2Box.classList.toggle('leader', game.p2Score > game.p1Score);
+
+  // Reset phase visibility
+  document.getElementById('phase-p1').classList.remove('hidden');
+  document.getElementById('phase-p2').classList.add('hidden');
+  document.getElementById('phase-reveal').classList.add('hidden');
+  document.getElementById('phase-result').classList.add('hidden');
+  document.getElementById('p1-guess').value = '';
+  document.getElementById('p2-guess').value = '';
+  document.getElementById('p1-guess').focus();
+  game.phase = 'p1';
+  game.p1Guess = null;
+  game.p2Guess = null;
 }
 
-function updateSwitchDisplay() {
-  const row = document.getElementById('switch-row');
-  if (!row) return;
-  const buttons = row.querySelectorAll('.bit-switch');
-  buttons.forEach((btn, i) => {
-    btn.textContent = switchBits[i];
-    btn.classList.toggle('on', switchBits[i] === 1);
+function submitGuess(player) {
+  const inputId = `p${player}-guess`;
+  const input = document.getElementById(inputId);
+  const raw = input.value.trim();
+  const v = parseGuess(raw);
+  if (!isFinite(v) || v <= 0) {
+    input.style.borderColor = '#c62828';
+    input.focus();
+    return;
+  }
+  input.style.borderColor = '';
+
+  if (player === 1) {
+    game.p1Guess = v;
+    game.phase = 'p2';
+    document.getElementById('phase-p1').classList.add('hidden');
+    document.getElementById('phase-p2').classList.remove('hidden');
+    document.getElementById('p2-guess').focus();
+  } else {
+    game.p2Guess = v;
+    game.phase = 'reveal';
+    document.getElementById('phase-p2').classList.add('hidden');
+    document.getElementById('phase-reveal').classList.remove('hidden');
+  }
+}
+
+function revealRound() {
+  const q = game.questions[game.currentRound];
+  const r1 = scoreGuess(game.p1Guess, q.answer);
+  const r2 = scoreGuess(game.p2Guess, q.answer);
+
+  game.p1Score += r1.points;
+  game.p2Score += r2.points;
+
+  game.history.push({
+    q: q.q,
+    answer: q.label,
+    p1Guess: game.p1Guess,
+    p2Guess: game.p2Guess,
+    p1Pts: r1.points,
+    p2Pts: r2.points
   });
 
-  const binStr = switchBits.join('');
-  const dec = parseInt(binStr, 2);
-  const hex = dec.toString(16).toUpperCase().padStart(2, '0');
+  document.getElementById('phase-reveal').classList.add('hidden');
+  document.getElementById('phase-result').classList.remove('hidden');
 
-  document.getElementById('switch-binary').textContent = binStr;
-  document.getElementById('switch-decimal').textContent = dec;
-  document.getElementById('switch-hex').textContent = hex;
+  document.getElementById('answer-reveal').innerHTML =
+    `🎉 The answer is: <span class="answer-num">${q.label}</span>`;
+
+  const p1Won = r1.points > r2.points;
+  const p2Won = r2.points > r1.points;
+  document.getElementById('round-results').innerHTML = `
+    <div class="player-result ${p1Won ? 'winner' : ''}">
+      <div class="player-result-name">${game.p1} ${p1Won ? '🏅' : ''}</div>
+      <div class="player-result-guess">${game.p1Guess.toLocaleString()}</div>
+      <div class="player-result-pts">${r1.label} — +${r1.points} pts</div>
+    </div>
+    <div class="player-result ${p2Won ? 'winner' : ''}">
+      <div class="player-result-name">${game.p2} ${p2Won ? '🏅' : ''}</div>
+      <div class="player-result-guess">${game.p2Guess.toLocaleString()}</div>
+      <div class="player-result-pts">${r2.label} — +${r2.points} pts</div>
+    </div>
+  `;
+
+  // Update scoreboard live
+  document.getElementById('p1-pts').textContent = game.p1Score;
+  document.getElementById('p2-pts').textContent = game.p2Score;
+
+  // Last round?
+  if (game.currentRound + 1 >= game.rounds) {
+    document.getElementById('next-round-btn').textContent = '🏁 See Final Results';
+  } else {
+    document.getElementById('next-round-btn').textContent = '➡️ Next Round';
+  }
+}
+
+function nextRound() {
+  if (game.currentRound + 1 >= game.rounds) {
+    finishGame();
+  } else {
+    game.currentRound++;
+    loadRound();
+  }
+}
+
+function finishGame() {
+  document.getElementById('game-active').classList.add('hidden');
+  document.getElementById('game-final').classList.remove('hidden');
+
+  const p1Won = game.p1Score > game.p2Score;
+  const p2Won = game.p2Score > game.p1Score;
+  const tied = game.p1Score === game.p2Score;
+
+  let banner;
+  if (tied) banner = `🤝 It's a tie at ${game.p1Score} points!`;
+  else if (p1Won) banner = `🏆 ${game.p1} wins!`;
+  else banner = `🏆 ${game.p2} wins!`;
+  document.getElementById('winner-banner').textContent = banner;
+
+  document.getElementById('final-scores').innerHTML = `
+    <div class="final-score-card ${p1Won ? 'winner' : ''}">
+      <div class="fs-name">${game.p1}</div>
+      <div class="fs-pts">${game.p1Score}</div>
+    </div>
+    <div class="final-score-card ${p2Won ? 'winner' : ''}">
+      <div class="fs-name">${game.p2}</div>
+      <div class="fs-pts">${game.p2Score}</div>
+    </div>
+  `;
+
+  let recap = '<h4 style="margin-bottom:8px;color:#bf360c">📜 Round-by-round recap</h4>';
+  game.history.forEach((h, i) => {
+    recap += `
+      <div class="recap-row">
+        <span class="recap-q">${i+1}.</span>
+        <span>${h.q}</span>
+        <span class="recap-ans">${h.answer}</span>
+        <span>${game.p1}: ${h.p1Guess.toLocaleString()} (+${h.p1Pts}) vs ${game.p2}: ${h.p2Guess.toLocaleString()} (+${h.p2Pts})</span>
+      </div>
+    `;
+  });
+  document.getElementById('final-recap').innerHTML = recap;
+}
+
+function resetGame() {
+  document.getElementById('game-setup').classList.remove('hidden');
+  document.getElementById('game-active').classList.add('hidden');
+  document.getElementById('game-final').classList.add('hidden');
+  game = null;
+}
+
+function quitGame() {
+  if (confirm('Quit the current match? All progress will be lost.')) {
+    resetGame();
+  }
 }
 
 // ============================================================
-// START
+// INIT
 // ============================================================
 function init() {
-  loadScore();
+  loadPracticeScore();
+  renderMCProblems('practice-1', FERMI_THINKING);
+  renderMCProblems('practice-2', OOM_PROBLEMS);
+  renderEstimateProblems('warmup-problems', WARMUP_PROBLEMS, false);
+  renderEstimateProblems('classic-problems', CLASSIC_PROBLEMS, true);
   showStage(1);
-  renderAllProblems();
-  resetCounter();
-  initSwitches();
-  updateColorPreview();
 }
 
 init();
