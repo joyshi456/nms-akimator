@@ -9,311 +9,193 @@
 <body>
   <header>
     <h1>Randomness Lab 🎲</h1>
-    <p class="subtitle">Coin flips, dice, and the magical bell curve</p>
+    <p class="subtitle">Mystery boxes, ball drops, and the magic of pretend randomness</p>
   </header>
 
   <div class="learning-panel">
-    <div class="learning-icon">🔮</div>
+    <div class="learning-icon">🎁</div>
     <div class="learning-text">
-      <p>Will the next coin flip be heads or tails? You don't know — that's <strong>randomness</strong>!</p>
-      <p>Surprisingly, even though we can't predict <em>one</em> outcome, we can predict patterns when many things happen.</p>
-      <p>Flip coins, roll dice, drop balls — and watch a beautiful <strong>bell curve</strong> appear like magic.</p>
+      <p>Imagine a box. You press a button. A number comes out. You can't predict which one — that's <strong>randomness</strong>.</p>
+      <p>Build your own bell curve, watch a Galton board, then learn how computers <em>fake</em> randomness with hash functions.</p>
     </div>
   </div>
 
   <nav class="stage-tabs">
-    <button class="tab active" data-stage="1">1. What Is Random?</button>
-    <button class="tab" data-stage="2">2. Random Variables</button>
-    <button class="tab" data-stage="3">3. Distributions</button>
-    <button class="tab" data-stage="4">4. The Bell Curve</button>
-    <button class="tab" data-stage="5">5. Galton Board</button>
+    <button class="tab active" data-stage="1">1. Mystery Box 🎁</button>
+    <button class="tab" data-stage="2">2. Build a Bell 🔔</button>
+    <button class="tab" data-stage="3">3. Different Boxes 📦</button>
+    <button class="tab" data-stage="4">4. Galton Board 🌰</button>
+    <button class="tab" data-stage="5">5. Hash Functions 🔐</button>
     <button class="tab" data-stage="6">6. Spot the Fake! 🎯</button>
   </nav>
 
-  <!-- STAGE 1: What is Randomness? -->
+  <!-- STAGE 1: THE MYSTERY BOX -->
   <section id="stage-1" class="stage">
     <div class="stage-content">
-      <h2>What Is Randomness?</h2>
-      <p>Some things you can predict. Some things you can't. The unpredictable ones are <strong>random</strong>.</p>
+      <h2>The Mystery Box 🎁</h2>
+      <p>Randomness is like a magic box: you press a button, a number pops out, and you have <em>no idea</em> what it'll be.</p>
 
-      <div class="lesson-card">
-        <h3>Predictable vs Random 🎯</h3>
-        <div class="compare-grid">
-          <div class="compare-col predictable">
-            <h4>📐 Predictable</h4>
-            <ul>
-              <li>If you drop a ball, it falls.</li>
-              <li>2 + 2 always equals 4.</li>
-              <li>The sun rises tomorrow.</li>
-              <li>A clock ticks once per second.</li>
-            </ul>
+      <div class="lesson-card mystery-card">
+        <div class="mystery-box-area">
+          <div class="mystery-box" id="mystery-box">
+            <div class="mb-question">?</div>
+            <div class="mb-output" id="mb-output">—</div>
+            <div class="mb-label">Press the button!</div>
           </div>
-          <div class="compare-col random">
-            <h4>🎲 Random</h4>
-            <ul>
-              <li>The next coin flip.</li>
-              <li>Which card you'll draw next.</li>
-              <li>Where lightning will strike.</li>
-              <li>Whether it'll rain at exactly 3:14 PM.</li>
-            </ul>
-          </div>
+          <button class="btn-mystery" onclick="pressMystery()">🎲 GENERATE!</button>
+          <button class="btn-secondary" onclick="resetMystery()">🔄 Reset</button>
         </div>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Flip a Coin! 🪙</h3>
-        <p>Click the coin to flip it. Try flipping it many times — what fraction lands heads?</p>
-        <div class="coin-area">
-          <div class="coin" id="coin">?</div>
-          <div class="coin-controls">
-            <button class="btn-action" onclick="flipOne()">🪙 Flip Once</button>
-            <button class="btn-action" onclick="flipMany(10)">⚡ Flip 10</button>
-            <button class="btn-action" onclick="flipMany(100)">💨 Flip 100</button>
-            <button class="btn-action" onclick="flipMany(1000)">🌪️ Flip 1,000</button>
-            <button class="btn-secondary" onclick="resetFlips()">🔄 Reset</button>
-          </div>
-        </div>
-        <div class="flip-stats">
-          <div class="stat-box">
-            <div class="stat-num" id="heads-count">0</div>
-            <div class="stat-label">Heads 🪙</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="tails-count">0</div>
-            <div class="stat-label">Tails 🌑</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="flip-total">0</div>
-            <div class="stat-label">Total flips</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="heads-pct">—</div>
-            <div class="stat-label">% Heads</div>
-          </div>
-        </div>
-        <div class="bar-display">
-          <div class="bar-row">
-            <span class="bar-label">Heads</span>
-            <div class="bar-track"><div class="bar-fill heads-fill" id="heads-bar"></div></div>
-          </div>
-          <div class="bar-row">
-            <span class="bar-label">Tails</span>
-            <div class="bar-track"><div class="bar-fill tails-fill" id="tails-bar"></div></div>
-          </div>
-        </div>
-        <p class="example-note">As you flip more, the % of heads gets closer to <strong>50%</strong>. This is the <strong>law of large numbers</strong>!</p>
+        <div class="mystery-stream" id="mystery-stream"></div>
+        <p class="example-note">Each press is <strong>independent</strong> — the box has no memory. Past numbers don't change future ones.</p>
       </div>
 
       <div class="lesson-card">
-        <h3>Big Idea 💡</h3>
+        <h3>Try a Different Box 📦</h3>
+        <p>Different "random sources" give different ranges and shapes:</p>
+        <div class="box-picker" id="box-picker">
+          <button class="box-option active" data-source="coin" onclick="setSource('coin')">🪙 Coin (H or T)</button>
+          <button class="box-option" data-source="die" onclick="setSource('die')">🎲 Die (1-6)</button>
+          <button class="box-option" data-source="d100" onclick="setSource('d100')">💯 1 to 100</button>
+          <button class="box-option" data-source="real" onclick="setSource('real')">🌊 Decimal 0-1</button>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The Big Idea 💡</h3>
         <div class="key-idea">
-          <p><strong>One flip:</strong> can't predict.</p>
-          <p><strong>Many flips:</strong> patterns emerge — about half are heads.</p>
-          <p>This is what makes randomness so cool: <em>chaos at the small scale, order at the large scale.</em></p>
+          <p>You can't predict <strong>one</strong> press. But press the box <strong>many</strong> times, and patterns appear.</p>
+          <p>That's the secret of randomness: <em>chaos at the small scale, order at the large scale.</em></p>
+          <p>Next tab: let's see those patterns appear before your eyes!</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 2: Random Variables -->
+  <!-- STAGE 2: BUILD YOUR OWN BELL CURVE -->
   <section id="stage-2" class="stage hidden">
     <div class="stage-content">
-      <h2>Random Variables</h2>
-      <p>A random variable is a number you don't know yet — but you know the possibilities.</p>
-
-      <div class="lesson-card">
-        <h3>What's a Random Variable? 🎲</h3>
-        <p>Let <strong>X</strong> = the result of rolling a 6-sided die.</p>
-        <div class="example-box">
-          <p>X can be any of these — each with probability 1/6:</p>
-          <div class="dice-list">
-            <span class="die">⚀</span>
-            <span class="die">⚁</span>
-            <span class="die">⚂</span>
-            <span class="die">⚃</span>
-            <span class="die">⚄</span>
-            <span class="die">⚅</span>
-          </div>
-          <p class="example-note">Before you roll, you don't know which one. After you roll, X has a definite value.</p>
-        </div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Expected Value (the Average) 📊</h3>
-        <p>The <strong>expected value</strong> is the average if you played many times.</p>
-        <p>For one die: E[X] = (1+2+3+4+5+6) / 6 = <strong>3.5</strong></p>
-        <p class="example-note">3.5 isn't a face on a die — but it's the long-run average!</p>
-      </div>
+      <h2>Build Your Own Bell Curve 🔔</h2>
+      <p>Click the button. A ball drops into a slot based on a random number. Do it over and over and watch what shape appears.</p>
 
       <div class="lesson-card interactive-card">
-        <h3>Roll the Die! 🎲</h3>
-        <p>Roll a die many times and watch the <strong>average</strong> creep toward 3.5:</p>
-        <div class="dice-area">
-          <div class="big-die" id="big-die">?</div>
-          <div class="coin-controls">
-            <button class="btn-action" onclick="rollDie(1)">🎲 Roll 1</button>
-            <button class="btn-action" onclick="rollDie(10)">⚡ Roll 10</button>
-            <button class="btn-action" onclick="rollDie(100)">💨 Roll 100</button>
-            <button class="btn-action" onclick="rollDie(1000)">🌪️ Roll 1,000</button>
-            <button class="btn-secondary" onclick="resetDice()">🔄 Reset</button>
+        <h3>One Click = One Ball 🎯</h3>
+        <p>Each ball is dropped at a slot picked using <strong>5 random numbers added together</strong>.</p>
+        <div class="bell-builder">
+          <canvas id="bell-canvas" width="700" height="320"></canvas>
+          <div class="bell-controls">
+            <button class="btn-mystery" onclick="dropOneBell()">⚪ Drop 1 Ball</button>
+            <button class="btn-action" onclick="dropManyBells(10)">⚡ Drop 10</button>
+            <button class="btn-action" onclick="dropManyBells(200)">💨 Drop 200</button>
+            <button class="btn-action" onclick="dropManyBells(2000)">🌪️ Drop 2,000</button>
+            <button class="btn-secondary" onclick="resetBells()">🔄 Reset</button>
+          </div>
+          <div class="bell-stats">
+            <div class="stat-box">
+              <div class="stat-num" id="bell-total">0</div>
+              <div class="stat-label">Balls dropped</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num" id="bell-mean">—</div>
+              <div class="stat-label">Average slot</div>
+            </div>
           </div>
         </div>
-        <div class="flip-stats">
-          <div class="stat-box">
-            <div class="stat-num" id="dice-rolls">0</div>
-            <div class="stat-label">Rolls</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="dice-avg">—</div>
-            <div class="stat-label">Average</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num">3.5</div>
-            <div class="stat-label">Expected (E[X])</div>
-          </div>
-        </div>
-        <canvas id="dice-histogram" width="600" height="200"></canvas>
-        <p class="example-note">Notice how each face appears about 1/6 of the time — that's a <strong>uniform distribution</strong>.</p>
+        <p class="example-note">After just a few drops, the slots look messy. After many — a beautiful <strong>bell curve</strong>! It happens every time.</p>
       </div>
 
       <div class="lesson-card">
-        <h3>Try These</h3>
-        <div id="practice-2"></div>
+        <h3>Why Does This Always Work? 🤔</h3>
+        <div class="key-idea">
+          <p>This is the <strong>Central Limit Theorem</strong> — one of the most magical facts in all of math:</p>
+          <p>👉 If you add up many random numbers, the result is <em>almost always</em> shaped like a bell.</p>
+          <p>It doesn't matter what the original numbers look like — sums of randoms turn into the bell shape.</p>
+          <p>That's why the bell curve shows up <em>everywhere</em> in nature!</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 3: Distributions -->
+  <!-- STAGE 3: DIFFERENT BOXES -->
   <section id="stage-3" class="stage hidden">
     <div class="stage-content">
-      <h2>Probability Distributions</h2>
-      <p>A distribution shows which values are likely and which are rare.</p>
-
-      <div class="lesson-card">
-        <h3>One Die: Uniform Shape ▭</h3>
-        <p>Each face is equally likely → flat bars. This is the <strong>uniform distribution</strong>.</p>
-        <p>Picture: 6 bars all the same height.</p>
-      </div>
+      <h2>Different Boxes, Different Shapes 📦</h2>
+      <p>Each random source has its own personality — its own <strong>distribution</strong>.</p>
 
       <div class="lesson-card interactive-card">
-        <h3>Two Dice: A Triangle Appears! 🔺</h3>
-        <p>Now let's add the values of <strong>two dice</strong>. The sum can be 2 through 12.</p>
-        <p>Are all sums equally likely? Try it and find out!</p>
-        <div class="coin-controls">
-          <button class="btn-action" onclick="rollSum(1)">🎲 Roll 1 pair</button>
-          <button class="btn-action" onclick="rollSum(100)">💨 Roll 100 pairs</button>
-          <button class="btn-action" onclick="rollSum(10000)">🌪️ Roll 10,000 pairs</button>
-          <button class="btn-secondary" onclick="resetSum()">🔄 Reset</button>
-        </div>
-        <canvas id="sum-histogram" width="600" height="280"></canvas>
-        <p class="example-note">A <strong>triangle</strong>! Why? There's only one way to get 2 (1+1), but six ways to get 7 (1+6, 2+5, 3+4, ...). The middle is most likely!</p>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Many Dice: Look Who Shows Up! 🔔</h3>
-        <p>Now let's sum <strong>many</strong> dice at once. Watch the shape change as we add more dice…</p>
+        <h3>Compare 4 Boxes Side-by-Side</h3>
+        <p>Run each box 5,000 times and see what shape appears:</p>
         <div class="setup-row">
-          <label>Dice per roll:
-            <input type="range" id="num-dice" min="1" max="20" value="5" oninput="updateDiceLabel()">
-            <span id="num-dice-label">5</span>
-          </label>
-          <button class="btn-action" onclick="rollManyDice(2000)">🌪️ Roll 2,000 times</button>
-          <button class="btn-secondary" onclick="resetManyDice()">🔄 Reset</button>
+          <button class="btn-action" onclick="runAllBoxes(5000)">🌪️ Run All 5,000 Times</button>
+          <button class="btn-secondary" onclick="resetAllBoxes()">🔄 Reset</button>
         </div>
-        <canvas id="many-dice-histogram" width="600" height="280"></canvas>
-        <p class="example-note">As you add more dice, the shape becomes a <strong>bell curve</strong> 🔔! This magical fact is called the <strong>Central Limit Theorem</strong>.</p>
+        <div class="boxes-grid">
+          <div class="box-panel">
+            <h4>🪙 Coin Flip</h4>
+            <p class="box-desc">Two outcomes, equally likely</p>
+            <canvas id="box-coin" width="300" height="160"></canvas>
+            <p class="box-note">Two equal bars — boring but fair!</p>
+          </div>
+          <div class="box-panel">
+            <h4>🎲 One Die</h4>
+            <p class="box-desc">Uniform: every face equally likely</p>
+            <canvas id="box-die" width="300" height="160"></canvas>
+            <p class="box-note">Six bars, all about the same height.</p>
+          </div>
+          <div class="box-panel">
+            <h4>🎲🎲 Sum of 2 Dice</h4>
+            <p class="box-desc">Triangular: middle is most likely</p>
+            <canvas id="box-2dice" width="300" height="160"></canvas>
+            <p class="box-note">Triangle! Many ways to roll a 7, only one to roll a 2.</p>
+          </div>
+          <div class="box-panel">
+            <h4>🎲×10 Sum of 10 Dice</h4>
+            <p class="box-desc">Bell-shaped: hello, Gaussian!</p>
+            <canvas id="box-10dice" width="300" height="160"></canvas>
+            <p class="box-note">A bell curve. Add enough randoms, and a bell always appears.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- STAGE 4: The Bell Curve / Gaussian -->
-  <section id="stage-4" class="stage hidden">
-    <div class="stage-content">
-      <h2>The Bell Curve 🔔</h2>
-      <p>Also called the <strong>Gaussian</strong> or <strong>Normal</strong> distribution. It's everywhere in nature!</p>
 
       <div class="lesson-card">
-        <h3>Where the Bell Curve Shows Up 🌍</h3>
-        <div class="examples-grid">
-          <div class="ex-card">📏<br><strong>Heights</strong><br><span>most people are near average; very tall and very short are rare</span></div>
-          <div class="ex-card">📝<br><strong>Test scores</strong><br><span>most students near the average, fewer at extremes</span></div>
-          <div class="ex-card">🎯<br><strong>Measurement errors</strong><br><span>scientists' tiny mistakes cluster around 0</span></div>
-          <div class="ex-card">🌧️<br><strong>Yearly rainfall</strong><br><span>most years near average, occasional drought or flood</span></div>
-        </div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Two Numbers Describe It 🔢</h3>
+        <h3>The Bell Curve Has 2 Knobs 🎚️</h3>
+        <p>The bell curve has just two settings:</p>
         <div class="key-idea">
-          <p><strong>μ (mu) = mean</strong> — the center of the curve. Where the peak sits.</p>
-          <p><strong>σ (sigma) = standard deviation</strong> — how spread out it is. Big σ = wide curve. Small σ = tall and narrow.</p>
+          <p>🎯 <strong>μ (mu) — the center.</strong> Where the peak sits.</p>
+          <p>📏 <strong>σ (sigma) — the width.</strong> How spread out it is.</p>
         </div>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Play with the Curve 🎚️</h3>
-        <p>Move the sliders to change the mean and standard deviation:</p>
         <div class="slider-control">
-          <label>Mean (μ): <span id="mean-label" class="slider-val">0</span></label>
+          <label>Center (μ): <span id="mean-label" class="slider-val">0</span></label>
           <input type="range" id="mean-slider" min="-5" max="5" value="0" step="0.1" oninput="redrawNormal()">
         </div>
         <div class="slider-control">
-          <label>Std Dev (σ): <span id="sd-label" class="slider-val">1</span></label>
+          <label>Width (σ): <span id="sd-label" class="slider-val">1</span></label>
           <input type="range" id="sd-slider" min="0.3" max="3" value="1" step="0.1" oninput="redrawNormal()">
         </div>
-        <canvas id="normal-canvas" width="600" height="280"></canvas>
-      </div>
-
-      <div class="lesson-card">
-        <h3>The 68-95-99.7 Rule 📐</h3>
-        <p>For any normal distribution, this rule always holds:</p>
-        <div class="rule-table">
-          <div class="rule-row">
-            <span class="rule-band band-1">±1σ</span>
-            <span class="rule-pct">~68%</span>
-            <span class="rule-desc">of values fall within 1 standard deviation of the mean</span>
-          </div>
-          <div class="rule-row">
-            <span class="rule-band band-2">±2σ</span>
-            <span class="rule-pct">~95%</span>
-            <span class="rule-desc">within 2 standard deviations</span>
-          </div>
-          <div class="rule-row">
-            <span class="rule-band band-3">±3σ</span>
-            <span class="rule-pct">~99.7%</span>
-            <span class="rule-desc">within 3 standard deviations (almost everything!)</span>
-          </div>
-        </div>
-        <canvas id="rule-canvas" width="600" height="240"></canvas>
-        <p class="example-note">Example: heights have μ ≈ 5'7" and σ ≈ 3". So ~68% of people are 5'4" to 5'10", ~95% are 5'1" to 6'1".</p>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Quick Check ✅</h3>
-        <div id="practice-4"></div>
+        <canvas id="normal-canvas" width="600" height="240"></canvas>
+        <p class="example-note">Move the sliders! See how the bell shifts left/right (μ) and gets fatter/skinnier (σ).</p>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 5: Galton Board -->
-  <section id="stage-5" class="stage hidden">
+  <!-- STAGE 4: GALTON BOARD -->
+  <section id="stage-4" class="stage hidden">
     <div class="stage-content">
       <h2>The Galton Board 🌰</h2>
-      <p>A famous machine that turns coin flips into a bell curve, right before your eyes!</p>
+      <p>A real machine that builds a bell curve from coin flips. Drop balls and watch!</p>
 
       <div class="lesson-card">
         <h3>How It Works ⚙️</h3>
         <div class="key-idea">
           <p>1. A ball drops from the top.</p>
-          <p>2. At each peg, it bounces left or right (50/50, like a coin flip).</p>
-          <p>3. After bouncing through many rows, it lands in a bin at the bottom.</p>
-          <p>4. Drop many balls, and the bins fill up like a <strong>bell curve</strong>!</p>
+          <p>2. It hits a peg. Bounces left or right (50/50, like a coin flip).</p>
+          <p>3. Hits another peg. Bounces left or right again.</p>
+          <p>4. After a bunch of bounces, lands in a slot at the bottom.</p>
+          <p>5. Drop tons of balls, and the slots fill up like… a bell curve! 🔔</p>
         </div>
       </div>
 
       <div class="lesson-card interactive-card">
-        <h3>Drop Some Balls! 🎯</h3>
-        <p>Each drop is the sum of many random ±1 steps — same as adding many dice!</p>
+        <h3>Drop Some Balls!</h3>
         <div class="setup-row">
           <label>Rows of pegs:
             <input type="range" id="galton-rows" min="5" max="15" value="10" oninput="updateGaltonRows()">
@@ -325,45 +207,106 @@
           <button class="btn-secondary" onclick="resetGalton()">🔄 Reset</button>
         </div>
         <canvas id="galton-canvas" width="600" height="500"></canvas>
-        <div class="flip-stats">
+        <div class="bell-stats">
           <div class="stat-box">
             <div class="stat-num" id="galton-total">0</div>
             <div class="stat-label">Balls dropped</div>
           </div>
           <div class="stat-box">
             <div class="stat-num" id="galton-mean">—</div>
-            <div class="stat-label">Mean position</div>
+            <div class="stat-label">Mean slot</div>
           </div>
         </div>
-        <p class="example-note">Even though every single ball takes a random path, the <strong>pile</strong> always ends up looking like a bell curve. Order from chaos!</p>
+        <p class="example-note">Each ball takes a random path. But the <strong>pile</strong> always ends up looking the same. Order from chaos!</p>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 6: Spot the Fake Random Game -->
+  <!-- STAGE 5: HASH FUNCTIONS -->
+  <section id="stage-5" class="stage hidden">
+    <div class="stage-content">
+      <h2>Hash Functions: Pretend Randomness 🔐</h2>
+      <p>Plot twist: a lot of "randomness" in computers isn't actually random — it's a clever trick called a <strong>hash function</strong>.</p>
+
+      <div class="lesson-card">
+        <h3>What Is a Hash? 🤔</h3>
+        <div class="key-idea">
+          <p>A <strong>hash function</strong> takes any input (a word, a number, a file) and turns it into a fixed-size scrambled output that <em>looks</em> totally random.</p>
+          <p>But it's <strong>not</strong> random! Same input → same output, every single time. It's a <em>deterministic</em> recipe.</p>
+          <p>The magic: even tiny changes to the input create wildly different outputs. This is called the <strong>avalanche effect</strong>.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Try It Yourself! ⚗️</h3>
+        <p>Type something. See its hash. Then change <em>one letter</em> and watch the hash explode into something totally different.</p>
+        <div class="hash-input-row">
+          <input type="text" id="hash-input" class="hash-input" value="hello" oninput="updateHash()" placeholder="Type anything...">
+        </div>
+        <div class="hash-output">
+          <div class="hash-label">Your input:</div>
+          <div class="hash-value" id="hash-input-display">hello</div>
+          <div class="hash-label">Hash (looks random, but isn't!):</div>
+          <div class="hash-value hash-result" id="hash-result">—</div>
+        </div>
+        <p class="example-note">Same input always gives the same hash. Don't believe me? Type "hello" again, then "Hello".</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>The Avalanche Effect 🏔️</h3>
+        <p>Watch how one tiny change ripples through the entire output:</p>
+        <div class="avalanche-list" id="avalanche-list"></div>
+        <p class="example-note">Notice: the inputs differ by ONE character, but the hashes share almost no characters. That's the avalanche!</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Hashes Look Random 🎯</h3>
+        <p>Even though hashes are deterministic, when you hash lots of different things, the outputs spread out evenly — just like real randomness!</p>
+        <div class="setup-row">
+          <button class="btn-action" onclick="runHashUniformity(2000)">🌪️ Hash 2,000 Words</button>
+          <button class="btn-secondary" onclick="resetHashUniformity()">🔄 Reset</button>
+        </div>
+        <canvas id="hash-uniformity" width="600" height="220"></canvas>
+        <p class="example-note">Each bar = how many hashes started with each hex digit. They're roughly equal — the hash function spreads things out evenly across all 16 buckets.</p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Why Should I Care? 🌐</h3>
+        <p>Hash functions power tons of stuff:</p>
+        <div class="examples-grid">
+          <div class="ex-card">🔒<br><strong>Passwords</strong><br><span>Websites store your password's hash, not the password itself.</span></div>
+          <div class="ex-card">⛓️<br><strong>Bitcoin & crypto</strong><br><span>Every block in the chain is identified by its hash.</span></div>
+          <div class="ex-card">📁<br><strong>File integrity</strong><br><span>Two files match if and only if their hashes match.</span></div>
+          <div class="ex-card">🎮<br><strong>Game maps</strong><br><span>Minecraft generates worlds from a "seed" hashed into terrain.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 6: SPOT THE FAKE -->
   <section id="stage-6" class="stage hidden">
     <div class="stage-content">
       <h2>Spot the Fake! 🎯</h2>
-      <p>People are <em>terrible</em> at being random. Can you spot the real coin flips vs the fake ones?</p>
+      <p>Humans are <em>terrible</em> at being random. Can you spot real coin flips vs sequences a person made up?</p>
 
       <div class="lesson-card">
         <h3>The Trick 🧠</h3>
-        <p>Real randomness has <strong>streaks</strong> — like 5 heads in a row. Humans usually <em>avoid</em> long streaks because it "feels" non-random.</p>
-        <p>So if a sequence has no long runs, it's probably fake!</p>
+        <p>Real random sequences <strong>have streaks</strong> — like 4 or 5 heads in a row. Humans avoid those because they "feel wrong".</p>
+        <p>So if a sequence has no long runs, it's probably faked!</p>
       </div>
 
       <div id="game-setup-card" class="lesson-card">
-        <h3>Set Up the Game ⚔️</h3>
+        <h3>Set Up the Game</h3>
         <div class="setup-row">
-          <label>Player 1 name:
-            <input type="text" id="rand-p1" class="short-input" style="width:160px" placeholder="Player 1" value="Player 1">
+          <label>Player 1:
+            <input type="text" id="rand-p1" class="short-input" style="width:160px" value="Player 1">
           </label>
-          <label>Player 2 name:
-            <input type="text" id="rand-p2" class="short-input" style="width:160px" placeholder="Player 2" value="Player 2">
+          <label>Player 2:
+            <input type="text" id="rand-p2" class="short-input" style="width:160px" value="Player 2">
           </label>
         </div>
         <div class="setup-row">
-          <label>Solo or Versus?
+          <label>Mode:
             <select id="rand-mode">
               <option value="solo">Solo Practice</option>
               <option value="vs" selected>2-Player Versus</option>
