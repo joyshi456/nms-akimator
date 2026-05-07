@@ -3,291 +3,425 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Estimathon! Fermi Problem Lab</title>
+  <title>Randomness Lab 🎲</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Estimathon! 🎯</h1>
-    <p class="subtitle">Become a master estimator — guess the unguessable!</p>
+    <h1>Randomness Lab 🎲</h1>
+    <p class="subtitle">Coin flips, dice, and the magical bell curve</p>
   </header>
 
   <div class="learning-panel">
-    <div class="learning-icon">🧠</div>
+    <div class="learning-icon">🔮</div>
     <div class="learning-text">
-      <p><strong>How many cats are in America?</strong> You don't know exactly — but you can <em>estimate</em>!</p>
-      <p>Fermi problems are wild questions you solve by breaking them into smaller, easier guesses.</p>
-      <p>Work through the lessons, then play the Estimathon against a friend or your teacher!</p>
+      <p>Will the next coin flip be heads or tails? You don't know — that's <strong>randomness</strong>!</p>
+      <p>Surprisingly, even though we can't predict <em>one</em> outcome, we can predict patterns when many things happen.</p>
+      <p>Flip coins, roll dice, drop balls — and watch a beautiful <strong>bell curve</strong> appear like magic.</p>
     </div>
   </div>
 
   <nav class="stage-tabs">
-    <button class="tab active" data-stage="1">1. Fermi Problems</button>
-    <button class="tab" data-stage="2">2. Order of Magnitude</button>
-    <button class="tab" data-stage="3">3. Warm-Up</button>
-    <button class="tab" data-stage="4">4. Classic Problems</button>
-    <button class="tab" data-stage="5">5. Estimathon! 🏆</button>
+    <button class="tab active" data-stage="1">1. What Is Random?</button>
+    <button class="tab" data-stage="2">2. Random Variables</button>
+    <button class="tab" data-stage="3">3. Distributions</button>
+    <button class="tab" data-stage="4">4. The Bell Curve</button>
+    <button class="tab" data-stage="5">5. Galton Board</button>
+    <button class="tab" data-stage="6">6. Spot the Fake! 🎯</button>
   </nav>
 
-  <!-- STAGE 1: What is a Fermi Problem? -->
+  <!-- STAGE 1: What is Randomness? -->
   <section id="stage-1" class="stage">
     <div class="stage-content">
-      <h2>What Is a Fermi Problem?</h2>
-      <p>A puzzle you solve with smart guessing — not exact math.</p>
+      <h2>What Is Randomness?</h2>
+      <p>Some things you can predict. Some things you can't. The unpredictable ones are <strong>random</strong>.</p>
 
       <div class="lesson-card">
-        <h3>Meet Enrico Fermi 👨‍🔬</h3>
-        <p>Enrico Fermi was a famous physicist who could estimate almost anything in his head.</p>
-        <p>His most famous question: <strong>"How many piano tuners work in Chicago?"</strong></p>
-        <p>Most people say "I have no idea!" But Fermi would calmly break it down:</p>
-        <div class="example-box">
-          <div class="step-list">
-            <div class="step">🏙️ Chicago has about <strong>3 million</strong> people.</div>
-            <div class="step">👨‍👩‍👧 With ~3 people per household, that's about <strong>1 million households</strong>.</div>
-            <div class="step">🎹 Maybe <strong>1 in 20</strong> households owns a piano → <strong>50,000 pianos</strong>.</div>
-            <div class="step">🎵 Pianos get tuned about <strong>once a year</strong> → 50,000 tunings/year.</div>
-            <div class="step">🔧 A tuner does ~<strong>4 tunings per day</strong>, ~250 days per year → 1,000 tunings/year per tuner.</div>
-            <div class="step result">🎯 So Chicago needs about <strong>50,000 ÷ 1,000 = 50 piano tuners</strong>.</div>
+        <h3>Predictable vs Random 🎯</h3>
+        <div class="compare-grid">
+          <div class="compare-col predictable">
+            <h4>📐 Predictable</h4>
+            <ul>
+              <li>If you drop a ball, it falls.</li>
+              <li>2 + 2 always equals 4.</li>
+              <li>The sun rises tomorrow.</li>
+              <li>A clock ticks once per second.</li>
+            </ul>
           </div>
-          <p class="example-note">The real answer was around 150 — Fermi's estimate is in the right ballpark!</p>
+          <div class="compare-col random">
+            <h4>🎲 Random</h4>
+            <ul>
+              <li>The next coin flip.</li>
+              <li>Which card you'll draw next.</li>
+              <li>Where lightning will strike.</li>
+              <li>Whether it'll rain at exactly 3:14 PM.</li>
+            </ul>
+          </div>
         </div>
       </div>
 
+      <div class="lesson-card interactive-card">
+        <h3>Flip a Coin! 🪙</h3>
+        <p>Click the coin to flip it. Try flipping it many times — what fraction lands heads?</p>
+        <div class="coin-area">
+          <div class="coin" id="coin">?</div>
+          <div class="coin-controls">
+            <button class="btn-action" onclick="flipOne()">🪙 Flip Once</button>
+            <button class="btn-action" onclick="flipMany(10)">⚡ Flip 10</button>
+            <button class="btn-action" onclick="flipMany(100)">💨 Flip 100</button>
+            <button class="btn-action" onclick="flipMany(1000)">🌪️ Flip 1,000</button>
+            <button class="btn-secondary" onclick="resetFlips()">🔄 Reset</button>
+          </div>
+        </div>
+        <div class="flip-stats">
+          <div class="stat-box">
+            <div class="stat-num" id="heads-count">0</div>
+            <div class="stat-label">Heads 🪙</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="tails-count">0</div>
+            <div class="stat-label">Tails 🌑</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="flip-total">0</div>
+            <div class="stat-label">Total flips</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="heads-pct">—</div>
+            <div class="stat-label">% Heads</div>
+          </div>
+        </div>
+        <div class="bar-display">
+          <div class="bar-row">
+            <span class="bar-label">Heads</span>
+            <div class="bar-track"><div class="bar-fill heads-fill" id="heads-bar"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Tails</span>
+            <div class="bar-track"><div class="bar-fill tails-fill" id="tails-bar"></div></div>
+          </div>
+        </div>
+        <p class="example-note">As you flip more, the % of heads gets closer to <strong>50%</strong>. This is the <strong>law of large numbers</strong>!</p>
+      </div>
+
       <div class="lesson-card">
-        <h3>The Big Idea 💡</h3>
+        <h3>Big Idea 💡</h3>
         <div class="key-idea">
-          <p><strong>1.</strong> You don't need the exact answer — you just need to be <em>close enough</em>.</p>
-          <p><strong>2.</strong> Break a HARD question into a few EASY questions.</p>
-          <p><strong>3.</strong> Use stuff you already know (population, prices, rough sizes).</p>
-          <p><strong>4.</strong> Multiply and divide your way to an answer.</p>
+          <p><strong>One flip:</strong> can't predict.</p>
+          <p><strong>Many flips:</strong> patterns emerge — about half are heads.</p>
+          <p>This is what makes randomness so cool: <em>chaos at the small scale, order at the large scale.</em></p>
         </div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Why Bother? 🚀</h3>
-        <p>Scientists, engineers, and business people use estimation every single day:</p>
-        <div class="use-cases">
-          <div class="use-case">🚀 <strong>NASA:</strong> "How much fuel will we need?"</div>
-          <div class="use-case">💰 <strong>Startups:</strong> "How big is this market?"</div>
-          <div class="use-case">🏭 <strong>Factories:</strong> "How many widgets per hour?"</div>
-          <div class="use-case">🌍 <strong>Climate:</strong> "How much CO₂ in the atmosphere?"</div>
-          <div class="use-case">🎮 <strong>Game design:</strong> "How long will players play?"</div>
-        </div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Try Thinking Like Fermi 🧩</h3>
-        <p>Pick the better starting question for each Fermi problem:</p>
-        <div id="practice-1"></div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 2: Order of Magnitude -->
+  <!-- STAGE 2: Random Variables -->
   <section id="stage-2" class="stage hidden">
     <div class="stage-content">
-      <h2>Order of Magnitude</h2>
-      <p>The secret weapon of every estimator: thinking in powers of 10.</p>
+      <h2>Random Variables</h2>
+      <p>A random variable is a number you don't know yet — but you know the possibilities.</p>
 
       <div class="lesson-card">
-        <h3>Powers of 10 🔟</h3>
-        <p>Each "order of magnitude" is 10 times bigger than the one before:</p>
-        <div class="oom-table">
-          <div class="oom-row"><span class="oom-power">10⁰</span><span class="oom-num">1</span><span class="oom-ex">a marble</span></div>
-          <div class="oom-row"><span class="oom-power">10¹</span><span class="oom-num">10</span><span class="oom-ex">fingers on two hands</span></div>
-          <div class="oom-row"><span class="oom-power">10²</span><span class="oom-num">100</span><span class="oom-ex">pages in a short book</span></div>
-          <div class="oom-row"><span class="oom-power">10³</span><span class="oom-num">1,000</span><span class="oom-ex">students in a school</span></div>
-          <div class="oom-row"><span class="oom-power">10⁴</span><span class="oom-num">10,000</span><span class="oom-ex">steps in a long day</span></div>
-          <div class="oom-row"><span class="oom-power">10⁵</span><span class="oom-num">100,000</span><span class="oom-ex">hairs on your head</span></div>
-          <div class="oom-row"><span class="oom-power">10⁶</span><span class="oom-num">1 million</span><span class="oom-ex">people in a big city</span></div>
-          <div class="oom-row"><span class="oom-power">10⁷</span><span class="oom-num">10 million</span><span class="oom-ex">people in NYC area</span></div>
-          <div class="oom-row"><span class="oom-power">10⁸</span><span class="oom-num">100 million</span><span class="oom-ex">cars in the USA</span></div>
-          <div class="oom-row"><span class="oom-power">10⁹</span><span class="oom-num">1 billion</span><span class="oom-ex">seconds in 32 years</span></div>
-          <div class="oom-row"><span class="oom-power">10¹⁰</span><span class="oom-num">10 billion</span><span class="oom-ex">heartbeats in a long life</span></div>
+        <h3>What's a Random Variable? 🎲</h3>
+        <p>Let <strong>X</strong> = the result of rolling a 6-sided die.</p>
+        <div class="example-box">
+          <p>X can be any of these — each with probability 1/6:</p>
+          <div class="dice-list">
+            <span class="die">⚀</span>
+            <span class="die">⚁</span>
+            <span class="die">⚂</span>
+            <span class="die">⚃</span>
+            <span class="die">⚄</span>
+            <span class="die">⚅</span>
+          </div>
+          <p class="example-note">Before you roll, you don't know which one. After you roll, X has a definite value.</p>
         </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Expected Value (the Average) 📊</h3>
+        <p>The <strong>expected value</strong> is the average if you played many times.</p>
+        <p>For one die: E[X] = (1+2+3+4+5+6) / 6 = <strong>3.5</strong></p>
+        <p class="example-note">3.5 isn't a face on a die — but it's the long-run average!</p>
       </div>
 
       <div class="lesson-card interactive-card">
-        <h3>Find the Order of Magnitude 🔍</h3>
-        <p>The order of magnitude of a number is the power of 10 closest to it.</p>
-        <p>Type any number to see its order of magnitude:</p>
-        <div class="input-row">
-          <input type="text" id="oom-input" class="short-input" placeholder="e.g. 7500" value="7500">
-          <button class="btn-action" onclick="showOOM()">Find OOM</button>
+        <h3>Roll the Die! 🎲</h3>
+        <p>Roll a die many times and watch the <strong>average</strong> creep toward 3.5:</p>
+        <div class="dice-area">
+          <div class="big-die" id="big-die">?</div>
+          <div class="coin-controls">
+            <button class="btn-action" onclick="rollDie(1)">🎲 Roll 1</button>
+            <button class="btn-action" onclick="rollDie(10)">⚡ Roll 10</button>
+            <button class="btn-action" onclick="rollDie(100)">💨 Roll 100</button>
+            <button class="btn-action" onclick="rollDie(1000)">🌪️ Roll 1,000</button>
+            <button class="btn-secondary" onclick="resetDice()">🔄 Reset</button>
+          </div>
         </div>
-        <div id="oom-result" class="result-box"></div>
+        <div class="flip-stats">
+          <div class="stat-box">
+            <div class="stat-num" id="dice-rolls">0</div>
+            <div class="stat-label">Rolls</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="dice-avg">—</div>
+            <div class="stat-label">Average</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">3.5</div>
+            <div class="stat-label">Expected (E[X])</div>
+          </div>
+        </div>
+        <canvas id="dice-histogram" width="600" height="200"></canvas>
+        <p class="example-note">Notice how each face appears about 1/6 of the time — that's a <strong>uniform distribution</strong>.</p>
       </div>
 
       <div class="lesson-card">
-        <h3>Estimathon Scoring 🎯</h3>
-        <p>In estimation, getting the right <em>order of magnitude</em> is what counts. Here's how we score guesses:</p>
-        <div class="scoring-table">
-          <div class="score-row-card excellent">
-            <span class="score-icon">🎯</span>
-            <span class="score-desc">Within 2× of the answer</span>
-            <span class="score-pts">10 pts</span>
-          </div>
-          <div class="score-row-card great">
-            <span class="score-icon">🌟</span>
-            <span class="score-desc">Within 5× of the answer</span>
-            <span class="score-pts">7 pts</span>
-          </div>
-          <div class="score-row-card good">
-            <span class="score-icon">👍</span>
-            <span class="score-desc">Within 10× (same order of magnitude)</span>
-            <span class="score-pts">5 pts</span>
-          </div>
-          <div class="score-row-card ok">
-            <span class="score-icon">😅</span>
-            <span class="score-desc">Within 100× (off by 1-2 orders)</span>
-            <span class="score-pts">2 pts</span>
-          </div>
-          <div class="score-row-card miss">
-            <span class="score-icon">❌</span>
-            <span class="score-desc">Way off (more than 100×)</span>
-            <span class="score-pts">0 pts</span>
-          </div>
-        </div>
-        <p class="example-note">Example: Real answer is 1,000. Guessing 800 = 10 pts (within 2×). Guessing 200 = 5 pts (within 10×). Guessing 5 = 0 pts.</p>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Score Calculator 🧮</h3>
-        <p>Try entering a guess and the real answer to see how many points you'd score:</p>
-        <div class="input-row">
-          <label>Your guess: <input type="text" id="score-guess" class="short-input" placeholder="800"></label>
-          <label>Real answer: <input type="text" id="score-real" class="short-input" placeholder="1000"></label>
-          <button class="btn-action" onclick="calcScore()">Score it!</button>
-        </div>
-        <div id="score-calc-result" class="result-box"></div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Practice: Order of Magnitude</h3>
+        <h3>Try These</h3>
         <div id="practice-2"></div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 3: Warm-Up Problems -->
+  <!-- STAGE 3: Distributions -->
   <section id="stage-3" class="stage hidden">
     <div class="stage-content">
-      <h2>Warm-Up Problems 🔥</h2>
-      <p>Easy starters! Take your best guess, then click "Reveal Answer" to see how you did.</p>
-      <p class="hint-line">💡 Tip: Don't look up the answer. Just <em>think</em>. Break it down. Trust your math!</p>
+      <h2>Probability Distributions</h2>
+      <p>A distribution shows which values are likely and which are rare.</p>
 
-      <div id="warmup-problems"></div>
+      <div class="lesson-card">
+        <h3>One Die: Uniform Shape ▭</h3>
+        <p>Each face is equally likely → flat bars. This is the <strong>uniform distribution</strong>.</p>
+        <p>Picture: 6 bars all the same height.</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Two Dice: A Triangle Appears! 🔺</h3>
+        <p>Now let's add the values of <strong>two dice</strong>. The sum can be 2 through 12.</p>
+        <p>Are all sums equally likely? Try it and find out!</p>
+        <div class="coin-controls">
+          <button class="btn-action" onclick="rollSum(1)">🎲 Roll 1 pair</button>
+          <button class="btn-action" onclick="rollSum(100)">💨 Roll 100 pairs</button>
+          <button class="btn-action" onclick="rollSum(10000)">🌪️ Roll 10,000 pairs</button>
+          <button class="btn-secondary" onclick="resetSum()">🔄 Reset</button>
+        </div>
+        <canvas id="sum-histogram" width="600" height="280"></canvas>
+        <p class="example-note">A <strong>triangle</strong>! Why? There's only one way to get 2 (1+1), but six ways to get 7 (1+6, 2+5, 3+4, ...). The middle is most likely!</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Many Dice: Look Who Shows Up! 🔔</h3>
+        <p>Now let's sum <strong>many</strong> dice at once. Watch the shape change as we add more dice…</p>
+        <div class="setup-row">
+          <label>Dice per roll:
+            <input type="range" id="num-dice" min="1" max="20" value="5" oninput="updateDiceLabel()">
+            <span id="num-dice-label">5</span>
+          </label>
+          <button class="btn-action" onclick="rollManyDice(2000)">🌪️ Roll 2,000 times</button>
+          <button class="btn-secondary" onclick="resetManyDice()">🔄 Reset</button>
+        </div>
+        <canvas id="many-dice-histogram" width="600" height="280"></canvas>
+        <p class="example-note">As you add more dice, the shape becomes a <strong>bell curve</strong> 🔔! This magical fact is called the <strong>Central Limit Theorem</strong>.</p>
+      </div>
     </div>
   </section>
 
-  <!-- STAGE 4: Classic Hard Problems -->
+  <!-- STAGE 4: The Bell Curve / Gaussian -->
   <section id="stage-4" class="stage hidden">
     <div class="stage-content">
-      <h2>Classic Fermi Problems 🏛️</h2>
-      <p>The legendary brain-twisters! Try to break each one down before peeking.</p>
-      <p class="hint-line">💡 First write down what you'd <em>need</em> to know. Then estimate each piece.</p>
+      <h2>The Bell Curve 🔔</h2>
+      <p>Also called the <strong>Gaussian</strong> or <strong>Normal</strong> distribution. It's everywhere in nature!</p>
 
-      <div id="classic-problems"></div>
+      <div class="lesson-card">
+        <h3>Where the Bell Curve Shows Up 🌍</h3>
+        <div class="examples-grid">
+          <div class="ex-card">📏<br><strong>Heights</strong><br><span>most people are near average; very tall and very short are rare</span></div>
+          <div class="ex-card">📝<br><strong>Test scores</strong><br><span>most students near the average, fewer at extremes</span></div>
+          <div class="ex-card">🎯<br><strong>Measurement errors</strong><br><span>scientists' tiny mistakes cluster around 0</span></div>
+          <div class="ex-card">🌧️<br><strong>Yearly rainfall</strong><br><span>most years near average, occasional drought or flood</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Two Numbers Describe It 🔢</h3>
+        <div class="key-idea">
+          <p><strong>μ (mu) = mean</strong> — the center of the curve. Where the peak sits.</p>
+          <p><strong>σ (sigma) = standard deviation</strong> — how spread out it is. Big σ = wide curve. Small σ = tall and narrow.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Play with the Curve 🎚️</h3>
+        <p>Move the sliders to change the mean and standard deviation:</p>
+        <div class="slider-control">
+          <label>Mean (μ): <span id="mean-label" class="slider-val">0</span></label>
+          <input type="range" id="mean-slider" min="-5" max="5" value="0" step="0.1" oninput="redrawNormal()">
+        </div>
+        <div class="slider-control">
+          <label>Std Dev (σ): <span id="sd-label" class="slider-val">1</span></label>
+          <input type="range" id="sd-slider" min="0.3" max="3" value="1" step="0.1" oninput="redrawNormal()">
+        </div>
+        <canvas id="normal-canvas" width="600" height="280"></canvas>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The 68-95-99.7 Rule 📐</h3>
+        <p>For any normal distribution, this rule always holds:</p>
+        <div class="rule-table">
+          <div class="rule-row">
+            <span class="rule-band band-1">±1σ</span>
+            <span class="rule-pct">~68%</span>
+            <span class="rule-desc">of values fall within 1 standard deviation of the mean</span>
+          </div>
+          <div class="rule-row">
+            <span class="rule-band band-2">±2σ</span>
+            <span class="rule-pct">~95%</span>
+            <span class="rule-desc">within 2 standard deviations</span>
+          </div>
+          <div class="rule-row">
+            <span class="rule-band band-3">±3σ</span>
+            <span class="rule-pct">~99.7%</span>
+            <span class="rule-desc">within 3 standard deviations (almost everything!)</span>
+          </div>
+        </div>
+        <canvas id="rule-canvas" width="600" height="240"></canvas>
+        <p class="example-note">Example: heights have μ ≈ 5'7" and σ ≈ 3". So ~68% of people are 5'4" to 5'10", ~95% are 5'1" to 6'1".</p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Quick Check ✅</h3>
+        <div id="practice-4"></div>
+      </div>
     </div>
   </section>
 
-  <!-- STAGE 5: ESTIMATHON GAME -->
+  <!-- STAGE 5: Galton Board -->
   <section id="stage-5" class="stage hidden">
     <div class="stage-content">
-      <h2>The Estimathon! 🏆</h2>
-      <p>A head-to-head estimation contest. Two players take turns guessing — best estimator wins!</p>
+      <h2>The Galton Board 🌰</h2>
+      <p>A famous machine that turns coin flips into a bell curve, right before your eyes!</p>
 
-      <!-- Setup screen -->
-      <div id="game-setup" class="lesson-card">
-        <h3>Set Up the Match ⚔️</h3>
+      <div class="lesson-card">
+        <h3>How It Works ⚙️</h3>
+        <div class="key-idea">
+          <p>1. A ball drops from the top.</p>
+          <p>2. At each peg, it bounces left or right (50/50, like a coin flip).</p>
+          <p>3. After bouncing through many rows, it lands in a bin at the bottom.</p>
+          <p>4. Drop many balls, and the bins fill up like a <strong>bell curve</strong>!</p>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Drop Some Balls! 🎯</h3>
+        <p>Each drop is the sum of many random ±1 steps — same as adding many dice!</p>
+        <div class="setup-row">
+          <label>Rows of pegs:
+            <input type="range" id="galton-rows" min="5" max="15" value="10" oninput="updateGaltonRows()">
+            <span id="galton-rows-label">10</span>
+          </label>
+          <button class="btn-action" onclick="dropGaltonBalls(1)">⚪ Drop 1</button>
+          <button class="btn-action" onclick="dropGaltonBalls(50)">⚡ Drop 50</button>
+          <button class="btn-action" onclick="dropGaltonBalls(500)">💨 Drop 500</button>
+          <button class="btn-secondary" onclick="resetGalton()">🔄 Reset</button>
+        </div>
+        <canvas id="galton-canvas" width="600" height="500"></canvas>
+        <div class="flip-stats">
+          <div class="stat-box">
+            <div class="stat-num" id="galton-total">0</div>
+            <div class="stat-label">Balls dropped</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="galton-mean">—</div>
+            <div class="stat-label">Mean position</div>
+          </div>
+        </div>
+        <p class="example-note">Even though every single ball takes a random path, the <strong>pile</strong> always ends up looking like a bell curve. Order from chaos!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 6: Spot the Fake Random Game -->
+  <section id="stage-6" class="stage hidden">
+    <div class="stage-content">
+      <h2>Spot the Fake! 🎯</h2>
+      <p>People are <em>terrible</em> at being random. Can you spot the real coin flips vs the fake ones?</p>
+
+      <div class="lesson-card">
+        <h3>The Trick 🧠</h3>
+        <p>Real randomness has <strong>streaks</strong> — like 5 heads in a row. Humans usually <em>avoid</em> long streaks because it "feels" non-random.</p>
+        <p>So if a sequence has no long runs, it's probably fake!</p>
+      </div>
+
+      <div id="game-setup-card" class="lesson-card">
+        <h3>Set Up the Game ⚔️</h3>
         <div class="setup-row">
           <label>Player 1 name:
-            <input type="text" id="p1-name" class="short-input" style="width:160px" placeholder="Teacher" value="Teacher">
+            <input type="text" id="rand-p1" class="short-input" style="width:160px" placeholder="Player 1" value="Player 1">
           </label>
           <label>Player 2 name:
-            <input type="text" id="p2-name" class="short-input" style="width:160px" placeholder="Student" value="Student">
+            <input type="text" id="rand-p2" class="short-input" style="width:160px" placeholder="Player 2" value="Player 2">
           </label>
         </div>
         <div class="setup-row">
-          <label>Number of rounds:
-            <select id="game-rounds">
-              <option value="3">3 (quick)</option>
-              <option value="5" selected>5 (standard)</option>
-              <option value="8">8 (full match)</option>
-              <option value="13">13 (champion)</option>
+          <label>Solo or Versus?
+            <select id="rand-mode">
+              <option value="solo">Solo Practice</option>
+              <option value="vs" selected>2-Player Versus</option>
+            </select>
+          </label>
+          <label>Rounds:
+            <select id="rand-rounds">
+              <option value="3">3</option>
+              <option value="5" selected>5</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
             </select>
           </label>
         </div>
-        <p style="margin-top:12px;font-size:0.9rem;color:#555">
-          <strong>How it works:</strong> Each round shows a question. Both players type their guesses (Player 1 goes first while Player 2 looks away — no peeking! 👀). When both have guessed, click reveal. The closer guess wins points!
-        </p>
-        <button class="btn-action btn-big" onclick="startGame()">🚀 Start the Estimathon!</button>
+        <button class="btn-action btn-big" onclick="startRandomGame()">🚀 Start the Game!</button>
       </div>
 
-      <!-- Active game -->
-      <div id="game-active" class="hidden">
-        <div class="scoreboard">
-          <div class="player-score" id="p1-score-box">
-            <div class="player-name" id="p1-display">Player 1</div>
-            <div class="player-pts" id="p1-pts">0</div>
+      <div id="game-active-card" class="lesson-card hidden">
+        <div class="scoreboard" id="rand-scoreboard">
+          <div class="player-score" id="rand-p1-box">
+            <div class="player-name" id="rand-p1-display">Player 1</div>
+            <div class="player-pts" id="rand-p1-pts">0</div>
           </div>
           <div class="round-info">
             <div class="round-label">Round</div>
-            <div class="round-num" id="round-num">1 / 5</div>
+            <div class="round-num" id="rand-round-num">1 / 5</div>
           </div>
-          <div class="player-score" id="p2-score-box">
-            <div class="player-name" id="p2-display">Player 2</div>
-            <div class="player-pts" id="p2-pts">0</div>
-          </div>
-        </div>
-
-        <div class="lesson-card game-question-card">
-          <div class="question-icon">🎯</div>
-          <h3 id="game-question-text">Loading...</h3>
-
-          <!-- Phase 1: Player 1 guess (Player 2 looks away) -->
-          <div id="phase-p1" class="game-phase">
-            <p class="phase-label" id="phase-p1-label">📝 <strong>Player 1</strong>, enter your guess (Player 2, look away!):</p>
-            <div class="guess-row">
-              <input type="text" id="p1-guess" class="short-input" placeholder="Your guess..." style="width:200px" autocomplete="off">
-              <button class="btn-action" onclick="submitGuess(1)">Lock In Guess 🔒</button>
-            </div>
-            <p class="privacy-hint">(Your guess will be hidden until both players have submitted.)</p>
-          </div>
-
-          <!-- Phase 2: Player 2 guess -->
-          <div id="phase-p2" class="game-phase hidden">
-            <p class="phase-label" id="phase-p2-label">📝 <strong>Player 2</strong>, your turn! Enter your guess:</p>
-            <div class="guess-row">
-              <input type="text" id="p2-guess" class="short-input" placeholder="Your guess..." style="width:200px" autocomplete="off">
-              <button class="btn-action" onclick="submitGuess(2)">Lock In Guess 🔒</button>
-            </div>
-          </div>
-
-          <!-- Phase 3: Reveal -->
-          <div id="phase-reveal" class="game-phase hidden">
-            <button class="btn-action btn-big" onclick="revealRound()">🎲 Reveal The Answer!</button>
-          </div>
-
-          <!-- Phase 4: Results -->
-          <div id="phase-result" class="game-phase hidden">
-            <div class="answer-reveal" id="answer-reveal"></div>
-            <div class="round-results" id="round-results"></div>
-            <button class="btn-action btn-big" onclick="nextRound()" id="next-round-btn">➡️ Next Round</button>
+          <div class="player-score" id="rand-p2-box">
+            <div class="player-name" id="rand-p2-display">Player 2</div>
+            <div class="player-pts" id="rand-p2-pts">0</div>
           </div>
         </div>
 
-        <button class="btn-quit" onclick="quitGame()">🚪 Quit Match</button>
+        <h3 id="rand-prompt">Which sequence is REAL random coin flips?</h3>
+
+        <div class="seq-row">
+          <button class="seq-btn" id="seq-A" onclick="pickSequence('A')">
+            <div class="seq-label">Sequence A</div>
+            <div class="seq-content" id="seq-A-content"></div>
+          </button>
+          <button class="seq-btn" id="seq-B" onclick="pickSequence('B')">
+            <div class="seq-label">Sequence B</div>
+            <div class="seq-content" id="seq-B-content"></div>
+          </button>
+        </div>
+
+        <div id="rand-turn-info" class="turn-info"></div>
+
+        <div id="rand-reveal" class="hidden">
+          <div class="reveal-block" id="rand-reveal-text"></div>
+          <button class="btn-action btn-big" onclick="nextRandomRound()" id="next-rand-btn">➡️ Next Round</button>
+        </div>
       </div>
 
-      <!-- Final results -->
-      <div id="game-final" class="hidden">
-        <div class="lesson-card final-card">
-          <h2 id="winner-banner">🏆 Winner!</h2>
-          <div class="final-scores" id="final-scores"></div>
-          <div class="final-recap" id="final-recap"></div>
-          <button class="btn-action btn-big" onclick="resetGame()">🔄 Play Again</button>
-        </div>
+      <div id="game-final-card" class="lesson-card hidden final-card">
+        <h2 id="rand-winner-banner">🏆 Game Over!</h2>
+        <div class="final-scores" id="rand-final-scores"></div>
+        <button class="btn-action btn-big" onclick="resetRandomGame()">🔄 Play Again</button>
       </div>
     </div>
   </section>
