@@ -1183,6 +1183,222 @@ function updateMontyDisplay() {
 }
 
 // ============================================================
+// STAGE 8: TRICKY PROBLEMS
+// ============================================================
+const TRICKY_PROBLEMS = [
+  {
+    id: 'sum7',
+    tag: 'Warm-up',
+    q: 'You roll two fair dice. What is the probability the sum is exactly 7?',
+    answer: 1/6,
+    answerLabel: '1/6 ≈ 0.1667',
+    hint: 'Count the (a,b) pairs where a+b=7. There are 36 total outcomes.',
+    explain: '6 ways out of 36: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1). So 6/36 = <strong>1/6</strong>. Fun fact: 7 is the most likely sum!',
+  },
+  {
+    id: 'twokids',
+    tag: 'Classic Trap',
+    q: 'A family has two children. You learn that <strong>at least one is a boy</strong>. What is the probability that <em>both</em> are boys?',
+    answer: 1/3,
+    answerLabel: '1/3 ≈ 0.333',
+    hint: 'List all equally-likely arrangements of two kids: BB, BG, GB, GG. Cross out the impossible ones given the new info.',
+    explain: 'Equally-likely cases: BB, BG, GB, GG. "At least one boy" rules out GG, leaving BB, BG, GB — three cases, each equally likely. Only BB is "both boys." Answer: <strong>1/3</strong>, not 1/2! The "you learn" framing changes everything.',
+  },
+  {
+    id: 'falsepos',
+    tag: 'Medical Test Trap',
+    q: '1 in 1000 people has a rare disease. A test is <strong>99% accurate</strong> (both for sick and healthy people). You test positive. What\'s the probability you actually have the disease? (Answer in %, round to nearest whole number.)',
+    answer: 9,
+    answerLabel: '~9%',
+    tolerance: 1,
+    hint: 'Imagine 100,000 people. About 100 actually have the disease. About 99,900 don\'t. How many of each group test positive?',
+    explain: 'In 100,000 people: 100 have disease, 99 of them test positive (99% accuracy). 99,900 don\'t have it, but 1% (= 999) still test positive (false positives). Of those who test positive: 99 / (99 + 999) ≈ <strong>9%</strong>. Even with a "99% accurate" test, most positives are false alarms when the disease is rare!',
+  },
+  {
+    id: 'cards',
+    tag: "Bertrand's Box",
+    q: 'A hat has 3 cards: one is <strong>red on both sides</strong>, one is <strong>blue on both sides</strong>, one is <strong>red on one side, blue on the other</strong>. You pick a card at random and see one side is red. What\'s the probability the other side is also red?',
+    answer: 2/3,
+    answerLabel: '2/3 ≈ 0.667',
+    hint: 'Don\'t count cards — count <em>sides</em>. There are 6 sides total, 3 of them red.',
+    explain: 'There are 3 red sides total: 2 belong to the red-red card, 1 belongs to the mixed card. Given you see a red side, it\'s twice as likely to belong to the red-red card. So P(other side is red) = <strong>2/3</strong>, not 1/2!',
+  },
+  {
+    id: 'coupon',
+    tag: 'Coupon Collector',
+    q: 'You roll a fair die over and over. What is the <strong>expected number of rolls</strong> until you have seen all 6 faces at least once? (Round to 1 decimal.)',
+    answer: 14.7,
+    answerLabel: '14.7 rolls',
+    tolerance: 0.2,
+    hint: 'After you have k different faces, expected rolls to see a new one is 6/(6-k). Sum these up.',
+    explain: 'Expected = 6/6 + 6/5 + 6/4 + 6/3 + 6/2 + 6/1 = 6·(1+½+⅓+¼+⅕+⅙) ≈ <strong>14.7</strong>. The 6th unique face is the slowest — you expect 6 more rolls just to find it.',
+  },
+  {
+    id: 'esum',
+    tag: 'A Surprising Constant',
+    q: 'You pick random decimals between 0 and 1, one at a time, and add them up. You stop the moment the total exceeds 1. What\'s the <strong>expected number</strong> of decimals you picked? (Round to 3 decimals — and yes, the answer is a famous constant.)',
+    answer: 2.718,
+    answerLabel: 'e ≈ 2.718',
+    tolerance: 0.05,
+    hint: 'It\'s a number that comes up everywhere in math. Starts with 2.7…',
+    explain: 'The expected value is exactly <strong>e ≈ 2.71828</strong>! This is one of the most beautiful "where did THAT come from?!" results in probability.',
+    sim: 'esim',
+  },
+  {
+    id: 'stpetersburg',
+    tag: 'St. Petersburg Paradox',
+    q: 'You play a game: a coin is flipped until it lands tails. If you got n heads first, you win $2ⁿ⁺¹. So 0 heads → $2, 1 head → $4, 2 heads → $8, etc. What is the <strong>expected payoff</strong> of this game?',
+    answer: Infinity,
+    answerLabel: '∞ (infinity!)',
+    accepts: ['infinity', 'infinite', 'inf', '∞', 'unbounded'],
+    hint: 'Compute P(0 heads)·$2 + P(1 head)·$4 + P(2 heads)·$8 + ... and see what each term equals.',
+    explain: 'Each term is (½)ⁿ⁺¹ · $2ⁿ⁺¹ = <strong>$1</strong>. Adding $1 + $1 + $1 + ... forever gives <strong>infinity</strong>. So technically you should pay any finite amount to play! But would you really pay $1,000,000 to play this game once? This paradox helped invent modern decision theory.',
+  },
+];
+
+function setupTrickyProblems() {
+  const container = document.getElementById('tricky-problems');
+  if (!container) return;
+  container.innerHTML = '';
+  TRICKY_PROBLEMS.forEach((prob, idx) => {
+    const card = document.createElement('div');
+    card.className = 'lesson-card puzzle-card';
+    card.id = `tp-card-${prob.id}`;
+    let simBlock = '';
+    if (prob.sim === 'esim') {
+      simBlock = `
+        <h4 style="margin-top:14px">See it for yourself 🧪</h4>
+        <p>Run this experiment a million times and watch the average:</p>
+        <div class="setup-row">
+          <button class="btn-action" onclick="runEsim()">🌪️ Simulate 1,000,000 times</button>
+          <button class="btn-secondary" onclick="resetEsim()">🔄 Reset</button>
+        </div>
+        <div id="esim-result" class="result-box"></div>
+      `;
+    }
+    card.innerHTML = `
+      <div class="puzzle-tag">Problem ${idx + 1} · ${prob.tag}</div>
+      <div class="puzzle-question">${prob.q}</div>
+      <div class="problem-row">
+        <input type="text" class="guess-input" id="tp-input-${prob.id}" placeholder="Your answer..."
+          onkeydown="if(event.key==='Enter') checkTricky('${prob.id}')">
+        <button class="btn-action" onclick="checkTricky('${prob.id}')">✓ Check</button>
+        <button class="btn-hint-toggle" onclick="toggleTrickyHint('${prob.id}')">💡 Hint</button>
+        <button class="btn-reveal" onclick="revealTricky('${prob.id}')">🎲 Reveal</button>
+      </div>
+      <div class="mc-feedback" id="tp-fb-${prob.id}"></div>
+      <div id="tp-hint-${prob.id}" class="hint-block hidden"></div>
+      <div id="tp-explain-${prob.id}" class="puzzle-reveal hidden">
+        <h4>Answer: ${prob.answerLabel}</h4>
+        <p>${prob.explain}</p>
+        ${simBlock}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function parseAnswer(str) {
+  if (!str) return NaN;
+  const s = str.trim().toLowerCase();
+  if (['infinity', 'infinite', 'inf', '∞', 'unbounded'].includes(s)) return Infinity;
+  if (s === 'e') return Math.E;
+  // fraction like "1/3"
+  if (/^-?\d+\/-?\d+$/.test(s)) {
+    const [a, b] = s.split('/').map(Number);
+    return a / b;
+  }
+  return parseFloat(s);
+}
+
+function checkTricky(id) {
+  const prob = TRICKY_PROBLEMS.find(p => p.id === id);
+  const input = document.getElementById(`tp-input-${id}`);
+  const fb = document.getElementById(`tp-fb-${id}`);
+  if (fb.dataset.answered) return;
+
+  const userStr = input.value.trim();
+  if (!userStr) { fb.textContent = 'Type an answer first!'; fb.className = 'mc-feedback incorrect'; return; }
+
+  // Special string-accept (e.g. "infinity")
+  let isCorrect = false;
+  if (prob.accepts && prob.accepts.includes(userStr.toLowerCase())) {
+    isCorrect = true;
+  } else if (prob.answer === Infinity) {
+    isCorrect = userStr.toLowerCase().includes('inf');
+  } else {
+    const v = parseAnswer(userStr);
+    if (!isFinite(v)) { fb.textContent = 'Could not parse that. Try a decimal or fraction.'; fb.className = 'mc-feedback incorrect'; return; }
+    const tol = prob.tolerance != null ? prob.tolerance : Math.max(0.001, Math.abs(prob.answer) * 0.02);
+    isCorrect = Math.abs(v - prob.answer) <= tol;
+  }
+
+  fb.dataset.answered = '1';
+  practiceScore.total++;
+  if (isCorrect) practiceScore.correct++;
+  savePracticeScore();
+  input.disabled = true;
+
+  if (isCorrect) {
+    fb.innerHTML = '✅ Correct! Nice work.';
+    fb.className = 'mc-feedback correct';
+    input.classList.add('correct');
+  } else {
+    fb.innerHTML = `❌ Not quite. The answer is <strong>${prob.answerLabel}</strong>. Tap "Reveal" for the full explanation!`;
+    fb.className = 'mc-feedback incorrect';
+    input.classList.add('incorrect');
+  }
+  document.getElementById(`tp-explain-${id}`).classList.remove('hidden');
+}
+
+function toggleTrickyHint(id) {
+  const prob = TRICKY_PROBLEMS.find(p => p.id === id);
+  const block = document.getElementById(`tp-hint-${id}`);
+  if (block.classList.contains('hidden')) {
+    block.innerHTML = `💡 <strong>Hint:</strong> ${prob.hint}`;
+    block.classList.remove('hidden');
+  } else {
+    block.classList.add('hidden');
+  }
+}
+
+function revealTricky(id) {
+  const prob = TRICKY_PROBLEMS.find(p => p.id === id);
+  const fb = document.getElementById(`tp-fb-${id}`);
+  if (!fb.dataset.answered) {
+    fb.dataset.answered = '1';
+    practiceScore.total++;
+    savePracticeScore();
+    fb.innerHTML = `Answer: <strong>${prob.answerLabel}</strong>`;
+    fb.className = 'mc-feedback';
+    document.getElementById(`tp-input-${id}`).disabled = true;
+  }
+  document.getElementById(`tp-explain-${id}`).classList.remove('hidden');
+}
+
+// e-simulator
+function runEsim() {
+  const N = 1000000;
+  let total = 0;
+  for (let i = 0; i < N; i++) {
+    let sum = 0, count = 0;
+    while (sum <= 1) { sum += Math.random(); count++; }
+    total += count;
+  }
+  const avg = total / N;
+  document.getElementById('esim-result').innerHTML = `
+    <div><strong>Trials:</strong> 1,000,000</div>
+    <div><strong>Average count to exceed 1:</strong> ${avg.toFixed(5)}</div>
+    <div><strong>Mathematical e:</strong> ${Math.E.toFixed(5)}</div>
+    <div style="margin-top:8px;font-size:1.1rem">Difference: <strong>${Math.abs(avg - Math.E).toFixed(5)}</strong> 🤯</div>
+  `;
+}
+function resetEsim() {
+  const el = document.getElementById('esim-result');
+  if (el) el.innerHTML = '';
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function init() {
@@ -1197,6 +1413,7 @@ function init() {
   setupPuzzles();
   resetBirthdaySim();
   resetMontySim();
+  setupTrickyProblems();
   showStage(1);
 }
 
