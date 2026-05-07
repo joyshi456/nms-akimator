@@ -25,6 +25,7 @@ function showStage(stage) {
   if (stage === 3) { redrawNormal(); drawAllBoxes(); }
   if (stage === 4) drawGaltonBoard();
   if (stage === 5) { updateHash(); buildAvalancheList(); drawHashUniformity(); }
+  if (stage === 7) drawBirthdayCanvas();
 }
 
 // ============================================================
@@ -934,6 +935,254 @@ function resetRandomGame() {
 }
 
 // ============================================================
+// STAGE 7: MIND-BENDER PUZZLES
+// ============================================================
+const PUZZLE_DEFS = {
+  bday:    { correct: 'C', explainId: 'bday-explain' },
+  gambler: { correct: 'B', explainId: 'gambler-explain' },
+  monty:   { correct: 'B', explainId: 'monty-explain' },
+};
+
+function setupPuzzles() {
+  Object.keys(PUZZLE_DEFS).forEach(key => {
+    const opts = document.getElementById(`${key}-opts`);
+    if (!opts) return;
+    opts.querySelectorAll('.mc-option').forEach(btn => {
+      btn.addEventListener('click', () => answerPuzzle(key, btn.dataset.v));
+    });
+  });
+}
+
+function answerPuzzle(key, choice) {
+  const def = PUZZLE_DEFS[key];
+  const fb = document.getElementById(`${key}-fb`);
+  if (fb.dataset.answered) return;
+  fb.dataset.answered = '1';
+
+  const opts = document.querySelectorAll(`#${key}-opts .mc-option`);
+  const correct = choice === def.correct;
+  practiceScore.total++;
+  if (correct) practiceScore.correct++;
+  savePracticeScore();
+
+  opts.forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o.dataset.v === def.correct) o.classList.add('correct');
+    else if (o.dataset.v === choice) o.classList.add('incorrect');
+  });
+  fb.innerHTML = correct
+    ? '✅ Right! Now check the explanation below.'
+    : `❌ Not quite — the answer is ${def.correct}. See why below!`;
+  fb.className = 'mc-feedback ' + (correct ? 'correct' : 'incorrect');
+
+  document.getElementById(def.explainId).classList.remove('hidden');
+
+  // Init simulator state for this puzzle the first time it opens
+  if (key === 'bday') resetBirthdaySim();
+  if (key === 'monty') resetMontySim();
+}
+
+// ----- Birthday simulator -----
+let bdayMatchProb = new Array(51).fill(0); // index = room size
+let bdayTrialsPerSize = 0;
+
+function runBirthdaySim(trialsPerSize) {
+  for (let n = 2; n <= 50; n++) {
+    let matches = 0;
+    for (let t = 0; t < trialsPerSize; t++) {
+      const seen = new Set();
+      let hit = false;
+      for (let p = 0; p < n; p++) {
+        const day = Math.floor(Math.random() * 365);
+        if (seen.has(day)) { hit = true; break; }
+        seen.add(day);
+      }
+      if (hit) matches++;
+    }
+    // running average
+    const prevTotal = bdayTrialsPerSize;
+    const newTotal = prevTotal + trialsPerSize;
+    bdayMatchProb[n] = (bdayMatchProb[n] * prevTotal + matches) / newTotal;
+  }
+  bdayTrialsPerSize += trialsPerSize;
+  drawBirthdayCanvas();
+}
+
+function resetBirthdaySim() {
+  bdayMatchProb = new Array(51).fill(0);
+  bdayTrialsPerSize = 0;
+  drawBirthdayCanvas();
+}
+
+function drawBirthdayCanvas() {
+  const canvas = document.getElementById('birthday-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  const padL = 40, padR = 20, padT = 20, padB = 30;
+  const chartW = w - padL - padR;
+  const chartH = h - padT - padB;
+  const xPx = n => padL + ((n - 2) / 48) * chartW;
+  const yPx = p => padT + chartH - p * chartH;
+
+  // grid
+  ctx.strokeStyle = '#eee';
+  ctx.lineWidth = 1;
+  for (let p = 0; p <= 1; p += 0.25) {
+    ctx.beginPath();
+    ctx.moveTo(padL, yPx(p));
+    ctx.lineTo(w - padR, yPx(p));
+    ctx.stroke();
+  }
+
+  // 50% line + 23 marker
+  ctx.strokeStyle = '#bdbdbd';
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(padL, yPx(0.5));
+  ctx.lineTo(w - padR, yPx(0.5));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(xPx(23), padT);
+  ctx.lineTo(xPx(23), padT + chartH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // y-axis labels
+  ctx.fillStyle = '#666';
+  ctx.font = '10px Arial';
+  ctx.textAlign = 'right';
+  for (let p = 0; p <= 1; p += 0.25) {
+    ctx.fillText(`${(p * 100).toFixed(0)}%`, padL - 6, yPx(p) + 3);
+  }
+  // x-axis labels
+  ctx.textAlign = 'center';
+  for (let n = 2; n <= 50; n += 6) {
+    ctx.fillText(n, xPx(n), h - 12);
+  }
+  // 23 label
+  ctx.fillStyle = '#bf360c';
+  ctx.font = 'bold 11px Arial';
+  ctx.fillText('23', xPx(23), padT - 4);
+
+  // Theoretical curve in red
+  ctx.strokeStyle = '#e53935';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let n = 2; n <= 50; n++) {
+    let p = 1;
+    for (let i = 0; i < n; i++) p *= (365 - i) / 365;
+    const collisionP = 1 - p;
+    const x = xPx(n);
+    const y = yPx(collisionP);
+    if (n === 2) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Empirical (simulated) — purple dots
+  if (bdayTrialsPerSize > 0) {
+    ctx.fillStyle = '#5e35b1';
+    for (let n = 2; n <= 50; n++) {
+      ctx.beginPath();
+      ctx.arc(xPx(n), yPx(bdayMatchProb[n]), 3, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }
+
+  // legend
+  ctx.fillStyle = '#e53935';
+  ctx.font = 'bold 11px Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('— exact math', padL + 4, padT + 12);
+  if (bdayTrialsPerSize > 0) {
+    ctx.fillStyle = '#5e35b1';
+    ctx.fillText(`• simulated (${bdayTrialsPerSize}/size)`, padL + 4, padT + 26);
+  }
+
+  ctx.fillStyle = '#311b92';
+  ctx.font = 'bold 12px Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('P(at least one shared birthday)', w - padR, padT + 12);
+}
+
+// ----- Gambler's fallacy simulator -----
+function runGamblerSim() {
+  const N = 1000000;
+  // generate flips and track what comes after each HHHHH
+  let streak = 0;
+  let afterStreak = 0;
+  let headsAfter = 0;
+  // we won't store the whole array, just stream
+  let prev = [];
+  for (let i = 0; i < N; i++) {
+    const flip = Math.random() < 0.5 ? 'H' : 'T';
+    if (flip === 'H') streak++;
+    else streak = 0;
+    if (i > 0 && prev.length === 5 && prev.every(x => x === 'H')) {
+      afterStreak++;
+      if (flip === 'H') headsAfter++;
+    }
+    prev.push(flip);
+    if (prev.length > 5) prev.shift();
+  }
+
+  const pct = afterStreak === 0 ? 0 : (headsAfter / afterStreak) * 100;
+  document.getElementById('gambler-result').innerHTML = `
+    <div><strong>Total flips:</strong> 1,000,000</div>
+    <div><strong>HHHHH streaks found:</strong> ${afterStreak.toLocaleString()}</div>
+    <div><strong>Of those, next flip was H:</strong> ${headsAfter.toLocaleString()}</div>
+    <div style="margin-top:8px;font-size:1.1rem"><strong>That's ${pct.toFixed(2)}%</strong> — almost exactly 50%, just like the gambler's fallacy predicts is impossible!</div>
+  `;
+}
+
+function resetGamblerSim() {
+  document.getElementById('gambler-result').innerHTML = '';
+}
+
+// ----- Monty Hall simulator -----
+let monty = { stayWins: 0, stayPlays: 0, switchWins: 0, switchPlays: 0 };
+
+function runMontySim(n) {
+  for (let i = 0; i < n; i++) {
+    const car = Math.floor(Math.random() * 3);
+    const choice = Math.floor(Math.random() * 3);
+    // host opens a non-car, non-choice door
+    let opened;
+    do { opened = Math.floor(Math.random() * 3); }
+    while (opened === car || opened === choice);
+    // switching: pick the remaining door
+    let switched;
+    for (let d = 0; d < 3; d++) if (d !== choice && d !== opened) { switched = d; break; }
+
+    // half the trials we play "stay", half "switch" — but for clarity, we count BOTH outcomes per trial
+    monty.stayPlays++;
+    if (choice === car) monty.stayWins++;
+    monty.switchPlays++;
+    if (switched === car) monty.switchWins++;
+  }
+  updateMontyDisplay();
+}
+
+function resetMontySim() {
+  monty = { stayWins: 0, stayPlays: 0, switchWins: 0, switchPlays: 0 };
+  updateMontyDisplay();
+}
+
+function updateMontyDisplay() {
+  document.getElementById('monty-stay-wins').textContent = monty.stayWins.toLocaleString();
+  document.getElementById('monty-stay-plays').textContent = monty.stayPlays.toLocaleString();
+  document.getElementById('monty-stay-rate').textContent =
+    monty.stayPlays === 0 ? '—' : ((monty.stayWins / monty.stayPlays) * 100).toFixed(1) + '%';
+  document.getElementById('monty-switch-wins').textContent = monty.switchWins.toLocaleString();
+  document.getElementById('monty-switch-plays').textContent = monty.switchPlays.toLocaleString();
+  document.getElementById('monty-switch-rate').textContent =
+    monty.switchPlays === 0 ? '—' : ((monty.switchWins / monty.switchPlays) * 100).toFixed(1) + '%';
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function init() {
@@ -945,6 +1194,9 @@ function init() {
   buildAvalancheList();
   updateHash();
   drawHashUniformity();
+  setupPuzzles();
+  resetBirthdaySim();
+  resetMontySim();
   showStage(1);
 }
 
