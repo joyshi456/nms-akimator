@@ -75,6 +75,7 @@
     </div>
 
     <div class="goal-box" id="coin-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('coin')">🎓 Show me the trick (4-coin demo)</button></div>
 
     <div class="coin-status">
       <div class="cs-item">
@@ -119,6 +120,7 @@
     </div>
 
     <div class="goal-box" id="bags-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('bags')">🎓 Show me the trick</button></div>
 
     <div class="coin-status">
       <div class="cs-item">
@@ -161,6 +163,7 @@
     </div>
 
     <div class="goal-box" id="wise-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('wise')">🎓 Show me the trick (4-person demo)</button></div>
 
     <div class="wise-hud">
       <div class="wise-hud-item">
@@ -211,6 +214,25 @@
       <div class="modal-buttons">
         <button class="btn-game btn-secondary" onclick="hideResult(); goLevelSelect();">📋 LEVEL SELECT</button>
         <button class="btn-game btn-submit" id="btn-next-level" onclick="onNextLevel()">▶ NEXT LEVEL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== WALKTHROUGH MODAL ===================== -->
+  <div id="walk-modal" class="modal-overlay hidden">
+    <div class="walk-modal">
+      <div class="walk-header">
+        <div>
+          <div class="walk-puzzle" id="walk-puzzle"></div>
+          <div class="walk-step-count" id="walk-step-count">Step 1 of 7</div>
+        </div>
+        <button class="walk-close" onclick="closeWalkthrough()" title="Skip tutorial">✕</button>
+      </div>
+      <div class="walk-visual" id="walk-visual"></div>
+      <div class="walk-text" id="walk-text"></div>
+      <div class="walk-buttons">
+        <button class="btn-game btn-secondary" id="walk-back" onclick="walkStep(-1)">← Back</button>
+        <button class="btn-game btn-submit" id="walk-next" onclick="walkStep(1)">Next →</button>
       </div>
     </div>
   </div>

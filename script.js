@@ -108,7 +108,7 @@ const PUZZLES = {
     name: '🪙 Coin Piles',
     subtitle: 'Separate coins into equal-heads piles — blindfolded!',
     levels: [
-      { num: 1, name: 'Tutorial', desc: '10 coins, 3 heads. Step by step.', emoji: '📚', total: 10, heads: 3 },
+      { num: 1, name: 'Tutorial', desc: '4 coins, 1 head. The smallest case.', emoji: '📚', total: 4, heads: 1 },
       { num: 2, name: 'Apply', desc: '50 coins, 8 heads. Solo run.', emoji: '🎯', total: 50, heads: 8 },
       { num: 3, name: 'Master', desc: '100 coins, 12 heads. Boss mode.', emoji: '🏆', total: 100, heads: 12 },
     ],
@@ -128,8 +128,8 @@ const PUZZLES = {
     name: '🍷 The Spokesman',
     subtitle: 'YOU are the spokesman. When do you declare?',
     levels: [
-      { num: 1, name: 'Tutorial', desc: '10 men. Slow pace.', emoji: '📚', n: 10 },
-      { num: 2, name: 'Apply', desc: '25 men. Quicker.', emoji: '🎯', n: 25 },
+      { num: 1, name: 'Tutorial', desc: '4 men. See the strategy clearly.', emoji: '📚', n: 4 },
+      { num: 2, name: 'Apply', desc: '15 men. Quicker pace.', emoji: '🎯', n: 15 },
       { num: 3, name: 'Master', desc: '50 men. The classic.', emoji: '🏆', n: 50 },
     ],
     start: (lvl) => startWiseLevel(lvl),
@@ -267,6 +267,8 @@ function startCoinLevel(lvl) {
   document.getElementById('btn-flip').disabled = false;
   document.getElementById('btn-coin-submit').disabled = false;
   showScreen('coin-game');
+  // Auto-open walkthrough on Tutorial level if first time
+  if (lvl === 0 && progress.coin[0] === 0) setTimeout(() => openWalkthrough('coin'), 350);
 }
 
 function renderCoinGame() {
@@ -391,6 +393,7 @@ function startBagsLevel(lvl) {
   }
   renderBagsGame();
   showScreen('bags-game');
+  if (lvl === 0 && progress.bags[0] === 0) setTimeout(() => openWalkthrough('bags'), 350);
 }
 
 function renderBagsGame() {
@@ -552,6 +555,7 @@ function startWiseLevel(lvl) {
     document.getElementById('wise-hint').innerHTML = `💡 The Classic. Patience is key — this can take a while.`;
   }
   showScreen('wise-game');
+  if (lvl === 0 && progress.wise[0] === 0) setTimeout(() => openWalkthrough('wise'), 350);
 }
 
 function setGlass(up, animate) {
@@ -667,6 +671,323 @@ function wiseDeclare() {
   }
   showResult(stars, success ? '🎉 EVERYONE GOES FREE!' : '💀 PREMATURE!', body);
 }
+
+// ============================================================
+// WALKTHROUGH SYSTEM
+// ============================================================
+let walkState = { puzzle: null, step: 0, steps: [] };
+
+function openWalkthrough(puzzle) {
+  walkState.puzzle = puzzle;
+  walkState.step = 0;
+  walkState.steps = WALKTHROUGHS[puzzle];
+  document.getElementById('walk-puzzle').textContent =
+    puzzle === 'coin' ? '🪙 COIN PILES' : puzzle === 'bags' ? '🍎 BAG DETECTIVE' : '🍷 THE SPOKESMAN';
+  document.getElementById('walk-modal').classList.remove('hidden');
+  renderWalkStep();
+}
+
+function closeWalkthrough() {
+  document.getElementById('walk-modal').classList.add('hidden');
+}
+
+function walkStep(delta) {
+  const next = walkState.step + delta;
+  if (next < 0 || next >= walkState.steps.length) {
+    if (next >= walkState.steps.length) { closeWalkthrough(); return; }
+    return;
+  }
+  walkState.step = next;
+  renderWalkStep();
+}
+
+function renderWalkStep() {
+  const stp = walkState.steps[walkState.step];
+  document.getElementById('walk-step-count').textContent =
+    `Step ${walkState.step + 1} of ${walkState.steps.length}`;
+  document.getElementById('walk-text').innerHTML = stp.text;
+  document.getElementById('walk-visual').innerHTML = stp.visual;
+  document.getElementById('walk-back').disabled = walkState.step === 0;
+  const nextBtn = document.getElementById('walk-next');
+  nextBtn.textContent = walkState.step === walkState.steps.length - 1 ? '✓ Got it!' : 'Next →';
+}
+
+// ---- Helper builders for walkthrough visuals ----
+
+function coinHtml(state, opts = {}) {
+  // state: 'heads' | 'tails' | 'hidden'
+  const cls = ['walk-coin'];
+  if (state === 'heads') cls.push('heads');
+  else if (state === 'tails') cls.push('tails');
+  else cls.push('hidden-state');
+  if (opts.pileA) cls.push('in-pile-a');
+  if (opts.flip) cls.push('flip-anim');
+  const letter = state === 'heads' ? 'H' : state === 'tails' ? 'T' : '?';
+  return `<div class="${cls.join(' ')}">${letter}</div>`;
+}
+
+function coinsRow(states, opts = {}) {
+  return `<div class="walk-coins-row">${states.map((s, i) =>
+    coinHtml(s, opts.pileMask && opts.pileMask[i] ? { pileA: true, flip: opts.flip } : { flip: opts.flip })
+  ).join('')}</div>`;
+}
+
+function pilesView(pileA, pileB, opts = {}) {
+  const aHeads = pileA.filter(s => s === 'heads').length;
+  const bHeads = pileB.filter(s => s === 'heads').length;
+  return `<div class="walk-piles">
+    <div class="walk-pile-box pile-a">
+      <div class="walk-pile-title">📦 Pile A</div>
+      <div class="walk-pile-coins">${pileA.map(s => coinHtml(s)).join('') || '<em style="color:#999">empty</em>'}</div>
+      ${opts.showCounts ? `<div style="margin-top:8px;color:#ffd96a;font-weight:700">${aHeads} heads</div>` : ''}
+    </div>
+    <div class="walk-pile-box">
+      <div class="walk-pile-title">📦 Pile B</div>
+      <div class="walk-pile-coins">${pileB.map(s => coinHtml(s)).join('') || '<em style="color:#999">empty</em>'}</div>
+      ${opts.showCounts ? `<div style="margin-top:8px;color:#ffd96a;font-weight:700">${bHeads} heads</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function bagHtml(label, opts = {}) {
+  const cls = ['walk-bag'];
+  if (opts.active) cls.push('active');
+  if (opts.solved) cls.push('solved');
+  return `<div class="${cls.join(' ')}">
+    <div class="walk-bag-icon">🛍️</div>
+    <div class="walk-bag-label">${label}</div>
+    ${opts.truth ? `<span class="walk-bag-truth">→ ${opts.truth}</span>` : ''}
+    ${opts.fruit ? `<span class="walk-bag-fruit">${opts.fruit}</span>` : ''}
+  </div>`;
+}
+
+function bagsRow(bags) {
+  return `<div class="walk-bags">${bags.map(b => bagHtml(b.label, b)).join('')}</div>`;
+}
+
+function personHtml(opts = {}) {
+  const cls = ['walk-person'];
+  if (opts.spoke) cls.push('spoke');
+  if (opts.flipped) cls.push('flipped');
+  if (opts.active) cls.push('active');
+  return `<div class="${cls.join(' ')}" data-tag="${opts.tag || ''}">${opts.label || ''}</div>`;
+}
+
+// ---- COIN WALKTHROUGH STEPS ----
+const COIN_WALK = [
+  {
+    visual: `<div style="text-align:center;font-size:0.95rem">${coinsRow(['heads', 'tails', 'tails', 'tails'])}</div>`,
+    text: `Imagine <strong>4 coins</strong> on the floor. <strong>1 is heads-up</strong> (gold H), and 3 are tails-up (silver T). Easy to see for now.`,
+  },
+  {
+    visual: coinsRow(['hidden', 'hidden', 'hidden', 'hidden']),
+    text: `Now you put on a <strong>blindfold</strong>. You can't tell which coin is which — they all look the same. But you DO know: exactly <strong>1 of the 4 is heads</strong>.`,
+  },
+  {
+    visual: pilesView(['hidden'], ['hidden', 'hidden', 'hidden']),
+    text: `🎩 <strong>The trick:</strong> since there's <strong>1 heads</strong>, you pick <strong>1 coin</strong> (any coin!) and put it in Pile A. The other 3 stay as Pile B. <em>You don't know which coin you picked — that's okay!</em>`,
+  },
+  {
+    visual: pilesView(['hidden'], ['hidden', 'hidden', 'hidden']) +
+      `<div style="margin-top:10px;color:#ffd96a;font-weight:700">🔄 Now FLIP your one coin!</div>`,
+    text: `Now <strong>flip every coin in Pile A</strong>. If it was heads, it becomes tails. If it was tails, it becomes heads. <em>You still don't know what it is — but that doesn't matter.</em>`,
+  },
+  {
+    visual: `<div style="margin-bottom:8px;color:#80deea;font-weight:700">💡 Let's check all 4 possible scenarios for which coin you picked:</div>` +
+      `<div class="walk-scenarios">
+        <div class="walk-scenario success">
+          <div class="walk-scenario-label">You picked the HEADS coin</div>
+          <div class="walk-scenario-coins"><div class="walk-scenario-coin tails">T</div></div>
+          <div style="font-size:0.7rem;color:#aaa">after flip</div>
+          <div class="walk-scenario-result">Pile A: 0 heads · Pile B: 0 heads ✅</div>
+        </div>
+        <div class="walk-scenario success">
+          <div class="walk-scenario-label">You picked a TAILS coin</div>
+          <div class="walk-scenario-coins"><div class="walk-scenario-coin heads">H</div></div>
+          <div style="font-size:0.7rem;color:#aaa">after flip</div>
+          <div class="walk-scenario-result">Pile A: 1 head · Pile B: 1 head ✅</div>
+        </div>
+      </div>`,
+    text: `Either way → <strong>Pile A heads = Pile B heads</strong>. It works <em>no matter which coin you happen to pick!</em>`,
+  },
+  {
+    visual: `<div class="walk-math">
+      <div>Pile A picks <span class="var">k</span> of the heads. (k = 0 or 1)</div>
+      <div>So Pile B has <span class="var">1 − k</span> heads (1 is the total).</div>
+      <div>&nbsp;</div>
+      <div>🔄 Flip Pile A:</div>
+      <div>&nbsp;&nbsp;heads → tails (so k heads vanish)</div>
+      <div>&nbsp;&nbsp;tails → heads (the <span class="var">1−k</span> tails become heads)</div>
+      <div>&nbsp;</div>
+      <div class="eq">→ Pile A: <span class="var">1−k</span> heads</div>
+      <div class="eq">→ Pile B: <span class="var">1−k</span> heads</div>
+      <div class="eq">✅ EQUAL — always!</div>
+    </div>`,
+    text: `Here's the math. The <strong>k cancels out</strong> when you flip. That's the symmetry magic!`,
+  },
+  {
+    visual: `<div style="text-align:center;font-size:1.05rem;line-height:1.7">
+      🎯 The general rule:<br>
+      <strong>Pick H coins → flip them all → done.</strong><br>
+      <span style="color:#80deea">(H = the number of heads you were told.)</span>
+    </div>`,
+    text: `Same trick works for <strong>any</strong> size: 10 coins / 3 heads → pick 3, flip them. 1000 coins / 20 heads → pick 20, flip them. Now go try it!`,
+  },
+];
+
+// ---- BAGS WALKTHROUGH STEPS ----
+const BAGS_WALK = [
+  {
+    visual: bagsRow([
+      { label: 'APPLES' }, { label: 'ORANGES' }, { label: 'MIX' }
+    ]),
+    text: `Three bags. One has <strong>apples</strong>, one has <strong>oranges</strong>, one has a <strong>mix</strong> — but <strong style="color:#ff5252">every label is WRONG</strong>.`,
+  },
+  {
+    visual: bagsRow([
+      { label: 'APPLES' }, { label: 'ORANGES' }, { label: 'MIX', active: true }
+    ]),
+    text: `🔑 The <strong>"MIX"</strong> bag is the special one. Its label is wrong → so the bag is <strong>NOT mix</strong>. It must be <strong>pure apples</strong> or <strong>pure oranges</strong>.`,
+  },
+  {
+    visual: bagsRow([
+      { label: 'APPLES' }, { label: 'ORANGES' }, { label: 'MIX', active: true, fruit: '🍎' }
+    ]),
+    text: `Pick one fruit from the <strong>"MIX"</strong> bag. Say you get an 🍎 apple. <strong>Boom!</strong> That bag is pure apples (it can't be mixed, and it's not labeled correctly).`,
+  },
+  {
+    visual: bagsRow([
+      { label: 'APPLES', active: true }, { label: 'ORANGES' }, { label: 'MIX', solved: true, truth: 'apples 🍎' }
+    ]),
+    text: `Now use elimination. The bag labeled <strong>"ORANGES"</strong> can't be oranges (wrong label) and can't be apples (taken). So it must be the <strong>MIX</strong>.`,
+  },
+  {
+    visual: bagsRow([
+      { label: 'APPLES', solved: true, truth: 'oranges 🍊' },
+      { label: 'ORANGES', solved: true, truth: 'mix 🍇' },
+      { label: 'MIX', solved: true, truth: 'apples 🍎' }
+    ]),
+    text: `Last one — bag labeled <strong>"APPLES"</strong> must be <strong>oranges</strong> by elimination. <strong style="color:#76ff03">Solved in ONE pick! 🎉</strong>`,
+  },
+  {
+    visual: `<div style="text-align:center;color:#80deea;line-height:1.7">
+      🪞 If you'd picked from <strong>"APPLES"</strong> or <strong>"ORANGES"</strong> first, you'd only get partial info — those choices are <em>symmetric</em>.<br><br>
+      🎯 <strong>"MIX"</strong> is the <em>asymmetric</em> bag — its wrong label is uniquely informative.
+    </div>`,
+    text: `That's the symmetry trick: always pick from the bag whose label is special. Now go try it yourself!`,
+  },
+];
+
+// ---- WISE-MEN WALKTHROUGH STEPS ----
+function walkPeopleRow(state) {
+  // state: array of 4 men. 0 = spokesman.
+  // each: { active?, flipped? }
+  return `<div class="walk-people-row">
+    ${state.map((m, i) => personHtml({
+      spoke: i === 0, flipped: m.flipped, active: m.active,
+      label: i === 0 ? '★' : '',
+      tag: i === 0 ? 'YOU' : `#${i}`,
+    })).join('')}
+  </div>`;
+}
+function walkGlass(up, count, target) {
+  return `<div class="walk-glass-row">
+    <span class="walk-glass${up ? ' up' : ''}">🍷</span>
+    <span class="walk-count-badge">Count: ${count} / ${target}</span>
+  </div>`;
+}
+
+const WISE_WALK = [
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 0, 3)}
+      ${walkPeopleRow([{}, {}, {}, {}])}
+    </div>`,
+    text: `<strong>4 wise men</strong>: YOU (the gold ★ <strong>Spokesman</strong>) plus 3 others. A glass starts <strong>bottom-down</strong>.`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 0, 3)}
+      ${walkPeopleRow([{}, {}, {}, {}])}
+      <div style="color:#80deea;font-size:0.9rem;text-align:center">
+        Each of the <strong>3 others</strong>: "First time I see glass DOWN, flip it UP. After that, never touch."
+      </div>
+    </div>`,
+    text: `The 3 regular wise men share <strong>one rule</strong>. They're <em>symmetric</em> — interchangeable.`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 0, 3)}
+      ${walkPeopleRow([{ active: true }, {}, {}, {}])}
+      <div style="color:#ffd96a;font-size:0.9rem;text-align:center">
+        YOU (Spokesman): "When I see glass UP, flip it DOWN, count +1."
+      </div>
+    </div>`,
+    text: `You're the <strong>asymmetric</strong> one — the only counter. Your goal: count to <strong>3</strong> (= number of others).`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(true, 0, 3)}
+      ${walkPeopleRow([{}, { active: true, flipped: true }, {}, {}])}
+      <div style="color:#76ff03;font-size:0.85rem;text-align:center">Min 1: #1 visits. Glass was DOWN → flips it UP.</div>
+    </div>`,
+    text: `Suppose <strong>#1</strong> visits first. Glass is down, so they flip it up (first time). Glass: <strong>UP</strong>.`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 1, 3)}
+      ${walkPeopleRow([{ active: true }, { flipped: true }, {}, {}])}
+      <div style="color:#ffd96a;font-size:0.85rem;text-align:center">Min 2: YOU visit. Glass is UP → flip down, count +1.</div>
+    </div>`,
+    text: `Then <strong>YOU</strong> visit. Glass is up → flip it down, count = <strong>1</strong>. (Now you know <em>at least 1 other person</em> has been called.)`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 1, 3)}
+      ${walkPeopleRow([{}, { active: true, flipped: true }, {}, {}])}
+      <div style="color:#aaa;font-size:0.85rem;text-align:center">Min 3: #1 visits AGAIN. Already flipped → does nothing.</div>
+    </div>`,
+    text: `If <strong>#1</strong> comes back, they remember they already flipped → <em>don't touch the glass.</em>`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(true, 1, 3)}
+      ${walkPeopleRow([{}, { flipped: true }, {}, { active: true, flipped: true }])}
+      <div style="color:#76ff03;font-size:0.85rem;text-align:center">Min 4: #3 visits. Glass DOWN → flips UP (first time).</div>
+    </div>`,
+    text: `Eventually <strong>#3</strong> visits for the first time → flips glass up.`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(true, 2, 3)}
+      ${walkPeopleRow([{}, { flipped: true }, {}, { flipped: true }])}
+      <div style="color:#ffd96a;font-size:0.9rem;text-align:center">…lots of visits later… Spokesman count = 2</div>
+    </div>`,
+    text: `Over many minutes, the count grows by 1 each time a new regular flips the glass up and you flip it back down.`,
+  },
+  {
+    visual: `<div class="walk-wise-area">
+      ${walkGlass(false, 3, 3)}
+      ${walkPeopleRow([{ active: true }, { flipped: true }, { flipped: true }, { flipped: true }])}
+      <div style="color:#76ff03;font-size:1rem;font-weight:800;text-align:center">🎉 Count = 3! ALL 3 others have flipped → all have visited.</div>
+    </div>`,
+    text: `When count = <strong>3</strong>, all 3 regulars have flipped exactly once — so all 3 have been called at least once. Plus YOU were just called (you're flipping right now). <strong>All 4 have visited → DECLARE!</strong>`,
+  },
+  {
+    visual: `<div style="text-align:center;color:#80deea;line-height:1.8">
+      Same logic works for any n.<br>
+      <strong style="color:#ffd96a">Count to n−1, then declare.</strong><br><br>
+      <em>For 50 men: count to 49.</em>
+    </div>`,
+    text: `That's the strategy. <strong>Watch carefully when YOU are called</strong> — flip only if the glass is up. Now try it!`,
+  },
+];
+
+const WALKTHROUGHS = {
+  coin: COIN_WALK,
+  bags: BAGS_WALK,
+  wise: WISE_WALK,
+};
 
 // ============================================================
 // INIT
