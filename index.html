@@ -3,535 +3,322 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Randomness Lab 🎲</title>
+  <title>Brain Teasers · Symmetry Lab 🧩</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Randomness Lab 🎲</h1>
-    <p class="subtitle">Mystery boxes, ball drops, and the magic of pretend randomness</p>
+    <h1>The Symmetry Lab 🧩</h1>
+    <p class="subtitle">Three classic brain teasers — and the one trick that cracks them all</p>
   </header>
 
   <div class="learning-panel">
-    <div class="learning-icon">🎁</div>
+    <div class="learning-icon">⚖️</div>
     <div class="learning-text">
-      <p>Imagine a box. You press a button. A number comes out. You can't predict which one — that's <strong>randomness</strong>.</p>
-      <p>Build your own bell curve, watch a Galton board, then learn how computers <em>fake</em> randomness with hash functions.</p>
+      <p>Some puzzles look <em>impossible</em> at first. Then you spot the <strong>symmetry</strong> — and the answer falls out.</p>
+      <p>In each problem here, there's a "special" choice that breaks the symmetry. Find it, and you solve it.</p>
     </div>
   </div>
 
   <nav class="stage-tabs">
-    <button class="tab active" data-stage="1">1. Mystery Box 🎁</button>
-    <button class="tab" data-stage="2">2. Build a Bell 🔔</button>
-    <button class="tab" data-stage="3">3. Different Boxes 📦</button>
-    <button class="tab" data-stage="4">4. Galton Board 🌰</button>
-    <button class="tab" data-stage="5">5. Hash Functions 🔐</button>
-    <button class="tab" data-stage="6">6. Spot the Fake! 🎯</button>
-    <button class="tab" data-stage="7">7. Mind-Benders 🤯</button>
-    <button class="tab" data-stage="8">8. Tricky Problems 🧩</button>
+    <button class="tab active" data-stage="1">1. The Big Idea</button>
+    <button class="tab" data-stage="2">2. Coin Piles 🪙</button>
+    <button class="tab" data-stage="3">3. Mislabeled Bags 🍎</button>
+    <button class="tab" data-stage="4">4. Wise Men &amp; Glass 🍷</button>
   </nav>
 
-  <!-- STAGE 1: THE MYSTERY BOX -->
+  <!-- STAGE 1: THE BIG IDEA -->
   <section id="stage-1" class="stage">
     <div class="stage-content">
-      <h2>The Mystery Box 🎁</h2>
-      <p>Randomness is like a magic box: you press a button, a number pops out, and you have <em>no idea</em> what it'll be.</p>
-
-      <div class="lesson-card mystery-card">
-        <div class="mystery-box-area">
-          <div class="mystery-box" id="mystery-box">
-            <div class="mb-question">?</div>
-            <div class="mb-output" id="mb-output">—</div>
-            <div class="mb-label">Press the button!</div>
-          </div>
-          <button class="btn-mystery" onclick="pressMystery()">🎲 GENERATE!</button>
-          <button class="btn-secondary" onclick="resetMystery()">🔄 Reset</button>
-        </div>
-        <div class="mystery-stream" id="mystery-stream"></div>
-        <p class="example-note">Each press is <strong>independent</strong> — the box has no memory. Past numbers don't change future ones.</p>
-      </div>
+      <h2>The Power of Symmetry ⚖️</h2>
+      <p>What does "symmetry" mean for puzzles? Let's see.</p>
 
       <div class="lesson-card">
-        <h3>Try a Different Box 📦</h3>
-        <p>Different "random sources" give different ranges and shapes:</p>
-        <div class="box-picker" id="box-picker">
-          <button class="box-option active" data-source="coin" onclick="setSource('coin')">🪙 Coin (H or T)</button>
-          <button class="box-option" data-source="die" onclick="setSource('die')">🎲 Die (1-6)</button>
-          <button class="box-option" data-source="d100" onclick="setSource('d100')">💯 1 to 100</button>
-          <button class="box-option" data-source="real" onclick="setSource('real')">🌊 Decimal 0-1</button>
-        </div>
-      </div>
-
-      <div class="lesson-card">
-        <h3>The Big Idea 💡</h3>
+        <h3>Two Kinds of Choices</h3>
         <div class="key-idea">
-          <p>You can't predict <strong>one</strong> press. But press the box <strong>many</strong> times, and patterns appear.</p>
-          <p>That's the secret of randomness: <em>chaos at the small scale, order at the large scale.</em></p>
-          <p>Next tab: let's see those patterns appear before your eyes!</p>
+          <p>🪞 <strong>Symmetric:</strong> two options look the same from the puzzle's point of view. If swapping them doesn't change anything, you've found symmetry.</p>
+          <p>✨ <strong>Asymmetric:</strong> one option is <em>different</em> from the others. <strong>That's where the insight lives.</strong></p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The Detective's Trick 🕵️</h3>
+        <p>When stuck, ask:</p>
+        <ol class="big-list">
+          <li>"What are my options?"</li>
+          <li>"Which ones are interchangeable (symmetric)?"</li>
+          <li>"Which one is the odd one out?"</li>
+        </ol>
+        <p>The odd one is almost always your starting point.</p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Tiny Warm-Up 🎯</h3>
+        <p>You have 4 coins on a table. Three are <strong>real</strong> (identical) and one is <strong>fake</strong> (slightly heavier). You have a balance scale.</p>
+        <div class="puzzle-question">In how many weighings can you guarantee finding the fake?</div>
+        <div class="mc-options" id="warm-opts">
+          <button class="mc-option" data-v="A">A) 1 weighing</button>
+          <button class="mc-option" data-v="B">B) 2 weighings</button>
+          <button class="mc-option" data-v="C">C) 3 weighings</button>
+          <button class="mc-option" data-v="D">D) Impossible without luck</button>
+        </div>
+        <div class="mc-feedback" id="warm-fb"></div>
+        <div id="warm-explain" class="puzzle-reveal hidden">
+          <h4>Answer: 2 weighings (B) 🎯</h4>
+          <p>Split into two pairs (call them L and R). Weigh L vs R.</p>
+          <ul class="reasoning-list">
+            <li>If they balance → impossible since one side has the fake. Wait — they can't balance with one heavier. So one side is heavier.</li>
+            <li>Take that heavier pair. Weigh its two coins against each other. The heavier one is the fake!</li>
+          </ul>
+          <p>The 4 coins were symmetric (any could be the fake). The scale <em>breaks</em> the symmetry by separating them into groups. Asymmetry → information → answer.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>What's Coming Up</h3>
+        <div class="preview-grid">
+          <div class="preview-card">
+            <div class="preview-emoji">🪙</div>
+            <strong>Coin Piles</strong>
+            <p>Separate 100 coins into two equal-heads piles — <em>while blindfolded</em>.</p>
+          </div>
+          <div class="preview-card">
+            <div class="preview-emoji">🍎</div>
+            <strong>Mislabeled Bags</strong>
+            <p>Three bags, all labels wrong. Identify them with the fewest fruit picks.</p>
+          </div>
+          <div class="preview-card">
+            <div class="preview-emoji">🍷</div>
+            <strong>Wise Men &amp; Glass</strong>
+            <p>50 prisoners and a glass. Devise a strategy to all go free.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 2: BUILD YOUR OWN BELL CURVE -->
+  <!-- STAGE 2: COIN PILES -->
   <section id="stage-2" class="stage hidden">
     <div class="stage-content">
-      <h2>Build Your Own Bell Curve 🔔</h2>
-      <p>Click the button. A ball drops into a slot based on a random number. Do it over and over and watch what shape appears.</p>
+      <h2>The Blindfolded Coin Puzzle 🪙</h2>
+
+      <div class="lesson-card">
+        <h3>The Setup</h3>
+        <p>You're blindfolded in a room. Someone tells you:</p>
+        <div class="key-idea">
+          <p>🪙 There are <strong id="coin-total-1">100</strong> coins on the floor.</p>
+          <p>👑 Exactly <strong id="coin-heads-1">10</strong> are heads-up. The rest are tails-up.</p>
+          <p>🎯 <strong>Your job:</strong> split them into two piles so each pile has <em>the same number of heads</em>.</p>
+          <p>🤚 You can <strong>flip</strong> any coin you want. But you can't feel which side is up.</p>
+        </div>
+      </div>
 
       <div class="lesson-card interactive-card">
-        <h3>One Click = One Ball 🎯</h3>
-        <p>Each ball is dropped at a slot picked using <strong>5 random numbers added together</strong>.</p>
-        <div class="bell-builder">
-          <canvas id="bell-canvas" width="700" height="320"></canvas>
-          <div class="bell-controls">
-            <button class="btn-mystery" onclick="dropOneBell()">⚪ Drop 1 Ball</button>
-            <button class="btn-action" onclick="dropManyBells(10)">⚡ Drop 10</button>
-            <button class="btn-action" onclick="dropManyBells(200)">💨 Drop 200</button>
-            <button class="btn-action" onclick="dropManyBells(2000)">🌪️ Drop 2,000</button>
-            <button class="btn-secondary" onclick="resetBells()">🔄 Reset</button>
-          </div>
-          <div class="bell-stats">
-            <div class="stat-box">
-              <div class="stat-num" id="bell-total">0</div>
-              <div class="stat-label">Balls dropped</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-num" id="bell-mean">—</div>
-              <div class="stat-label">Average slot</div>
-            </div>
-          </div>
+        <h3>The Coins (you can see them now — but you'll be blindfolded soon!)</h3>
+        <div class="coin-controls">
+          <label>Number of heads:
+            <input type="range" id="coin-head-slider" min="3" max="20" value="10" oninput="setupCoins()">
+            <span id="coin-head-label">10</span>
+          </label>
+          <label>Total coins:
+            <input type="range" id="coin-total-slider" min="40" max="200" step="20" value="100" oninput="setupCoins()">
+            <span id="coin-total-label">100</span>
+          </label>
         </div>
-        <p class="example-note">After just a few drops, the slots look messy. After many — a beautiful <strong>bell curve</strong>! It happens every time.</p>
+        <div class="coin-grid" id="coin-grid"></div>
+        <div class="coin-summary" id="coin-summary"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Step 1: Think About It 💭</h3>
+        <p>Try a naive strategy. <strong>Just split in half</strong> — first half in pile A, second half in pile B:</p>
+        <button class="btn-action" onclick="trySplitHalf()">🪓 Split in half (no flips)</button>
+        <div id="split-result" class="result-box"></div>
+        <p class="example-note">Try it a few times by re-rolling the heads positions. It almost never works — the heads are scattered randomly!</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Step 2: The Magic Trick ✨</h3>
+        <p>Now try the symmetry trick: <strong>take exactly <span id="coin-h-text">10</span> random coins</strong> (matching the number of heads), put them in pile A, and <strong>flip them all</strong>:</p>
+        <button class="btn-action btn-big" onclick="trySymmetryTrick()">🎩 Pick H coins &amp; flip them all!</button>
+        <div id="symmetry-result" class="result-box"></div>
       </div>
 
       <div class="lesson-card">
-        <h3>Why Does This Always Work? 🤔</h3>
+        <h3>Why Does This Always Work? 🤯</h3>
         <div class="key-idea">
-          <p>This is the <strong>Central Limit Theorem</strong> — one of the most magical facts in all of math:</p>
-          <p>👉 If you add up many random numbers, the result is <em>almost always</em> shaped like a bell.</p>
-          <p>It doesn't matter what the original numbers look like — sums of randoms turn into the bell shape.</p>
-          <p>That's why the bell curve shows up <em>everywhere</em> in nature!</p>
+          <p>Suppose your pile of <strong>H coins</strong> happened to contain <strong>k heads</strong>.</p>
+          <p>Then pile B (the other coins) has <strong>H − k heads</strong> (since H heads total).</p>
+          <p>When you flip every coin in pile A, those k heads become tails — and the H − k <em>tails</em> in pile A become heads.</p>
+          <p>So pile A now has <strong>H − k heads</strong>. Pile B still has <strong>H − k heads</strong>. <span class="tada">✨ EQUAL!</span></p>
         </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Bot Battle 🤖</h3>
+        <p>Run the strategy on 1,000 random configurations. The bot uses the symmetry trick; the "naive" half-and-half split is the control.</p>
+        <button class="btn-action" onclick="runCoinBot()">⚔️ Run 1,000 trials</button>
+        <button class="btn-secondary" onclick="resetCoinBot()">🔄 Reset</button>
+        <div id="coin-bot-result" class="result-box"></div>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 3: DIFFERENT BOXES -->
+  <!-- STAGE 3: MISLABELED BAGS -->
   <section id="stage-3" class="stage hidden">
     <div class="stage-content">
-      <h2>Different Boxes, Different Shapes 📦</h2>
-      <p>Each random source has its own personality — its own <strong>distribution</strong>.</p>
+      <h2>The Mislabeled Bags 🍎</h2>
 
-      <div class="lesson-card interactive-card">
-        <h3>Compare 4 Boxes Side-by-Side</h3>
-        <p>Run each box 5,000 times and see what shape appears:</p>
-        <div class="setup-row">
-          <button class="btn-action" onclick="runAllBoxes(5000)">🌪️ Run All 5,000 Times</button>
-          <button class="btn-secondary" onclick="resetAllBoxes()">🔄 Reset</button>
-        </div>
-        <div class="boxes-grid">
-          <div class="box-panel">
-            <h4>🪙 Coin Flip</h4>
-            <p class="box-desc">Two outcomes, equally likely</p>
-            <canvas id="box-coin" width="300" height="160"></canvas>
-            <p class="box-note">Two equal bars — boring but fair!</p>
-          </div>
-          <div class="box-panel">
-            <h4>🎲 One Die</h4>
-            <p class="box-desc">Uniform: every face equally likely</p>
-            <canvas id="box-die" width="300" height="160"></canvas>
-            <p class="box-note">Six bars, all about the same height.</p>
-          </div>
-          <div class="box-panel">
-            <h4>🎲🎲 Sum of 2 Dice</h4>
-            <p class="box-desc">Triangular: middle is most likely</p>
-            <canvas id="box-2dice" width="300" height="160"></canvas>
-            <p class="box-note">Triangle! Many ways to roll a 7, only one to roll a 2.</p>
-          </div>
-          <div class="box-panel">
-            <h4>🎲×10 Sum of 10 Dice</h4>
-            <p class="box-desc">Bell-shaped: hello, Gaussian!</p>
-            <canvas id="box-10dice" width="300" height="160"></canvas>
-            <p class="box-note">A bell curve. Add enough randoms, and a bell always appears.</p>
-          </div>
+      <div class="lesson-card">
+        <h3>The Setup</h3>
+        <div class="key-idea">
+          <p>🛒 Three bags. One has only apples. One has only oranges. One has a mix.</p>
+          <p>🏷️ Each bag has a label — but the manager warns you: <strong>ALL labels are wrong.</strong></p>
+          <p>🎯 <strong>Your job:</strong> figure out what's in each bag by picking the <em>fewest</em> fruits possible.</p>
         </div>
       </div>
 
+      <div class="lesson-card interactive-card">
+        <h3>Try It Yourself 🍇</h3>
+        <p>Click a bag to pick one fruit from it. When you think you know the answer, assign the labels!</p>
+        <div class="bags-row" id="bags-row"></div>
+        <div class="bag-status">
+          <div class="bag-stat-box">
+            <div class="bag-stat-num" id="bag-picks">0</div>
+            <div class="bag-stat-label">Fruits picked</div>
+          </div>
+          <div class="bag-stat-box">
+            <div class="bag-stat-num" id="bag-optimal">?</div>
+            <div class="bag-stat-label">Best possible</div>
+          </div>
+        </div>
+        <div id="bag-last-pick" class="last-pick"></div>
+        <div class="bag-controls">
+          <button class="btn-action" onclick="startGuessing()" id="btn-guess">🎯 I know the answer!</button>
+          <button class="btn-secondary" onclick="restartBags()">🔄 New round</button>
+        </div>
+        <div id="bag-guess-form" class="hidden">
+          <h4>Assign each bag's REAL contents:</h4>
+          <div id="bag-guess-grid"></div>
+          <button class="btn-action btn-big" onclick="submitBagGuess()">✓ Submit</button>
+        </div>
+        <div id="bag-result" class="result-box"></div>
+      </div>
+
       <div class="lesson-card">
-        <h3>The Bell Curve Has 2 Knobs 🎚️</h3>
-        <p>The bell curve has just two settings:</p>
+        <h3>The Symmetry Insight 🔑</h3>
+        <p>Think about which bag to pick from:</p>
         <div class="key-idea">
-          <p>🎯 <strong>μ (mu) — the center.</strong> Where the peak sits.</p>
-          <p>📏 <strong>σ (sigma) — the width.</strong> How spread out it is.</p>
+          <p>🍎 If you pick from <strong>"APPLES"</strong> (wrong label): you get an orange or a mixed-bag fruit. Either way, you only narrow it down partially.</p>
+          <p>🍊 If you pick from <strong>"ORANGES"</strong> (wrong label): same kind of partial information — symmetric to the apple case.</p>
+          <p>🎁 If you pick from <strong>"MIX"</strong> (wrong label): the bag CANNOT actually be the mix! So whatever fruit comes out tells you the bag's <em>entire</em> identity.</p>
         </div>
-        <div class="slider-control">
-          <label>Center (μ): <span id="mean-label" class="slider-val">0</span></label>
-          <input type="range" id="mean-slider" min="-5" max="5" value="0" step="0.1" oninput="redrawNormal()">
-        </div>
-        <div class="slider-control">
-          <label>Width (σ): <span id="sd-label" class="slider-val">1</span></label>
-          <input type="range" id="sd-slider" min="0.3" max="3" value="1" step="0.1" oninput="redrawNormal()">
-        </div>
-        <canvas id="normal-canvas" width="600" height="240"></canvas>
-        <p class="example-note">Move the sliders! See how the bell shifts left/right (μ) and gets fatter/skinnier (σ).</p>
+        <p><strong>"Mix" is the odd one out.</strong> Its label-mismatch carries the most information. <strong>1 pick from "MIX" is enough!</strong></p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The Full Logic 🧠</h3>
+        <p>Say you pick from "MIX" and get an <strong>apple</strong>. Then:</p>
+        <ol class="big-list">
+          <li>That bag must be <strong>APPLES</strong> (it's not mix, it's not labeled correctly).</li>
+          <li>The bag labeled "ORANGES" can't be oranges (wrong label) and can't be apples (taken). So it's the <strong>MIX</strong>.</li>
+          <li>The bag labeled "APPLES" must be the <strong>ORANGES</strong> — by elimination.</li>
+        </ol>
+        <p>Same logic if you get an orange from "MIX" — just swap apple and orange. <strong>One pick. Done.</strong></p>
       </div>
     </div>
   </section>
 
-  <!-- STAGE 4: GALTON BOARD -->
+  <!-- STAGE 4: WISE MEN & GLASS -->
   <section id="stage-4" class="stage hidden">
     <div class="stage-content">
-      <h2>The Galton Board 🌰</h2>
-      <p>A real machine that builds a bell curve from coin flips. Drop balls and watch!</p>
+      <h2>The Wise Men &amp; The Glass 🍷</h2>
 
       <div class="lesson-card">
-        <h3>How It Works ⚙️</h3>
+        <h3>The Setup</h3>
         <div class="key-idea">
-          <p>1. A ball drops from the top.</p>
-          <p>2. It hits a peg. Bounces left or right (50/50, like a coin flip).</p>
-          <p>3. Hits another peg. Bounces left or right again.</p>
-          <p>4. After a bunch of bounces, lands in a slot at the bottom.</p>
-          <p>5. Drop tons of balls, and the slots fill up like… a bell curve! 🔔</p>
+          <p>👤 A sultan captures <strong>50 wise men</strong>. He puts each in a separate room.</p>
+          <p>🍷 There's a glass in his hall, currently <strong>bottom-down</strong>.</p>
+          <p>⏰ Every minute, he randomly picks one wise man and brings them to the hall. That man can flip the glass — or not — then returns.</p>
+          <p>🗣️ At any time, a wise man visiting the hall may declare: <em>"All 50 of us have been called at least once!"</em></p>
+          <p>✅ If they're right, everyone goes free. ❌ If they're wrong, everyone dies.</p>
+          <p>📜 The wise men can talk <strong>once</strong> before being separated to agree on a strategy.</p>
         </div>
       </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Drop Some Balls!</h3>
-        <div class="setup-row">
-          <label>Rows of pegs:
-            <input type="range" id="galton-rows" min="5" max="15" value="10" oninput="updateGaltonRows()">
-            <span id="galton-rows-label">10</span>
-          </label>
-          <button class="btn-action" onclick="dropGaltonBalls(1)">⚪ Drop 1</button>
-          <button class="btn-action" onclick="dropGaltonBalls(50)">⚡ Drop 50</button>
-          <button class="btn-action" onclick="dropGaltonBalls(500)">💨 Drop 500</button>
-          <button class="btn-secondary" onclick="resetGalton()">🔄 Reset</button>
-        </div>
-        <canvas id="galton-canvas" width="600" height="500"></canvas>
-        <div class="bell-stats">
-          <div class="stat-box">
-            <div class="stat-num" id="galton-total">0</div>
-            <div class="stat-label">Balls dropped</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="galton-mean">—</div>
-            <div class="stat-label">Mean slot</div>
-          </div>
-        </div>
-        <p class="example-note">Each ball takes a random path. But the <strong>pile</strong> always ends up looking the same. Order from chaos!</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- STAGE 5: HASH FUNCTIONS -->
-  <section id="stage-5" class="stage hidden">
-    <div class="stage-content">
-      <h2>Hash Functions: Pretend Randomness 🔐</h2>
-      <p>Plot twist: a lot of "randomness" in computers isn't actually random — it's a clever trick called a <strong>hash function</strong>.</p>
 
       <div class="lesson-card">
-        <h3>What Is a Hash? 🤔</h3>
+        <h3>The Symmetry Insight 🔑</h3>
+        <p>If <em>one</em> wise man will eventually make the declaration, they're <strong>different from the others</strong>. Call them the <strong>Spokesman</strong>.</p>
+        <p>The other 49 are <strong>symmetric</strong> — interchangeable. So they should all follow the same rule.</p>
         <div class="key-idea">
-          <p>A <strong>hash function</strong> takes any input (a word, a number, a file) and turns it into a fixed-size scrambled output that <em>looks</em> totally random.</p>
-          <p>But it's <strong>not</strong> random! Same input → same output, every single time. It's a <em>deterministic</em> recipe.</p>
-          <p>The magic: even tiny changes to the input create wildly different outputs. This is called the <strong>avalanche effect</strong>.</p>
+          <p>📜 <strong>49 Regular Wise Men:</strong> "The first time I see the glass bottom-down, I flip it upside-down. After that, I never touch the glass again."</p>
+          <p>🎩 <strong>The Spokesman:</strong> "Every time I see the glass upside-down, I flip it bottom-down — and add 1 to my count. When my count reaches 49, I know each of the other 49 has been called at least once."</p>
+          <p>🎯 The spokesman has been called too (they were doing the counting!) — so all 50 have been called. <strong>Declare!</strong></p>
         </div>
       </div>
 
       <div class="lesson-card interactive-card">
-        <h3>Try It Yourself! ⚗️</h3>
-        <p>Type something. See its hash. Then change <em>one letter</em> and watch the hash explode into something totally different.</p>
-        <div class="hash-input-row">
-          <input type="text" id="hash-input" class="hash-input" value="hello" oninput="updateHash()" placeholder="Type anything...">
-        </div>
-        <div class="hash-output">
-          <div class="hash-label">Your input:</div>
-          <div class="hash-value" id="hash-input-display">hello</div>
-          <div class="hash-label">Hash (looks random, but isn't!):</div>
-          <div class="hash-value hash-result" id="hash-result">—</div>
-        </div>
-        <p class="example-note">Same input always gives the same hash. Don't believe me? Type "hello" again, then "Hello".</p>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>The Avalanche Effect 🏔️</h3>
-        <p>Watch how one tiny change ripples through the entire output:</p>
-        <div class="avalanche-list" id="avalanche-list"></div>
-        <p class="example-note">Notice: the inputs differ by ONE character, but the hashes share almost no characters. That's the avalanche!</p>
-      </div>
-
-      <div class="lesson-card interactive-card">
-        <h3>Hashes Look Random 🎯</h3>
-        <p>Even though hashes are deterministic, when you hash lots of different things, the outputs spread out evenly — just like real randomness!</p>
-        <div class="setup-row">
-          <button class="btn-action" onclick="runHashUniformity(2000)">🌪️ Hash 2,000 Words</button>
-          <button class="btn-secondary" onclick="resetHashUniformity()">🔄 Reset</button>
-        </div>
-        <canvas id="hash-uniformity" width="600" height="220"></canvas>
-        <p class="example-note">Each bar = how many hashes started with each hex digit. They're roughly equal — the hash function spreads things out evenly across all 16 buckets.</p>
-      </div>
-
-      <div class="lesson-card">
-        <h3>Why Should I Care? 🌐</h3>
-        <p>Hash functions power tons of stuff:</p>
-        <div class="examples-grid">
-          <div class="ex-card">🔒<br><strong>Passwords</strong><br><span>Websites store your password's hash, not the password itself.</span></div>
-          <div class="ex-card">⛓️<br><strong>Bitcoin & crypto</strong><br><span>Every block in the chain is identified by its hash.</span></div>
-          <div class="ex-card">📁<br><strong>File integrity</strong><br><span>Two files match if and only if their hashes match.</span></div>
-          <div class="ex-card">🎮<br><strong>Game maps</strong><br><span>Minecraft generates worlds from a "seed" hashed into terrain.</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STAGE 6: SPOT THE FAKE -->
-  <section id="stage-6" class="stage hidden">
-    <div class="stage-content">
-      <h2>Spot the Fake! 🎯</h2>
-      <p>Humans are <em>terrible</em> at being random. Can you spot real coin flips vs sequences a person made up?</p>
-
-      <div class="lesson-card">
-        <h3>The Trick 🧠</h3>
-        <p>Real random sequences <strong>have streaks</strong> — like 4 or 5 heads in a row. Humans avoid those because they "feel wrong".</p>
-        <p>So if a sequence has no long runs, it's probably faked!</p>
-      </div>
-
-      <div id="game-setup-card" class="lesson-card">
-        <h3>Set Up the Game</h3>
-        <div class="setup-row">
-          <label>Player 1:
-            <input type="text" id="rand-p1" class="short-input" style="width:160px" value="Player 1">
+        <h3>Watch It Play Out 🎬</h3>
+        <p>Run the simulation and watch the strategy unfold. The grey dots are the regular wise men; gold is the spokesman. Purple = they've made their flip.</p>
+        <div class="wise-controls">
+          <label>Number of wise men:
+            <input type="range" id="wise-count" min="10" max="100" step="5" value="50" oninput="resetWiseMen()">
+            <span id="wise-count-label">50</span>
           </label>
-          <label>Player 2:
-            <input type="text" id="rand-p2" class="short-input" style="width:160px" value="Player 2">
+          <label>Speed:
+            <input type="range" id="wise-speed" min="1" max="200" value="60">
           </label>
         </div>
-        <div class="setup-row">
-          <label>Mode:
-            <select id="rand-mode">
-              <option value="solo">Solo Practice</option>
-              <option value="vs" selected>2-Player Versus</option>
-            </select>
-          </label>
-          <label>Rounds:
-            <select id="rand-rounds">
-              <option value="3">3</option>
-              <option value="5" selected>5</option>
-              <option value="8">8</option>
-              <option value="10">10</option>
-            </select>
-          </label>
-        </div>
-        <button class="btn-action btn-big" onclick="startRandomGame()">🚀 Start the Game!</button>
-      </div>
-
-      <div id="game-active-card" class="lesson-card hidden">
-        <div class="scoreboard" id="rand-scoreboard">
-          <div class="player-score" id="rand-p1-box">
-            <div class="player-name" id="rand-p1-display">Player 1</div>
-            <div class="player-pts" id="rand-p1-pts">0</div>
-          </div>
-          <div class="round-info">
-            <div class="round-label">Round</div>
-            <div class="round-num" id="rand-round-num">1 / 5</div>
-          </div>
-          <div class="player-score" id="rand-p2-box">
-            <div class="player-name" id="rand-p2-display">Player 2</div>
-            <div class="player-pts" id="rand-p2-pts">0</div>
-          </div>
-        </div>
-
-        <h3 id="rand-prompt">Which sequence is REAL random coin flips?</h3>
-
-        <div class="seq-row">
-          <button class="seq-btn" id="seq-A" onclick="pickSequence('A')">
-            <div class="seq-label">Sequence A</div>
-            <div class="seq-content" id="seq-A-content"></div>
-          </button>
-          <button class="seq-btn" id="seq-B" onclick="pickSequence('B')">
-            <div class="seq-label">Sequence B</div>
-            <div class="seq-content" id="seq-B-content"></div>
-          </button>
-        </div>
-
-        <div id="rand-turn-info" class="turn-info"></div>
-
-        <div id="rand-reveal" class="hidden">
-          <div class="reveal-block" id="rand-reveal-text"></div>
-          <button class="btn-action btn-big" onclick="nextRandomRound()" id="next-rand-btn">➡️ Next Round</button>
-        </div>
-      </div>
-
-      <div id="game-final-card" class="lesson-card hidden final-card">
-        <h2 id="rand-winner-banner">🏆 Game Over!</h2>
-        <div class="final-scores" id="rand-final-scores"></div>
-        <button class="btn-action btn-big" onclick="resetRandomGame()">🔄 Play Again</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- STAGE 7: MIND-BENDERS -->
-  <section id="stage-7" class="stage hidden">
-    <div class="stage-content">
-      <h2>Mind-Benders 🤯</h2>
-      <p>Three classic randomness puzzles where your gut is almost always wrong. Make a guess first, then click to reveal!</p>
-
-      <!-- PUZZLE 1: BIRTHDAY PARADOX -->
-      <div class="lesson-card puzzle-card">
-        <div class="puzzle-tag">Puzzle 1 · The Birthday Paradox 🎂</div>
-        <div class="puzzle-question">
-          In a room of <strong>23 people</strong>, what's the chance that <strong>at least two share a birthday</strong>?
-        </div>
-        <div class="mc-options" id="bday-opts">
-          <button class="mc-option" data-v="A">A) About 6% — way too few people</button>
-          <button class="mc-option" data-v="B">B) About 23% — same as the count</button>
-          <button class="mc-option" data-v="C">C) About 50% — basically a coin flip!</button>
-          <button class="mc-option" data-v="D">D) About 90% — birthdays are common</button>
-        </div>
-        <div class="mc-feedback" id="bday-fb"></div>
-
-        <div id="bday-explain" class="puzzle-reveal hidden">
-          <h4>The Answer: ~50.7% 🤯</h4>
-          <p>Counterintuitive, right? Here's the trick: instead of computing "at least one match," compute "no matches" and subtract from 1.</p>
-          <ul class="reasoning-list">
-            <li>Person 1 picks any day: 365/365</li>
-            <li>Person 2 must avoid person 1's day: 364/365</li>
-            <li>Person 3 must avoid both: 363/365</li>
-            <li>… continue for all 23 people …</li>
-            <li>Multiply them all → ≈ 0.493 (no match)</li>
-            <li>So <strong>P(at least one match) = 1 − 0.493 ≈ 50.7%</strong></li>
-          </ul>
-          <p>This is exactly why <strong>hash collisions</strong> happen sooner than you'd think — same math.</p>
-
-          <h4 style="margin-top:14px">See it for yourself 🧪</h4>
-          <p>Simulate thousands of "rooms" of each size and watch the probability curve grow:</p>
-          <div class="setup-row">
-            <button class="btn-action" onclick="runBirthdaySim(2000)">🌪️ Simulate 2,000 rooms per size</button>
-            <button class="btn-secondary" onclick="resetBirthdaySim()">🔄 Reset</button>
-          </div>
-          <canvas id="birthday-canvas" width="600" height="240"></canvas>
-          <p class="example-note">The curve crosses 50% around 23 people — and 99% by about 57. Random collisions sneak up fast!</p>
-        </div>
-      </div>
-
-      <!-- PUZZLE 2: GAMBLER'S FALLACY -->
-      <div class="lesson-card puzzle-card">
-        <div class="puzzle-tag">Puzzle 2 · The Hot Streak 🔥</div>
-        <div class="puzzle-question">
-          You flip a fair coin <strong>10 times in a row</strong> and get all heads: HHHHHHHHHH. What's the chance the <strong>next flip</strong> is heads?
-        </div>
-        <div class="mc-options" id="gambler-opts">
-          <button class="mc-option" data-v="A">A) Less than 50% — tails is "due"</button>
-          <button class="mc-option" data-v="B">B) Exactly 50% — the coin has no memory</button>
-          <button class="mc-option" data-v="C">C) More than 50% — heads is on a roll</button>
-        </div>
-        <div class="mc-feedback" id="gambler-fb"></div>
-
-        <div id="gambler-explain" class="puzzle-reveal hidden">
-          <h4>The Answer: Exactly 50% ⚖️</h4>
-          <p>This is called the <strong>gambler's fallacy</strong> — believing past results affect future independent events.</p>
-          <p>Remember the Mystery Box from Tab 1? Each press is <em>independent</em>. The coin doesn't know it just landed heads 10 times in a row. It has no memory.</p>
-          <p>Yes, getting 10 heads in a row was unlikely <em>before</em> you started (about 1 in 1,024). But once you're <em>in</em> that situation, the next flip is just a fresh 50/50.</p>
-
-          <h4 style="margin-top:14px">Prove it 🧪</h4>
-          <p>Let's flip a million coins, find every "HHHHH" streak (5 heads in a row), and check what came next. Was it more likely to be tails?</p>
-          <div class="setup-row">
-            <button class="btn-action" onclick="runGamblerSim()">🌪️ Find all 5-heads streaks (1M flips)</button>
-            <button class="btn-secondary" onclick="resetGamblerSim()">🔄 Reset</button>
-          </div>
-          <div id="gambler-result" class="result-box"></div>
-          <p class="example-note">After streaks of HHHHH, the next flip is heads about 50% of the time — exactly like any other flip.</p>
-        </div>
-      </div>
-
-      <!-- PUZZLE 3: MONTY HALL -->
-      <div class="lesson-card puzzle-card">
-        <div class="puzzle-tag">Puzzle 3 · The Monty Hall Problem 🚪</div>
-        <div class="puzzle-question">
-          You're on a game show. Behind one of three doors is a car 🚗; behind the other two, goats 🐐.
-          You pick door #1. The host (who knows where the car is) opens door #3 to reveal a goat,
-          then asks: <strong>"Want to switch to door #2?"</strong>
-        </div>
-        <div class="mc-options" id="monty-opts">
-          <button class="mc-option" data-v="A">A) Stay with door #1 — switching makes no difference</button>
-          <button class="mc-option" data-v="B">B) Switch to door #2 — it has a higher chance of winning</button>
-          <button class="mc-option" data-v="C">C) Doesn't matter — it's now 50/50 either way</button>
-        </div>
-        <div class="mc-feedback" id="monty-fb"></div>
-
-        <div id="monty-explain" class="puzzle-reveal hidden">
-          <h4>The Answer: Switch! 🚗</h4>
-          <p>If you <strong>stay</strong>, you win <strong>1/3</strong> of the time.</p>
-          <p>If you <strong>switch</strong>, you win <strong>2/3</strong> of the time. <em>Switching doubles your chances.</em></p>
-          <p><strong>Why?</strong> When you first picked, you had a 1/3 chance of being right. That means 2/3 of the time, the car is behind one of the OTHER two doors. The host then helpfully eliminates the wrong one of those two — so the remaining door now carries that whole 2/3 probability.</p>
-
-          <h4 style="margin-top:14px">Prove it 🧪</h4>
-          <p>Play the game many times with each strategy and see who wins more:</p>
-          <div class="setup-row">
-            <button class="btn-action" onclick="runMontySim(1)">🚪 Play 1 round</button>
-            <button class="btn-action" onclick="runMontySim(100)">⚡ Play 100</button>
-            <button class="btn-action" onclick="runMontySim(10000)">🌪️ Play 10,000</button>
-            <button class="btn-secondary" onclick="resetMontySim()">🔄 Reset</button>
-          </div>
-          <div class="monty-result-grid">
-            <div class="monty-strategy">
-              <div class="monty-name">Stay 🛑</div>
-              <div class="monty-stats">
-                <div>Wins: <strong id="monty-stay-wins">0</strong></div>
-                <div>Played: <strong id="monty-stay-plays">0</strong></div>
-                <div>Win rate: <strong id="monty-stay-rate">—</strong></div>
-              </div>
+        <div class="wise-area">
+          <div class="wise-info">
+            <div class="wise-stat">
+              <div class="wise-stat-num" id="wise-day">0</div>
+              <div class="wise-stat-label">Minutes</div>
             </div>
-            <div class="monty-strategy">
-              <div class="monty-name">Switch 🔄</div>
-              <div class="monty-stats">
-                <div>Wins: <strong id="monty-switch-wins">0</strong></div>
-                <div>Played: <strong id="monty-switch-plays">0</strong></div>
-                <div>Win rate: <strong id="monty-switch-rate">—</strong></div>
-              </div>
+            <div class="glass-area">
+              <div class="glass" id="glass">🍷</div>
+              <div class="glass-label" id="glass-label">bottom-down</div>
+            </div>
+            <div class="wise-stat">
+              <div class="wise-stat-num" id="wise-count-stat">0 / 49</div>
+              <div class="wise-stat-label">Spokesman's count</div>
             </div>
           </div>
-          <p class="example-note">After many rounds, "Stay" hovers around 33% and "Switch" hovers around 67%. The math doesn't lie!</p>
+          <div class="wise-grid" id="wise-grid"></div>
         </div>
+        <div class="wise-buttons">
+          <button class="btn-action" onclick="stepWise()">🔁 Step (1 minute)</button>
+          <button class="btn-action" onclick="playWise()" id="wise-play">▶️ Auto-play</button>
+          <button class="btn-secondary" onclick="resetWiseMen()">🔄 Reset</button>
+        </div>
+        <div id="wise-log" class="event-log"></div>
+        <div id="wise-victory" class="victory-banner hidden"></div>
       </div>
 
       <div class="lesson-card">
-        <h3>Why Are These So Tricky? 🧠</h3>
+        <h3>How Long Does It Take? ⏱️</h3>
+        <p>Even though each step is fast, this strategy can be <em>slow</em>. The mathematical expected time is roughly <strong>n² · ln(n) minutes</strong> — for 50 wise men, that's typically several thousand minutes.</p>
+        <p>Run many simulations to see the distribution:</p>
+        <button class="btn-action" onclick="runWiseBot(100)">⚡ Run 100 simulations</button>
+        <button class="btn-secondary" onclick="resetWiseBot()">🔄 Reset</button>
+        <div id="wise-bot-result" class="result-box"></div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The Three Puzzles in One Sentence 🎁</h3>
         <div class="key-idea">
-          <p>All three puzzles share a theme: <strong>our gut is built for everyday life, not for probability</strong>.</p>
-          <p>We see "23 people" and think "small group." We see "10 heads in a row" and feel a pattern. We see "two doors left" and assume 50/50.</p>
-          <p>But math doesn't care about feelings. The only way to get good at probability is to <em>compute it</em> — or <em>simulate it</em>, just like you did above. 🎲</p>
+          <p>🪙 <strong>Coin Piles:</strong> the "different" choice was <em>flipping</em>. Asymmetric act, symmetric outcome.</p>
+          <p>🍎 <strong>Mislabeled Bags:</strong> the "different" bag was the one labeled <em>MIX</em>. Pick where the asymmetry lives.</p>
+          <p>🍷 <strong>Wise Men:</strong> the "different" person was the <em>Spokesman</em>. One asymmetric role lets the symmetric crowd cooperate.</p>
+          <p>Every time: find the one thing that's <em>not like the others</em>. That's your wedge.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STAGE 8: TRICKY MATH PROBLEMS -->
-  <section id="stage-8" class="stage hidden">
-    <div class="stage-content">
-      <h2>Tricky Math Problems 🧩</h2>
-      <p>Real probability puzzles, from warm-ups to "wait, that's the answer?!" Compute first, then reveal.</p>
-      <p class="hint-line">💡 Tip: For fractions, type things like <code>1/3</code> or <code>0.333</code>. The checker accepts both. For ∞, type "infinity".</p>
-
-      <div id="tricky-problems"></div>
-
-      <div class="lesson-card">
-        <h3>Want More? 📚</h3>
-        <p>Once these feel easy, look up:</p>
-        <ul style="padding-left:24px;line-height:1.8">
-          <li><strong>Bertrand's Paradox</strong> — what is the probability of a random chord on a circle?</li>
-          <li><strong>Sleeping Beauty</strong> — a famous philosophical probability puzzle</li>
-          <li><strong>Random walks</strong> — will a drunk person always come home?</li>
-          <li><strong>Gambler's Ruin</strong> — how long until you go broke?</li>
-        </ul>
       </div>
     </div>
   </section>
 
   <!-- Score tracker -->
   <div class="score-bar" id="score-bar">
-    <span id="score-display">Practice score: 0 / 0</span>
+    <span id="score-display">Puzzles solved: 0 / 4</span>
     <button class="btn-reset-score" onclick="resetPracticeScore()">Reset</button>
   </div>
 
