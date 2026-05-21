@@ -351,15 +351,16 @@ function clearWhiteboard() {
 
 const TOOLBOX_DEFS = [
   { name: 'words', desc: 'List of all words available' },
-  { name: 'fiveLetter', desc: 'Only 5-letter words' },
+  { name: 'five_letter', desc: 'Only 5-letter words' },
   { name: 'print(...)', desc: 'Show something in the output' },
-  { name: 'isVowel(c)', desc: 'True if c is a, e, i, o, or u' },
-  { name: 'vowels(w)', desc: 'Get array of vowels in w' },
+  { name: 'input(prompt)', desc: 'Ask the user a question' },
+  { name: 'is_vowel(c)', desc: 'True if c is a, e, i, o, or u' },
+  { name: 'vowels(w)', desc: 'List of vowels in w' },
   { name: 'reverse(w)', desc: 'Flip the word backwards' },
-  { name: 'isPalindrome(w)', desc: 'True if w reads same backwards' },
-  { name: 'letters(w)', desc: 'Array of letters in w' },
+  { name: 'is_palindrome(w)', desc: 'True if w reads the same backwards' },
+  { name: 'letters(w)', desc: 'List of letters in w' },
   { name: 'len(w)', desc: 'Length of word w' },
-  { name: 'sortByLength(arr)', desc: 'Sort words by length' },
+  { name: 'sort_by_length(arr)', desc: 'Sort words by length' },
 ];
 
 function renderToolbox() {
@@ -371,112 +372,114 @@ function renderToolbox() {
 
 const CHALLENGES = [
   {
+    id: 'hello',
+    title: 'Hello, you!',
+    desc: 'A tiny warm-up. Ask the user their name, then say hello and tell them how many vowels are in it.',
+    starter: `# Tiny warm-up: ask the user a question.
+name = input("What is your name? ")
+print("Hello,", name, "!")
+print("Your name has", len(vowels(name)), "vowels.")`,
+    solution: `name = input("What is your name? ")
+print("Hello,", name, "!")
+print("Your name has", len(vowels(name)), "vowels.")`,
+  },
+  {
     id: 'palindromes',
     title: 'Find all palindromes',
-    desc: 'Look through every word, print the ones that read the same backwards. (Try not to look at the solution!)',
-    starter: `// Print every palindrome in the word list.
-for (let w of words) {
-  if (isPalindrome(w)) {
-    print(w);
-  }
-}`,
-    solution: `// Print every palindrome in the word list.
-for (let w of words) {
-  if (isPalindrome(w)) {
-    print(w);
-  }
-}`,
+    desc: 'Look through every word, print the ones that read the same backwards.',
+    starter: `# Print every palindrome in the word list.
+for w in words:
+    if is_palindrome(w):
+        print(w)`,
+    solution: `for w in words:
+    if is_palindrome(w):
+        print(w)`,
   },
   {
     id: 'most-vowels',
     title: 'Word with the most vowels',
     desc: 'Go through every word, count its vowels, keep the best one. Print it at the end.',
-    starter: `// Find the word with the most vowels.
-let best = '';
-let bestCount = 0;
-for (let w of words) {
-  let n = vowels(w).length;
-  if (n > bestCount) {
-    bestCount = n;
-    best = w;
-  }
-}
-print(best, 'has', bestCount, 'vowels');`,
-    solution: `let best = '';
-let bestCount = 0;
-for (let w of words) {
-  const n = vowels(w).length;
-  if (n > bestCount) { bestCount = n; best = w; }
-}
-print(best, 'has', bestCount, 'vowels');`,
+    starter: `# Find the word with the most vowels.
+best = ""
+best_count = 0
+for w in words:
+    n = len(vowels(w))
+    if n > best_count:
+        best_count = n
+        best = w
+print(best, "has", best_count, "vowels")`,
+    solution: `best = ""
+best_count = 0
+for w in words:
+    n = len(vowels(w))
+    if n > best_count:
+        best_count = n
+        best = w
+print(best, "has", best_count, "vowels")`,
   },
   {
     id: 'no-vowels',
     title: 'Words with NO vowels',
     desc: 'Some real words have zero vowels (like "hm" or "tsk"). Find them all.',
-    starter: `// Print words that have no vowels at all.
-for (let w of words) {
-  if (vowels(w).length === 0) {
-    print(w);
-  }
-}`,
-    solution: `for (let w of words) {
-  if (vowels(w).length === 0) print(w);
-}`,
+    starter: `# Print words that have no vowels at all.
+for w in words:
+    if len(vowels(w)) == 0:
+        print(w)`,
+    solution: `for w in words:
+    if len(vowels(w)) == 0:
+        print(w)`,
   },
   {
     id: 'reversed-pairs',
     title: 'Word pairs that reverse',
     desc: 'Find pairs of words where one is the reverse of the other (like CAT/TAC, DOG/GOD).',
-    starter: `// Find pairs where one word is the reverse of another.
-const wordSet = new Set(words);
-for (let w of words) {
-  const r = reverse(w);
-  if (r !== w && wordSet.has(r) && w < r) {
-    print(w, '<->', r);
-  }
-}`,
-    solution: `const wordSet = new Set(words);
-for (let w of words) {
-  const r = reverse(w);
-  if (r !== w && wordSet.has(r) && w < r) {
-    print(w, '<->', r);
-  }
-}`,
+    starter: `# Find pairs where one word is the reverse of another.
+word_set = set(words)
+for w in words:
+    r = reverse(w)
+    if r != w and r in word_set and w < r:
+        print(w, "<->", r)`,
+    solution: `word_set = set(words)
+for w in words:
+    r = reverse(w)
+    if r != w and r in word_set and w < r:
+        print(w, "<->", r)`,
   },
   {
     id: 'longest-alpha',
     title: 'Top "alphabet runs"',
     desc: 'For each word, find its longest run of letters in ABC order. Print the words with runs of length 4 or more.',
-    starter: `// Find words with a long ABC-ordered run.
-function longestAlpha(w) {
-  let best = 1, cur = 1;
-  for (let i = 1; i < w.length; i++) {
-    if (w.charCodeAt(i) >= w.charCodeAt(i-1)) cur++;
-    else cur = 1;
-    if (cur > best) best = cur;
-  }
-  return best;
-}
+    starter: `# Find words with a long ABC-ordered run.
+def longest_alpha(w):
+    best = 1
+    cur = 1
+    for i in range(1, len(w)):
+        if w[i] >= w[i-1]:
+            cur += 1
+        else:
+            cur = 1
+        if cur > best:
+            best = cur
+    return best
 
-for (let w of words) {
-  if (longestAlpha(w) >= 4) {
-    print(w, '(run of', longestAlpha(w), 'letters)');
-  }
-}`,
-    solution: `function longestAlpha(w) {
-  let best = 1, cur = 1;
-  for (let i = 1; i < w.length; i++) {
-    if (w.charCodeAt(i) >= w.charCodeAt(i-1)) cur++;
-    else cur = 1;
-    if (cur > best) best = cur;
-  }
-  return best;
-}
+for w in words:
+    if longest_alpha(w) >= 4:
+        print(w, "(run of", longest_alpha(w), ")")`,
+    solution: `def longest_alpha(w):
+    best = 1
+    cur = 1
+    for i in range(1, len(w)):
+        if w[i] >= w[i-1]:
+            cur += 1
+        else:
+            cur = 1
+        if cur > best:
+            best = cur
+    return best
 
-for (let w of words) {
-  if (longestAlpha(w) >= 4) print(w, '(run of', longestAlpha(w), ')');
-}`,
+for w in words:
+    if longest_alpha(w) >= 4:
+        print(w, "(run of", longest_alpha(w), ")")`,
   },
 ];
 
@@ -504,47 +507,200 @@ function loadChallenge(i) {
 function loadStarter() { document.getElementById('code-editor').value = CHALLENGES[currentChallenge].starter; }
 function loadSolution() { document.getElementById('code-editor').value = CHALLENGES[currentChallenge].solution; }
 function clearOutput() {
-  document.getElementById('code-output').textContent = '';
-  document.getElementById('code-output').classList.remove('error');
+  document.getElementById('code-output').innerHTML = '';
 }
 
-function runCode() {
-  const code = document.getElementById('code-editor').value;
+// === Terminal output helpers ===
+function terminalAppend(text, cls) {
   const out = document.getElementById('code-output');
-  let lines = [];
-  const sandboxPrint = (...args) => {
-    lines.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '));
-    if (lines.length > 5000) throw new Error('Too much output! (over 5000 lines)');
-  };
-  try {
-    const fn = new Function(
-      'words', 'fiveLetter', 'print', 'isVowel', 'vowels', 'reverse', 'isPalindrome', 'letters', 'len', 'sortByLength',
-      code
-    );
-    fn(
-      ALL_WORDS,
-      FIVE_LETTER_WORDS,
-      sandboxPrint,
-      isVowel,
-      vowelsOf,
-      reverseStr,
-      isPalindrome,
-      (w) => [...w],
-      (w) => String(w).length,
-      (arr) => [...arr].sort((a, b) => a.length - b.length)
-    );
-    out.classList.remove('error');
-    out.textContent = lines.length ? lines.join('\n') : '(no output — did your code print anything?)';
-    // Mark solved if produced output without error
-    if (lines.length > 0) {
+  // Skulpt sends text including \n; split on newlines so we can style each line
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = text;
+  out.appendChild(span);
+  out.scrollTop = out.scrollHeight;
+}
+function terminalErrorBlock(html) {
+  const out = document.getElementById('code-output');
+  const div = document.createElement('div');
+  div.className = 'out-err';
+  div.innerHTML = html;
+  out.appendChild(div);
+  out.scrollTop = out.scrollHeight;
+}
+function terminalWarn(text) {
+  const out = document.getElementById('code-output');
+  const div = document.createElement('div');
+  div.className = 'out-warn';
+  div.textContent = text;
+  out.appendChild(div);
+  out.scrollTop = out.scrollHeight;
+}
+function terminalInput(promptText) {
+  return new Promise((resolve) => {
+    const out = document.getElementById('code-output');
+    const line = document.createElement('div');
+    line.className = 'input-line';
+    if (promptText) {
+      const p = document.createElement('span');
+      p.className = 'out-prompt';
+      p.textContent = promptText;
+      line.appendChild(p);
+    }
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    caret.textContent = '› ';
+    line.appendChild(caret);
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.autocomplete = 'off';
+    inp.spellcheck = false;
+    line.appendChild(inp);
+    out.appendChild(line);
+    out.scrollTop = out.scrollHeight;
+    setTimeout(() => inp.focus(), 30);
+    const submit = () => {
+      const val = inp.value;
+      inp.disabled = true;
+      // append a visible newline so subsequent output starts fresh
+      const nl = document.createElement('span');
+      nl.textContent = '\n';
+      out.appendChild(nl);
+      resolve(val);
+    };
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); submit(); }
+    });
+  });
+}
+
+// === Soft-fix common Python typos ===
+function softFixPython(code) {
+  // 1) Tabs to 4 spaces
+  let fixed = code.replace(/\t/g, '    ');
+  const notices = [];
+
+  // 2) Auto-add missing colons after if / elif / else / for / while / def / class / try / except / finally / with
+  const colonRegex = /^(\s*(?:if|elif|else|for|while|def|class|try|except(?:\s+\w+(?:\s+as\s+\w+)?)?|finally|with)\b[^#\n]*?)\s*$/gm;
+  fixed = fixed.replace(colonRegex, (m, prefix) => {
+    const trimmed = prefix.replace(/\s+$/, '');
+    if (trimmed.endsWith(':')) return trimmed;
+    notices.push(`auto-added missing ":" to line: "${trimmed.trim()}"`);
+    return trimmed + ':';
+  });
+
+  // 3) Curly-quote → straight-quote (smart quote fix). Use explicit unicode escapes.
+  const CURLY = /[“”‘’]/;
+  if (CURLY.test(fixed)) {
+    fixed = fixed.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+    notices.push('replaced curly quotes with straight quotes');
+  }
+
+  // 4) Common JS-isms: `console.log` → `print`, `===` → `==`
+  if (/console\.log/.test(fixed)) {
+    fixed = fixed.replace(/console\.log/g, 'print');
+    notices.push('changed console.log → print (this is Python!)');
+  }
+  if (/(?<![<>!=])===/.test(fixed)) {
+    fixed = fixed.replace(/===/g, '==');
+    notices.push('changed === → == (Python uses double-equals)');
+  }
+  if (/!==/.test(fixed)) {
+    fixed = fixed.replace(/!==/g, '!=');
+    notices.push('changed !== → != (Python uses != for not-equal)');
+  }
+
+  return { code: fixed, notices };
+}
+
+// === Friendly error wrapping ===
+function friendlyPyError(err) {
+  let msg = err && err.toString ? err.toString() : String(err);
+  // Skulpt error includes line numbers in [<file>] format
+  let extra = '';
+  if (msg.includes('SyntaxError')) extra = '<br><em style="color:#ffd96a">💡 Tip: check for missing colons (:) after if/for/def, mismatched ( ) or " ", or wrong indentation.</em>';
+  else if (msg.includes('IndentationError')) extra = '<br><em style="color:#ffd96a">💡 Tip: every indented line should use the same number of spaces (4 spaces is standard).</em>';
+  else if (msg.includes('NameError')) extra = '<br><em style="color:#ffd96a">💡 Tip: you used a name that isn\'t defined yet. Spelled correctly? Snake_case helpers (is_vowel, not isVowel).</em>';
+  else if (msg.includes('TypeError')) extra = '<br><em style="color:#ffd96a">💡 Tip: a value didn\'t match what the function expected. Maybe a missing string conversion?</em>';
+  else if (msg.includes('ValueError')) extra = '<br><em style="color:#ffd96a">💡 Tip: a value was the right type but the wrong value. Double-check ranges and arguments.</em>';
+  // Strip leading "Error:" if duplicated
+  return `<strong>❌ ${escapeHtml(msg)}</strong>${extra}`;
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// === Skulpt setup: prelude that injects Python helpers + word lists ===
+function buildPrelude() {
+  const wordsLit = '[' + ALL_WORDS.map(w => `'${w}'`).join(',') + ']';
+  const fiveLit  = '[' + FIVE_LETTER_WORDS.map(w => `'${w}'`).join(',') + ']';
+  return `
+words = ${wordsLit}
+five_letter = ${fiveLit}
+def is_vowel(c):
+    return str(c).lower() in 'aeiou'
+def vowels(w):
+    return [c for c in str(w) if is_vowel(c)]
+def reverse(w):
+    return str(w)[::-1]
+def is_palindrome(w):
+    s = str(w).lower()
+    return len(s) > 0 and s == s[::-1]
+def letters(w):
+    return list(str(w))
+def sort_by_length(arr):
+    return sorted(arr, key=len)
+`;
+}
+
+let codeRunning = false;
+
+function runCode() {
+  if (codeRunning) { terminalWarn('Already running. Hit Clear if it gets stuck.'); return; }
+  if (typeof Sk === 'undefined') {
+    terminalErrorBlock('Python engine isn\'t loaded yet. Check your internet connection and refresh.');
+    return;
+  }
+  const rawCode = document.getElementById('code-editor').value;
+  clearOutput();
+
+  // Soft fix
+  const { code: fixedCode, notices } = softFixPython(rawCode);
+  notices.forEach(n => terminalWarn('🤖 ' + n));
+
+  const fullCode = buildPrelude() + '\n' + fixedCode + '\n';
+
+  // Configure Skulpt
+  Sk.configure({
+    output: (text) => terminalAppend(text, 'out-line'),
+    read: (file) => {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[file] === undefined) {
+        throw "File not found: '" + file + "'";
+      }
+      return Sk.builtinFiles.files[file];
+    },
+    inputfun: (prompt) => terminalInput(prompt || ''),
+    inputfunTakesPrompt: true,
+    __future__: Sk.python3,
+    execLimit: 12000, // 12 sec safety
+  });
+
+  codeRunning = true;
+  document.querySelector('.btn-run').disabled = true;
+  Sk.misceval.asyncToPromise(() => Sk.importMainWithBody('<stdin>', false, fullCode, true))
+    .then(() => {
+      const out = document.getElementById('code-output');
+      if (!out.textContent.trim()) terminalWarn('(program ran, but printed nothing)');
+      // Mark solved
       solvedChallenges[CHALLENGES[currentChallenge].id] = true;
       localStorage.setItem('mow-solved', JSON.stringify(solvedChallenges));
       renderChallengeTabs();
-    }
-  } catch (e) {
-    out.classList.add('error');
-    out.textContent = '❌ Error: ' + e.message + '\n\n(Check for typos. Each line should end without a missing bracket or quote.)';
-  }
+    })
+    .catch((err) => {
+      terminalErrorBlock(friendlyPyError(err));
+    })
+    .finally(() => {
+      codeRunning = false;
+      document.querySelector('.btn-run').disabled = false;
+    });
 }
 
 // Tab key inside editor → insert spaces

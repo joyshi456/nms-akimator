@@ -484,19 +484,59 @@ header h1 {
   resize: vertical;
   tab-size: 2;
 }
-#code-output {
+.terminal-output {
   background: #050810;
   color: #76ff03;
   padding: 14px 16px;
   font-family: 'Menlo', 'Courier New', monospace;
   font-size: 0.92rem;
   line-height: 1.55;
-  min-height: 120px;
-  max-height: 320px;
+  min-height: 140px;
+  max-height: 360px;
   overflow-y: auto;
   white-space: pre-wrap;
+  word-break: break-word;
 }
-#code-output.error { color: #ff5252; }
+.terminal-output .out-line { padding: 1px 0; }
+.terminal-output .out-err {
+  color: #ff7373;
+  background: rgba(255,82,82,0.08);
+  padding: 4px 6px;
+  border-left: 3px solid #ff5252;
+  margin: 4px 0;
+  border-radius: 3px;
+}
+.terminal-output .out-warn {
+  color: #ffd96a;
+  font-style: italic;
+}
+.terminal-output .out-prompt { color: #80deea; }
+.terminal-output .input-line { display: flex; align-items: baseline; gap: 4px; padding: 2px 0; }
+.terminal-output .input-line input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #76ff03;
+  color: #ffd96a;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  flex: 1;
+  padding: 0 2px;
+}
+.terminal-output .input-line input:disabled { color: #80deea; border-bottom-color: transparent; }
+.terminal-output .input-line .caret { color: #76ff03; font-weight: 800; }
+
+.lang-badge {
+  display: inline-block;
+  background: rgba(255,217,106,0.15);
+  color: #ffd96a;
+  font-size: 0.7em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid #ffd96a;
+  vertical-align: middle;
+  margin-left: 6px;
+}
 
 /* === WORDLE === */
 .legend {

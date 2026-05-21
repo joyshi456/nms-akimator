@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Math of Words 📚</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Skulpt: Python in the browser -->
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 </head>
 <body>
   <header>
@@ -168,8 +171,8 @@
   <!-- ============ STAGE 3: CODE LAB ============ -->
   <section id="stage-3" class="stage hidden">
     <div class="stage-content">
-      <h2>The Code Lab 💻</h2>
-      <p>Write little programs to find cool stuff. Easier than it looks!</p>
+      <h2>The Code Lab 💻 <span class="lang-badge">Python 🐍</span></h2>
+      <p>Write tiny Python programs to find cool stuff. Easier than it looks!</p>
 
       <div class="lesson-card">
         <h3>🧰 Your Toolbox</h3>
@@ -194,7 +197,7 @@
             <span class="ide-label">🖨️ output:</span>
             <button class="btn-ide btn-clear" onclick="clearOutput()">Clear</button>
           </div>
-          <pre id="code-output">Click ▶ RUN to see the result.</pre>
+          <div id="code-output" class="terminal-output">Click ▶ RUN to see the result.</div>
         </div>
       </div>
     </div>
