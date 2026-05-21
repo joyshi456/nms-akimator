@@ -20,7 +20,16 @@ for (const w of WORDS) {
   const c = String(w).toLowerCase().replace(/[^a-z]/g, '');
   if (c && !_wordSet.has(c)) { _wordSet.add(c); ALL_WORDS.push(c); }
 }
+// Ensure SOREN is in the pool
+if (!_wordSet.has('soren')) { ALL_WORDS.push('soren'); _wordSet.add('soren'); }
 const FIVE_LETTER_WORDS = ALL_WORDS.filter(w => w.length === 5);
+
+// Weighted target pool: SOREN appears 50x, every other 5-letter word appears once.
+const WORDLE_TARGET_POOL = (() => {
+  const pool = [...FIVE_LETTER_WORDS];
+  for (let i = 0; i < 49; i++) pool.push('soren'); // 1 base + 49 extras = 50
+  return pool;
+})();
 
 // ============================================================
 // NAVIGATION
@@ -463,7 +472,7 @@ function bestGuessFor(candidates, pool) {
 }
 
 function newWordleGame() {
-  const target = FIVE_LETTER_WORDS[Math.floor(Math.random() * FIVE_LETTER_WORDS.length)];
+  const target = WORDLE_TARGET_POOL[Math.floor(Math.random() * WORDLE_TARGET_POOL.length)];
   wordleState = {
     target,
     guesses: [],
