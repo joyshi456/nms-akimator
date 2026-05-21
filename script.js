@@ -201,14 +201,34 @@ function showRotation() {
   if (!w) { out.innerHTML = '<em>Type a word…</em>'; out.className = 'prop-result'; return; }
   const yes = isRotationallySymmetric(w);
   out.className = 'prop-result ' + (yes ? 'yes' : 'no');
-  // Build the flipped display (mapping)
-  const flipped = [...w.toLowerCase()].reverse().map(c => (ROTATE_MAP[c] || '?').toUpperCase()).join('');
   out.innerHTML = `
-    <div class="big-result">${yes ? '🔄 Looks the same upside-down!' : '↕️ Different when flipped'}</div>
-    <div style="margin-top:6px;font-family:'Courier New',monospace">Normal: <strong>${w}</strong><br>Flipped: <strong>${flipped}</strong></div>
-    ${yes ? '<div style="margin-top:6px">Letters that work: <strong>H, I, L, M, N, O, S, W, X, Z</strong> (some also pair: b↔q, d↔p)</div>' :
-            '<div style="margin-top:6px">Try: NOON, MOM, WOW, SIS, OHO, SWIMS</div>'}
+    <div class="rotation-canvas">
+      <div class="rot-side ${yes ? 'match' : ''}">
+        <div class="rot-label">Original</div>
+        <div class="rot-word" id="rot-original-word">${w}</div>
+      </div>
+      <button class="rot-spin-btn" onclick="spinRotation()" title="Spin it!">🔄</button>
+      <div class="rot-side ${yes ? 'match' : ''}">
+        <div class="rot-label">Rotated 180°</div>
+        <div class="rot-word rotated">${w}</div>
+      </div>
+    </div>
+    <div class="big-result" style="margin-top:8px;text-align:center">
+      ${yes ? '✅ <strong>Same upside-down!</strong> The boxes look identical.' : '↕️ <strong>Different when flipped.</strong> Notice how the letters don\'t line up.'}
+    </div>
+    <div style="margin-top:6px;color:#d8c4b0;font-size:0.9rem;text-align:center">
+      ${yes ? 'Click 🔄 to watch it spin. Try also: NOON, MOM, WOW, SIS, OHO, SWIMS, NOON.' :
+              'Try a real-rotation word: NOON, MOM, WOW, SIS, OHO, SWIMS, BOOB.'}
+    </div>
   `;
+}
+
+function spinRotation() {
+  const orig = document.getElementById('rot-original-word');
+  if (!orig) return;
+  orig.classList.remove('spinning');
+  void orig.offsetWidth;
+  orig.classList.add('spinning');
 }
 
 // ============================================================
