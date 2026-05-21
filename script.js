@@ -24,10 +24,10 @@ for (const w of WORDS) {
 if (!_wordSet.has('soren')) { ALL_WORDS.push('soren'); _wordSet.add('soren'); }
 const FIVE_LETTER_WORDS = ALL_WORDS.filter(w => w.length === 5);
 
-// Weighted target pool: SOREN appears 50x, every other 5-letter word appears once.
+// Weighted target pool: SOREN appears 150x, every other 5-letter word appears once.
 const WORDLE_TARGET_POOL = (() => {
   const pool = [...FIVE_LETTER_WORDS];
-  for (let i = 0; i < 49; i++) pool.push('soren'); // 1 base + 49 extras = 50
+  for (let i = 0; i < 149; i++) pool.push('soren'); // 1 base + 149 extras = 150
   return pool;
 })();
 
