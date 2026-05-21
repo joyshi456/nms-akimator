@@ -47,6 +47,7 @@ function showStage(stage) {
   if (stage === 1) analyzeWord();
   if (stage === 2) {
     checkPalindrome(); showVCPattern(); showDistance(); showAlphabetic(); showRotation();
+    initWhiteboard();
   }
   if (stage === 3) renderToolbox(), renderChallengeTabs(), loadChallenge(currentChallenge);
   if (stage === 4 && !wordleState) newWordleGame();
@@ -229,6 +230,119 @@ function spinRotation() {
   orig.classList.remove('spinning');
   void orig.offsetWidth;
   orig.classList.add('spinning');
+}
+
+// ============================================================
+// AMBIGRAM WHITEBOARD
+// ============================================================
+let wbInitialized = false;
+let wbPen = { color: '#ffd4c2', size: 6, eraser: false };
+let wbDrawing = false;
+let wbLast = { x: 0, y: 0 };
+
+function initWhiteboard() {
+  if (wbInitialized) return;
+  const canvas = document.getElementById('whiteboard-draw');
+  const mirror = document.getElementById('whiteboard-mirror');
+  if (!canvas || !mirror) return;
+  wbInitialized = true;
+  const ctx = canvas.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  function getPos(evt) {
+    const r = canvas.getBoundingClientRect();
+    const e = evt.touches ? evt.touches[0] : evt;
+    return {
+      x: (e.clientX - r.left) * (canvas.width / r.width),
+      y: (e.clientY - r.top) * (canvas.height / r.height),
+    };
+  }
+  function start(evt) {
+    evt.preventDefault();
+    wbDrawing = true;
+    wbLast = getPos(evt);
+  }
+  function move(evt) {
+    if (!wbDrawing) return;
+    evt.preventDefault();
+    const p = getPos(evt);
+    ctx.lineWidth = wbPen.size;
+    if (wbPen.eraser) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = wbPen.color;
+    }
+    ctx.beginPath();
+    ctx.moveTo(wbLast.x, wbLast.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    wbLast = p;
+    updateMirror();
+  }
+  function end(evt) {
+    if (!wbDrawing) return;
+    if (evt) evt.preventDefault();
+    wbDrawing = false;
+    updateMirror();
+  }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', () => { if (wbDrawing) updateMirror(); });
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchend', end, { passive: false });
+  canvas.addEventListener('touchcancel', end);
+
+  // Color swatches
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      wbPen.color = s.dataset.color;
+      wbPen.eraser = false;
+      document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
+      s.classList.add('active');
+      document.getElementById('btn-eraser').classList.remove('active');
+    });
+  });
+
+  // Pen size
+  const sizeInput = document.getElementById('pen-size');
+  const sizeLabel = document.getElementById('pen-size-label');
+  sizeInput.addEventListener('input', () => {
+    wbPen.size = parseInt(sizeInput.value);
+    sizeLabel.textContent = wbPen.size;
+  });
+
+  // Eraser toggle
+  document.getElementById('btn-eraser').addEventListener('click', () => {
+    wbPen.eraser = !wbPen.eraser;
+    document.getElementById('btn-eraser').classList.toggle('active', wbPen.eraser);
+  });
+
+  updateMirror();
+}
+
+function updateMirror() {
+  const canvas = document.getElementById('whiteboard-draw');
+  const mirror = document.getElementById('whiteboard-mirror');
+  if (!canvas || !mirror) return;
+  const mctx = mirror.getContext('2d');
+  mctx.save();
+  mctx.clearRect(0, 0, mirror.width, mirror.height);
+  mctx.translate(mirror.width, mirror.height);
+  mctx.rotate(Math.PI);
+  mctx.drawImage(canvas, 0, 0);
+  mctx.restore();
+}
+
+function clearWhiteboard() {
+  const canvas = document.getElementById('whiteboard-draw');
+  if (!canvas) return;
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  updateMirror();
 }
 
 // ============================================================

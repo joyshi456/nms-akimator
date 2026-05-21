@@ -99,6 +99,47 @@
         <div id="rot-result" class="prop-result"></div>
       </div>
 
+      <div class="lesson-card interactive-card">
+        <h3>🎨 Ambigram Whiteboard</h3>
+        <p>Draw a word or design that reads the same upside-down. Watch the live mirror to check your work!</p>
+        <p style="font-size:0.9rem;color:#d8c4b0">💡 Tip: stick to symmetric letters (H I N O S X Z) or paired ones (M↔W, b↔q, d↔p).</p>
+
+        <div class="whiteboard-tools">
+          <div class="tool-group">
+            <span class="tool-label">Color</span>
+            <button class="color-swatch active" data-color="#ffd4c2" style="background:#ffd4c2"></button>
+            <button class="color-swatch" data-color="#ffd96a" style="background:#ffd96a"></button>
+            <button class="color-swatch" data-color="#ff8b6b" style="background:#ff8b6b"></button>
+            <button class="color-swatch" data-color="#76ff03" style="background:#76ff03"></button>
+            <button class="color-swatch" data-color="#80deea" style="background:#80deea"></button>
+            <button class="color-swatch" data-color="#ab47bc" style="background:#ab47bc"></button>
+          </div>
+          <div class="tool-group">
+            <span class="tool-label">Size</span>
+            <input type="range" id="pen-size" min="2" max="24" value="6">
+            <span id="pen-size-label" class="tool-num">6</span>
+          </div>
+          <div class="tool-group">
+            <button class="btn-tool" id="btn-eraser">🩹 Eraser</button>
+            <button class="btn-tool" onclick="clearWhiteboard()">🗑️ Clear</button>
+          </div>
+        </div>
+
+        <div class="whiteboard-display">
+          <div class="wb-side">
+            <div class="wb-label">✏️ Draw Here</div>
+            <canvas id="whiteboard-draw" width="500" height="320"></canvas>
+          </div>
+          <div class="wb-side">
+            <div class="wb-label">🔄 Live Mirror (180°)</div>
+            <canvas id="whiteboard-mirror" width="500" height="320"></canvas>
+          </div>
+        </div>
+        <p style="font-size:0.85rem;color:#d8c4b0;text-align:center;margin-top:8px">
+          Try writing <strong>NOON</strong>, <strong>MOM</strong>, <strong>SWIMS</strong>, or your name in big bubble letters. Or just draw something silly — does it become a different doodle when rotated?
+        </p>
+      </div>
+
       <div class="lesson-card">
         <h3>🤯 Mind-Blowing Aaronson Finds</h3>
         <p>Math-of-words wizard Adam Aaronson found these gems:</p>
