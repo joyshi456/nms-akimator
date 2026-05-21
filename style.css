@@ -474,6 +474,148 @@ header h1 {
   75% { transform: translateX(6px); }
 }
 
+/* === WORDLE MATH (3B1B) === */
+.wordle-math {
+  max-width: 700px;
+  margin: 24px auto 0;
+  background: rgba(0,0,0,0.35);
+  border: 2px solid #ff8b6b;
+  border-radius: 16px;
+  padding: 18px 22px;
+}
+.wmath-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.wmath-title {
+  color: #ffd4c2;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 1.05rem;
+}
+.btn-toggle {
+  background: rgba(255,139,107,0.15);
+  color: #ffd4c2;
+  border: 1px solid #ff8b6b;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-toggle:hover { background: rgba(255,139,107,0.3); }
+
+.wmath-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.wmath-stat {
+  background: rgba(255,139,107,0.08);
+  border: 1px solid rgba(255,139,107,0.3);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.wmath-num {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #ffd4c2;
+  font-family: 'Courier New', monospace;
+}
+.wmath-num.delta-pos { color: #76ff03; }
+.wmath-num.delta-neg { color: #ff7373; }
+.wmath-lab {
+  font-size: 0.72rem;
+  color: #d8c4b0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+.wmath-history {
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #b8c7d2;
+  margin-bottom: 12px;
+  min-height: 28px;
+}
+.wmath-history:empty { display: none; }
+.wmath-history .hist-line { padding: 2px 0; }
+.wmath-history .hist-word { color: #ffd4c2; font-weight: 800; }
+.wmath-history .bits-gained { color: #76ff03; font-weight: 700; }
+
+.wmath-suggest {
+  text-align: center;
+  margin: 12px 0;
+}
+.btn-suggest {
+  background: linear-gradient(135deg, #6b8db5, #5378a8);
+  color: white;
+}
+#wmath-suggestion {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: #ffd4c2;
+}
+#wmath-suggestion .sugg-word {
+  display: inline-block;
+  background: linear-gradient(135deg, #538d4e, #3e7038);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  margin: 0 4px;
+}
+#wmath-suggestion .sugg-bits {
+  color: #ffd4c2;
+  font-weight: 700;
+}
+
+.wmath-help {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-top: 14px;
+  border-left: 4px solid #ff8b6b;
+}
+.wmath-help h3 { color: #ffd4c2; margin-bottom: 10px; font-size: 1.05rem; }
+.wmath-help p { color: #d8c4b0; line-height: 1.65; font-size: 0.92rem; margin-bottom: 10px; }
+.wmath-help strong { color: #ffd4c2; }
+.pattern-chip {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 4px;
+  vertical-align: middle;
+}
+.pattern-chip .key {
+  width: 18px; height: 18px;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+.math-formula {
+  background: rgba(0,0,0,0.5);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.05rem;
+  color: #76ff03;
+  text-align: center;
+  margin: 10px 0;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 600px) {
   header h1 { font-size: 1.8rem; }
@@ -483,4 +625,6 @@ header h1 {
   .word-input { font-size: 1.2rem; padding: 12px 16px; }
   .wordle-cell { font-size: 1.3rem; }
   .kb-key { font-size: 0.85rem; padding: 10px 0; }
+  .wmath-row { grid-template-columns: 1fr 1fr; }
+  .wmath-num { font-size: 1.4rem; }
 }

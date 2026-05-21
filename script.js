@@ -41,6 +41,7 @@ function showStage(stage) {
   }
   if (stage === 3) renderToolbox(), renderChallengeTabs(), loadChallenge(currentChallenge);
   if (stage === 4 && !wordleState) newWordleGame();
+  if (stage === 4 && wordleState) updateWordleMath();
 }
 
 // ============================================================
@@ -420,6 +421,47 @@ document.addEventListener('keydown', (e) => {
 let wordleState = null;
 // { target, guesses: [], current: '', won: false, lost: false, letterStates: {a:'absent', ...} }
 
+// ===== Pattern + entropy helpers (3B1B-style) =====
+function getPattern(guess, target) {
+  const states = new Array(5).fill(0); // 0=absent, 1=present, 2=correct
+  const counts = {};
+  for (const c of target) counts[c] = (counts[c] || 0) + 1;
+  for (let i = 0; i < 5; i++) {
+    if (guess[i] === target[i]) { states[i] = 2; counts[guess[i]]--; }
+  }
+  for (let i = 0; i < 5; i++) {
+    if (states[i] !== 2 && counts[guess[i]] > 0) {
+      states[i] = 1; counts[guess[i]]--;
+    }
+  }
+  // encode as base-3 number for fast hashing
+  return states[0] * 81 + states[1] * 27 + states[2] * 9 + states[3] * 3 + states[4];
+}
+
+function entropyOfGuess(guess, candidates) {
+  const buckets = {};
+  for (const c of candidates) {
+    const p = getPattern(guess, c);
+    buckets[p] = (buckets[p] || 0) + 1;
+  }
+  let H = 0;
+  const total = candidates.length;
+  for (const k in buckets) {
+    const pi = buckets[k] / total;
+    H -= pi * Math.log2(pi);
+  }
+  return H;
+}
+
+function bestGuessFor(candidates, pool) {
+  let best = null, bestH = -Infinity;
+  for (const g of pool) {
+    const H = entropyOfGuess(g, candidates);
+    if (H > bestH) { bestH = H; best = g; }
+  }
+  return { word: best, bits: bestH };
+}
+
 function newWordleGame() {
   const target = FIVE_LETTER_WORDS[Math.floor(Math.random() * FIVE_LETTER_WORDS.length)];
   wordleState = {
@@ -429,12 +471,17 @@ function newWordleGame() {
     won: false,
     lost: false,
     letterStates: {},
+    candidates: [...FIVE_LETTER_WORDS],
+    bitsHistory: [],
   };
   document.getElementById('wordle-status').textContent = `Guess the 5-letter word!`;
   document.getElementById('wordle-message').textContent = '';
   document.getElementById('wordle-message').className = 'wordle-message';
+  document.getElementById('wmath-suggestion').innerHTML = '';
+  document.getElementById('wmath-history').innerHTML = '';
   renderWordleGrid();
   renderWordleKeyboard();
+  updateWordleMath();
 }
 
 function renderWordleGrid() {
@@ -524,6 +571,14 @@ function submitWordleGuess() {
     }
   }
   wordleState.guesses.push({ word: guess, states });
+  // === 3B1B math: filter candidates and record bits gained ===
+  const before = wordleState.candidates.length;
+  const patternCode = getPattern(guess, target);
+  wordleState.candidates = wordleState.candidates.filter(c => getPattern(guess, c) === patternCode);
+  const after = Math.max(1, wordleState.candidates.length);
+  const bitsGained = Math.log2(before / after);
+  wordleState.bitsHistory.push({ guess, before, after: wordleState.candidates.length, bits: bitsGained });
+  updateWordleMath();
   // Update letter states (only upgrade, never downgrade)
   for (let i = 0; i < 5; i++) {
     const ch = guess[i];
@@ -544,6 +599,55 @@ function submitWordleGuess() {
   }
   renderWordleGrid();
   renderWordleKeyboard();
+}
+
+function updateWordleMath() {
+  if (!wordleState) return;
+  const left = wordleState.candidates.length || 1;
+  const bits = Math.log2(left);
+  document.getElementById('wmath-left').textContent = left;
+  document.getElementById('wmath-bits').textContent = bits.toFixed(2);
+
+  const last = wordleState.bitsHistory[wordleState.bitsHistory.length - 1];
+  const gainEl = document.getElementById('wmath-gain');
+  if (last) {
+    gainEl.textContent = '+' + last.bits.toFixed(2);
+    gainEl.classList.add('delta-pos');
+  } else {
+    gainEl.textContent = '—';
+    gainEl.classList.remove('delta-pos');
+  }
+
+  // history
+  document.getElementById('wmath-history').innerHTML =
+    wordleState.bitsHistory.map(h =>
+      `<div class="hist-line">"<span class="hist-word">${h.guess.toUpperCase()}</span>": ${h.before} → ${h.after} words &nbsp;<span class="bits-gained">+${h.bits.toFixed(2)} bits</span></div>`
+    ).join('');
+}
+
+function toggleMathHelp() {
+  document.getElementById('wmath-help').classList.toggle('hidden');
+}
+
+function suggestBestGuess() {
+  if (!wordleState) return;
+  const out = document.getElementById('wmath-suggestion');
+  if (wordleState.won || wordleState.lost) { out.innerHTML = '<em>Start a new game first.</em>'; return; }
+  if (wordleState.candidates.length === 1) {
+    out.innerHTML = `Only 1 word left! It must be <span class="sugg-word">${wordleState.candidates[0].toUpperCase()}</span>`;
+    return;
+  }
+  out.innerHTML = '⏳ thinking...';
+  // Compute on next tick so UI updates
+  setTimeout(() => {
+    // Pool = remaining candidates + a small set of "all-purpose" probes to ensure coverage
+    // For simplicity, use the remaining candidates as the guess pool
+    const pool = wordleState.candidates.length <= 2
+      ? wordleState.candidates
+      : wordleState.candidates;
+    const { word, bits } = bestGuessFor(wordleState.candidates, pool);
+    out.innerHTML = `Try <span class="sugg-word">${word.toUpperCase()}</span> — it'll give you <span class="sugg-bits">≈ ${bits.toFixed(2)} bits</span> of info on average.`;
+  }, 30);
 }
 
 function flash(msg, cls) {

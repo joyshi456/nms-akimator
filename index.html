@@ -179,6 +179,49 @@
       <div class="wordle-keyboard" id="wordle-keyboard"></div>
 
       <div id="wordle-message" class="wordle-message"></div>
+
+      <!-- INFO THEORY PANEL (3Blue1Brown style) -->
+      <div class="wordle-math">
+        <div class="wmath-header">
+          <span class="wmath-title">📊 The Math of Your Guesses</span>
+          <button class="btn-toggle" onclick="toggleMathHelp()">📚 What does this mean?</button>
+        </div>
+
+        <div class="wmath-row">
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-left">370</div>
+            <div class="wmath-lab">possible answers left</div>
+          </div>
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-bits">8.5</div>
+            <div class="wmath-lab">bits remaining</div>
+          </div>
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-gain">—</div>
+            <div class="wmath-lab">bits gained last guess</div>
+          </div>
+        </div>
+
+        <div class="wmath-history" id="wmath-history"></div>
+
+        <div class="wmath-suggest">
+          <button class="btn-wordle btn-suggest" onclick="suggestBestGuess()">🤖 Suggest the optimal guess</button>
+          <div id="wmath-suggestion"></div>
+        </div>
+
+        <div id="wmath-help" class="wmath-help hidden">
+          <h3>🤓 The 3Blue1Brown explanation</h3>
+          <p><strong>What's a "bit"?</strong> A <strong>bit</strong> of information is what you learn from one yes/no question. If you can split possibilities in half with one answer, you've gained 1 bit.</p>
+          <p><strong>Why start at 8.5 bits?</strong> There are about 370 possible secret words. log₂(370) ≈ 8.5 — meaning you'd need about 8.5 perfect yes/no questions to find the answer.</p>
+          <p><strong>What makes a great guess?</strong> A guess is good if it <em>splits</em> the remaining words into many small groups, so no matter the result you've narrowed it down a lot.</p>
+          <p>Each guess result is a 5-letter pattern like <span class="pattern-chip"><span class="key absent">.</span><span class="key present">Y</span><span class="key correct">G</span><span class="key absent">.</span><span class="key correct">G</span></span> — there are 3⁵ = <strong>243</strong> possible patterns total.</p>
+          <p><strong>The math:</strong> For each candidate guess <em>w</em>, see how the remaining words split across the 243 patterns. The "best" guess is the one whose split has the highest <strong>entropy</strong>:</p>
+          <div class="math-formula">E(w) = − ∑ p<sub>i</sub> · log₂(p<sub>i</sub>)</div>
+          <p>(Where p<sub>i</sub> is the fraction of remaining words that produce pattern <em>i</em>.)</p>
+          <p><strong>The famous result:</strong> the best opening guesses give around <strong>5.9 bits</strong> of expected info. Top contenders include TARES, SOARE, RAISE, CRANE, SLATE.</p>
+          <p>For the second guess and beyond, the optimal word depends on what you've learned. Click 🤖 above to see the current best!</p>
+        </div>
+      </div>
     </div>
   </section>
 
