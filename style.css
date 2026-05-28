@@ -284,6 +284,23 @@ select:focus { outline: none; border-color: #e5383b; }
 .puzzle-explain { margin-top: 10px; background: rgba(63,185,80,0.06); border-left: 3px solid #3fb950; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; color: #c6dcc6; line-height: 1.6; }
 .puzzle-explain strong { color: #7ee787; }
 
+/* === VENN PUZZLE === */
+.venn-wrap { text-align: center; margin-bottom: 14px; }
+.venn-svg { width: 100%; max-width: 440px; height: auto; }
+.venn-circle-label { font-size: 18px; font-weight: 800; font-family: 'Segoe UI', sans-serif; }
+.venn-num { font-size: 19px; font-weight: 900; fill: #f0d8d8; font-family: 'Courier New', monospace; text-anchor: middle; }
+.venn-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
+.venn-item-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: #0c0506; border: 1px solid #2a1012; border-radius: 8px; padding: 8px 12px;
+}
+.venn-item-name { font-size: 0.95rem; color: #ecdede; font-weight: 600; }
+.venn-item-note { color: #8a7273; font-weight: 400; font-size: 0.82rem; }
+.venn-select {
+  padding: 6px 10px; background: #120708; border: 1px solid #5a1f22; border-radius: 6px;
+  color: #ff8085; font-weight: 700; font-family: 'Courier New', monospace; cursor: pointer;
+}
+
 /* === BUILDER === */
 .builder-card { border-color: #e5383b; }
 .lang-name-input {

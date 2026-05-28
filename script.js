@@ -562,7 +562,155 @@ const PUZZLE_SECTIONS = [
       },
     ]
   },
+  {
+    title: 'Olympiad Challenge',
+    blurb: 'Real competition-level puzzles, adapted from the kind posed at NACLO (the North American Computational Linguistics Olympiad). Each uses authentic patterns from real languages. Take your time.',
+    puzzles: [
+      {
+        id: 'h1', diff: 'hard',
+        title: 'Turkish — Vowel Harmony',
+        rules: clueTable([
+          ['ev → evler', 'house → houses'],
+          ['göl → göller', 'lake → lakes'],
+          ['diş → dişler', 'tooth → teeth'],
+          ['yol → yollar', 'road → roads'],
+          ['kuş → kuşlar', 'bird → birds'],
+          ['kız → kızlar', 'girl → girls'],
+        ], 'Singular → Plural', 'Meaning'),
+        task: `The plural ending is sometimes <strong>-ler</strong> and sometimes <strong>-lar</strong>. Work out the rule, then give the plural of <span class="target">köy</span> (village).`,
+        answers: ['köyler', 'koyler'],
+        hint: 'Sort the roots into two groups by which ending they take. Look at the vowel in each root. Some vowels (e, i, ö, ü) are made at the FRONT of the mouth; others (a, ı, o, u) at the BACK. The ending must "harmonize" with the root vowel.',
+        explain: 'This is Turkish <strong>vowel harmony</strong>. Front vowels (e, i, ö, ü) take <strong>-ler</strong>; back vowels (a, ı, o, u) take <strong>-lar</strong>. "köy" contains ö (a front vowel), so the plural is <strong>köyler</strong>.'
+      },
+      {
+        id: 'h2', diff: 'hard',
+        title: 'Yoruba — Counting by Subtraction',
+        rules: clueTable([
+          ['ban le da', '12'],
+          ['ban le fe', '14'],
+          ['kor le ti', '23'],
+          ['kor din da', '18'],
+          ['kor din ti', '17'],
+        ], 'Words', 'Number'),
+        task: `Two of these words are operators, not numbers. Crack the system, then decode <span class="target">kor din fe</span>.`,
+        answers: ['16'],
+        hint: '"le" and "din" aren\'t numbers — they\'re operations. From "ban le da = 12" you can tell ban = 10 and le = "plus". From "kor din da = 18" you get kor = 20 and din = "minus". Now find fe.',
+        explain: 'ban = 10, kor = 20, le = "+", din = "−", da = 2, ti = 3, fe = 4. So kor din fe = 20 − 4 = <strong>16</strong>. Yoruba genuinely builds many numbers by subtraction from the next round number.'
+      },
+      {
+        id: 'h3', diff: 'hard',
+        title: 'Swahili — Verb Assembly',
+        rules: clueTable([
+          ['nilikuona', 'I saw you'],
+          ['ulinipenda', 'you loved me'],
+          ['nitakupenda', 'I will love you'],
+          ['alikuona', 'she saw you'],
+        ], 'Swahili', 'English'),
+        task: `Each verb is built from four stacked pieces: subject + tense + object + verb-root. Assemble the single word for <span class="target">she will love me</span>.`,
+        answers: ['atanipenda'],
+        hint: 'Subjects: ni = I, u = you, a = she. Tenses: li = past, ta = future. Objects: ku = you, ni = me. Roots: ona = see, penda = love. Stack them in that order with no spaces.',
+        explain: 'she (a) + future (ta) + me (ni) + love (penda) → <strong>atanipenda</strong>. This is exactly how real Swahili verbs work — one word carries the whole sentence.'
+      },
+    ]
+  },
 ];
+
+// Special visual puzzle: Venn / Set Match
+const VENN = {
+  circles: { A: 'FRUIT', B: 'RED', C: 'SWEET' },
+  // region number -> set membership
+  regions: {
+    1: 'FRUIT only',
+    2: 'FRUIT + RED',
+    3: 'RED only',
+    4: 'FRUIT + SWEET',
+    5: 'FRUIT + RED + SWEET',
+    6: 'RED + SWEET',
+    7: 'SWEET only',
+  },
+  items: [
+    { name: 'lemon', note: 'a sour yellow fruit', region: 1 },
+    { name: 'cranberry', note: 'a tart red fruit', region: 2 },
+    { name: 'fire engine', note: 'red, not a fruit, not sweet', region: 3 },
+    { name: 'ripe banana', note: 'a sweet yellow fruit', region: 4 },
+    { name: 'strawberry', note: 'a sweet red fruit', region: 5 },
+    { name: 'red gummy bear', note: 'a sweet red candy', region: 6 },
+    { name: 'honey', note: 'sweet, not red, not a fruit', region: 7 },
+  ],
+};
+
+function vennSvg() {
+  // viewBox 0 0 520 400; A top-left, B top-right, C bottom
+  return `<svg viewBox="0 0 520 400" class="venn-svg" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="190" cy="165" r="125" fill="rgba(229,56,59,0.18)" stroke="#ff5a5f" stroke-width="2"/>
+    <circle cx="330" cy="165" r="125" fill="rgba(232,162,74,0.16)" stroke="#e8a24a" stroke-width="2"/>
+    <circle cx="260" cy="275" r="125" fill="rgba(63,185,80,0.14)" stroke="#7ee787" stroke-width="2"/>
+    <text x="95" y="60" class="venn-circle-label" fill="#ff5a5f">FRUIT</text>
+    <text x="395" y="60" class="venn-circle-label" fill="#e8a24a">RED</text>
+    <text x="260" y="395" class="venn-circle-label" fill="#7ee787">SWEET</text>
+    <text x="120" y="160" class="venn-num">1</text>
+    <text x="260" y="115" class="venn-num">2</text>
+    <text x="400" y="160" class="venn-num">3</text>
+    <text x="195" y="255" class="venn-num">4</text>
+    <text x="260" y="195" class="venn-num">5</text>
+    <text x="325" y="255" class="venn-num">6</text>
+    <text x="260" y="335" class="venn-num">7</text>
+  </svg>`;
+}
+
+function vennSectionHtml() {
+  const itemRows = VENN.items.map((it, i) => `
+    <div class="venn-item-row">
+      <span class="venn-item-name">${it.name} <span class="venn-item-note">(${it.note})</span></span>
+      <select class="venn-select" id="venn-sel-${i}">
+        <option value="">region…</option>
+        ${[1,2,3,4,5,6,7].map(n => `<option value="${n}">${n}</option>`).join('')}
+      </select>
+    </div>`).join('');
+  return `
+    <div class="puzzle-section-title">Set Match (Venn)</div>
+    <div class="puzzle-section-blurb">A circle for "small dog" sits entirely inside "dog"; "red things" only overlaps "fruit". Each numbered region is a different combination of the three labelled circles. Match every item to the region it belongs in.</div>
+    <div class="puzzle-card" id="card-venn">
+      <div class="puzzle-head"><span class="puzzle-title">Where Does It Belong?</span><span class="puzzle-diff hard">hard</span></div>
+      <div class="venn-wrap">${vennSvg()}</div>
+      <div class="venn-items">${itemRows}</div>
+      <div class="puzzle-input-row" style="margin-top:12px">
+        <button class="btn-check" onclick="checkVenn()">Check all</button>
+        <button class="btn-mini" onclick="revealVenn()">Reveal</button>
+      </div>
+      <div class="puzzle-feedback" id="fb-venn"></div>
+    </div>`;
+}
+
+function checkVenn() {
+  let correct = 0;
+  VENN.items.forEach((it, i) => {
+    const sel = document.getElementById(`venn-sel-${i}`);
+    const val = parseInt(sel.value);
+    if (val === it.region) { correct++; sel.style.borderColor = '#3fb950'; }
+    else sel.style.borderColor = val ? '#e5383b' : '#5a1f22';
+  });
+  const fb = document.getElementById('fb-venn');
+  if (correct === VENN.items.length) {
+    fb.innerHTML = 'All correct! You read the Venn diagram perfectly.';
+    fb.className = 'puzzle-feedback correct';
+    document.getElementById('card-venn').classList.add('solved');
+  } else {
+    fb.innerHTML = `${correct} / ${VENN.items.length} correct. The green boxes are right — rethink the red ones.`;
+    fb.className = 'puzzle-feedback incorrect';
+    document.getElementById('card-venn').classList.remove('solved');
+  }
+}
+function revealVenn() {
+  VENN.items.forEach((it, i) => {
+    const sel = document.getElementById(`venn-sel-${i}`);
+    sel.value = String(it.region);
+    sel.style.borderColor = '#3fb950';
+  });
+  const fb = document.getElementById('fb-venn');
+  fb.innerHTML = 'Region 5 (the very center) is FRUIT + RED + SWEET — the strawberry. A region inside only one circle means the item has just that one property.';
+  fb.className = 'puzzle-feedback correct';
+}
 
 let puzzlesRendered = false;
 function renderPuzzles() {
@@ -593,6 +741,7 @@ function renderPuzzles() {
         </div>`;
     });
   });
+  html += vennSectionHtml();
   container.innerHTML = html;
 }
 
