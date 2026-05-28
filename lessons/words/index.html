@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Math of Words 📚</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Skulpt: Python in the browser -->
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+</head>
+<body>
+  <header>
+    <h1>The Math of Words 📚</h1>
+    <p class="subtitle">Words are made of letters. Letters are like numbers. Let's do math with them!</p>
+  </header>
+
+  <nav class="stage-tabs">
+    <button class="tab active" data-stage="1">1. Letters Are Numbers</button>
+    <button class="tab" data-stage="2">2. Cool Properties</button>
+    <button class="tab" data-stage="3">3. The Code Lab 💻</button>
+    <button class="tab" data-stage="4">4. Wordle! 🎯</button>
+  </nav>
+
+  <!-- ============ STAGE 1: INTRO ============ -->
+  <section id="stage-1" class="stage">
+    <div class="stage-content">
+      <h2>Letters Are Just Numbers In Disguise</h2>
+      <p>Every letter has a number: <strong>A=1, B=2, C=3, ..., Z=26</strong>.<br>
+      So <strong>"CAT"</strong> is really the number sequence <strong>3, 1, 20</strong>!</p>
+
+      <div class="lesson-card interactive-card">
+        <h3>🔬 The Word Analyzer</h3>
+        <p>Type any word and see all its mathy properties:</p>
+        <input type="text" id="analyzer-input" class="word-input" value="HELLO" maxlength="20" placeholder="Type a word..." oninput="analyzeWord()">
+        <div id="analyzer-result"></div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>What Can We Do With Word-Math?</h3>
+        <div class="cool-grid">
+          <div class="cool-item">📏 <strong>Count letters</strong><br><span>Length, vowels, consonants…</span></div>
+          <div class="cool-item">🔢 <strong>Add up positions</strong><br><span>HELLO = 8+5+12+12+15 = 52</span></div>
+          <div class="cool-item">🪞 <strong>Reverse them</strong><br><span>STAR ↔ RATS</span></div>
+          <div class="cool-item">📐 <strong>Spot patterns</strong><br><span>NOON reads the same forwards and back</span></div>
+          <div class="cool-item">📊 <strong>Measure distance</strong><br><span>How far do letters jump in the alphabet?</span></div>
+          <div class="cool-item">🔄 <strong>Find symmetry</strong><br><span>SWIMS looks the same upside-down!</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Key Words 🗝️</h3>
+        <ul class="vocab-list">
+          <li><strong>Length</strong> — how many letters in a word</li>
+          <li><strong>Vowel</strong> — A, E, I, O, U (and sometimes Y!)</li>
+          <li><strong>Palindrome</strong> — a word that reads the same forwards and backwards (NOON, KAYAK)</li>
+          <li><strong>Anagram</strong> — same letters in a different order (LISTEN ↔ SILENT)</li>
+          <li><strong>Substring</strong> — a chunk of letters inside a word (the "art" inside "smart")</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 2: COOL PROPERTIES ============ -->
+  <section id="stage-2" class="stage hidden">
+    <div class="stage-content">
+      <h2>Cool Properties of Words 🌟</h2>
+      <p>Some words have weird, beautiful properties. Try these tools to find them!</p>
+
+      <div class="lesson-card interactive-card">
+        <h3>🔍 Palindrome Checker</h3>
+        <p>A <strong>palindrome</strong> reads the same forwards and backwards. Try: NOON, LEVEL, RACECAR.</p>
+        <input type="text" id="palin-input" class="word-input" value="LEVEL" maxlength="20" oninput="checkPalindrome()">
+        <div id="palin-result" class="prop-result"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>🎵 Vowel / Consonant Pattern</h3>
+        <p>Map each letter to V (vowel) or C (consonant). AUDIO = V-V-C-V-V. What's the pattern of yours?</p>
+        <input type="text" id="vc-input" class="word-input" value="AUDIO" maxlength="20" oninput="showVCPattern()">
+        <div id="vc-result" class="prop-result"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>📏 Alphabet Distance</h3>
+        <p>Add up how far each letter jumps from the next. ZA travels 25 letters; XYZ travels just 2.</p>
+        <input type="text" id="dist-input" class="word-input" value="LAYAWAYS" maxlength="20" oninput="showDistance()">
+        <div id="dist-result" class="prop-result"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>📚 Longest Alphabetic Substring</h3>
+        <p>What's the longest chunk where letters go in ABC order? UNDERSTUDY contains <strong>RSTU</strong> (4 letters in order!).</p>
+        <input type="text" id="alpha-input" class="word-input" value="UNDERSTUDY" maxlength="30" oninput="showAlphabetic()">
+        <div id="alpha-result" class="prop-result"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>🔄 Rotation Symmetry</h3>
+        <p>Some letters look the same when flipped upside-down: N, O, S, X, Z, H, I, M, W (kinda). SWIMS becomes SWIMS again!</p>
+        <input type="text" id="rot-input" class="word-input" value="SWIMS" maxlength="20" oninput="showRotation()">
+        <div id="rot-result" class="prop-result"></div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>🎨 Ambigram Whiteboard</h3>
+        <p>Draw a word or design that reads the same upside-down. Watch the live mirror to check your work!</p>
+        <p style="font-size:0.9rem;color:#d8c4b0">💡 Tip: stick to symmetric letters (H I N O S X Z) or paired ones (M↔W, b↔q, d↔p).</p>
+
+        <div class="whiteboard-tools">
+          <div class="tool-group">
+            <span class="tool-label">Color</span>
+            <button class="color-swatch active" data-color="#ffd4c2" style="background:#ffd4c2"></button>
+            <button class="color-swatch" data-color="#ffd96a" style="background:#ffd96a"></button>
+            <button class="color-swatch" data-color="#ff8b6b" style="background:#ff8b6b"></button>
+            <button class="color-swatch" data-color="#76ff03" style="background:#76ff03"></button>
+            <button class="color-swatch" data-color="#80deea" style="background:#80deea"></button>
+            <button class="color-swatch" data-color="#ab47bc" style="background:#ab47bc"></button>
+          </div>
+          <div class="tool-group">
+            <span class="tool-label">Size</span>
+            <input type="range" id="pen-size" min="2" max="24" value="6">
+            <span id="pen-size-label" class="tool-num">6</span>
+          </div>
+          <div class="tool-group">
+            <button class="btn-tool" id="btn-eraser">🩹 Eraser</button>
+            <button class="btn-tool" onclick="clearWhiteboard()">🗑️ Clear</button>
+          </div>
+        </div>
+
+        <div class="whiteboard-display">
+          <div class="wb-side">
+            <div class="wb-label">✏️ Draw Here</div>
+            <canvas id="whiteboard-draw" width="500" height="320"></canvas>
+          </div>
+          <div class="wb-side">
+            <div class="wb-label">🔄 Live Mirror (180°)</div>
+            <canvas id="whiteboard-mirror" width="500" height="320"></canvas>
+          </div>
+        </div>
+        <p style="font-size:0.85rem;color:#d8c4b0;text-align:center;margin-top:8px">
+          Try writing <strong>NOON</strong>, <strong>MOM</strong>, <strong>SWIMS</strong>, or your name in big bubble letters. Or just draw something silly — does it become a different doodle when rotated?
+        </p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>🤯 Mind-Blowing Aaronson Finds</h3>
+        <p>Math-of-words wizard Adam Aaronson found these gems:</p>
+        <div class="aaron-grid">
+          <div class="aaron-card">
+            <div class="aaron-title">Longest palindrome of 5 letters?</div>
+            <div class="aaron-answer">CIVIC, KAYAK, LEVEL, REFER, ROTOR</div>
+          </div>
+          <div class="aaron-card">
+            <div class="aaron-title">Longest word that's the same upside-down?</div>
+            <div class="aaron-answer">SWIMS (5 letters!)</div>
+          </div>
+          <div class="aaron-card">
+            <div class="aaron-title">5-letter word with all 5 vowels?</div>
+            <div class="aaron-answer">ADIEU, AUDIO, EUNOIA</div>
+          </div>
+          <div class="aaron-card">
+            <div class="aaron-title">Word with longest "abc-order" run?</div>
+            <div class="aaron-answer">DABCHICK has ABCH (4 in a row!)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 3: CODE LAB ============ -->
+  <section id="stage-3" class="stage hidden">
+    <div class="stage-content">
+      <h2>The Code Lab 💻 <span class="lang-badge">Python 🐍</span></h2>
+      <p>Write tiny Python programs to find cool stuff. Easier than it looks!</p>
+
+      <div class="lesson-card">
+        <h3>🧰 Your Toolbox</h3>
+        <p>These are pre-loaded for you. Click any to see how to use it:</p>
+        <div class="toolbox" id="toolbox"></div>
+      </div>
+
+      <div class="challenge-tabs" id="challenge-tabs"></div>
+
+      <div class="lesson-card ide-card">
+        <h3 id="challenge-title">Challenge</h3>
+        <p id="challenge-desc"></p>
+        <div class="ide-shell">
+          <div class="ide-toolbar">
+            <span class="ide-label">📝 your code:</span>
+            <button class="btn-ide" onclick="loadStarter()">↺ Reset</button>
+            <button class="btn-ide" onclick="loadSolution()">💡 Show Solution</button>
+            <button class="btn-run" onclick="runCode()">▶ RUN</button>
+          </div>
+          <textarea id="code-editor" spellcheck="false"></textarea>
+          <div class="ide-output-bar">
+            <span class="ide-label">🖨️ output:</span>
+            <button class="btn-ide btn-clear" onclick="clearOutput()">Clear</button>
+          </div>
+          <div id="code-output" class="terminal-output">Click ▶ RUN to see the result.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 4: WORDLE ============ -->
+  <section id="stage-4" class="stage hidden">
+    <div class="stage-content">
+      <h2>Wordle! 🎯</h2>
+      <p>Guess the secret 5-letter word in 6 tries.<br>
+      <span class="legend"><span class="key correct">G</span> right letter, right spot &nbsp;·&nbsp;
+      <span class="key present">Y</span> in the word, wrong spot &nbsp;·&nbsp;
+      <span class="key absent">.</span> not in the word</span></p>
+
+      <div class="wordle-controls">
+        <button class="btn-wordle" onclick="newWordleGame()">🔄 New Word</button>
+        <button class="btn-wordle" onclick="giveUp()">😅 Give up</button>
+        <span class="wordle-status" id="wordle-status"></span>
+      </div>
+
+      <div class="wordle-grid" id="wordle-grid"></div>
+
+      <div class="wordle-keyboard" id="wordle-keyboard"></div>
+
+      <div id="wordle-message" class="wordle-message"></div>
+
+      <!-- INFO THEORY PANEL (3Blue1Brown style) -->
+      <div class="wordle-math">
+        <div class="wmath-header">
+          <span class="wmath-title">📊 The Math of Your Guesses</span>
+          <button class="btn-toggle" onclick="toggleMathHelp()">📚 What does this mean?</button>
+        </div>
+
+        <div class="wmath-row">
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-left">370</div>
+            <div class="wmath-lab">possible answers left</div>
+          </div>
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-bits">8.5</div>
+            <div class="wmath-lab">bits remaining</div>
+          </div>
+          <div class="wmath-stat">
+            <div class="wmath-num" id="wmath-gain">—</div>
+            <div class="wmath-lab">bits gained last guess</div>
+          </div>
+        </div>
+
+        <div class="wmath-history" id="wmath-history"></div>
+
+        <div class="wmath-suggest">
+          <button class="btn-wordle btn-suggest" onclick="suggestBestGuess()">🤖 Suggest the optimal guess</button>
+          <div id="wmath-suggestion"></div>
+        </div>
+
+        <div id="wmath-help" class="wmath-help hidden">
+          <h3>🤓 The 3Blue1Brown explanation</h3>
+          <p><strong>What's a "bit"?</strong> A <strong>bit</strong> of information is what you learn from one yes/no question. If you can split possibilities in half with one answer, you've gained 1 bit.</p>
+          <p><strong>Why start at 8.5 bits?</strong> There are about 370 possible secret words. log₂(370) ≈ 8.5 — meaning you'd need about 8.5 perfect yes/no questions to find the answer.</p>
+          <p><strong>What makes a great guess?</strong> A guess is good if it <em>splits</em> the remaining words into many small groups, so no matter the result you've narrowed it down a lot.</p>
+          <p>Each guess result is a 5-letter pattern like <span class="pattern-chip"><span class="key absent">.</span><span class="key present">Y</span><span class="key correct">G</span><span class="key absent">.</span><span class="key correct">G</span></span> — there are 3⁵ = <strong>243</strong> possible patterns total.</p>
+          <p><strong>The math:</strong> For each candidate guess <em>w</em>, see how the remaining words split across the 243 patterns. The "best" guess is the one whose split has the highest <strong>entropy</strong>:</p>
+          <div class="math-formula">E(w) = − ∑ p<sub>i</sub> · log₂(p<sub>i</sub>)</div>
+          <p>(Where p<sub>i</sub> is the fraction of remaining words that produce pattern <em>i</em>.)</p>
+          <p><strong>The famous result:</strong> the best opening guesses give around <strong>5.9 bits</strong> of expected info. Top contenders include TARES, SOARE, RAISE, CRANE, SLATE.</p>
+          <p>For the second guess and beyond, the optimal word depends on what you've learned. Click 🤖 above to see the current best!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

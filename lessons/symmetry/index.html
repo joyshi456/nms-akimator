@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symmetry Arena 🏛️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========================= HUB ========================= -->
+  <section id="hub" class="screen active">
+    <header class="hub-header">
+      <h1>SYMMETRY ARENA</h1>
+      <p class="tagline">3 puzzles · 9 levels · Use the symmetry trick to win</p>
+      <div class="total-stars-display">
+        <span class="big-star">⭐</span>
+        <span class="big-star-count" id="total-stars">0</span>
+        <span class="star-max">/ 9</span>
+      </div>
+    </header>
+
+    <div class="hub-grid">
+      <div class="puzzle-tile" data-puzzle="coin" onclick="enterPuzzle('coin')">
+        <div class="tile-emoji">🪙</div>
+        <h2>Coin Piles</h2>
+        <p>Separate coins into equal-heads piles — <em>blindfolded</em>.</p>
+        <div class="tile-progress" id="coin-progress">⭐⭐⭐</div>
+        <button class="btn-play">▶ PLAY</button>
+      </div>
+
+      <div class="puzzle-tile" data-puzzle="bags" onclick="enterPuzzle('bags')">
+        <div class="tile-emoji">🍎</div>
+        <h2>Bag Detective</h2>
+        <p>Three mislabeled bags. Identify them in minimum picks.</p>
+        <div class="tile-progress" id="bags-progress">⭐⭐⭐</div>
+        <button class="btn-play">▶ PLAY</button>
+      </div>
+
+      <div class="puzzle-tile" data-puzzle="wise" onclick="enterPuzzle('wise')">
+        <div class="tile-emoji">🍷</div>
+        <h2>The Spokesman</h2>
+        <p>YOU are the spokesman. When do you declare?</p>
+        <div class="tile-progress" id="wise-progress">⭐⭐⭐</div>
+        <button class="btn-play">▶ PLAY</button>
+      </div>
+    </div>
+
+    <div class="reveal-section" id="symmetry-master" style="display:none">
+      <h2>🏆 SYMMETRY MASTER 🏆</h2>
+      <p>You've cracked all 9 levels! Here's the unifying secret:</p>
+      <div class="master-grid">
+        <div>🪙 <strong>Coins:</strong> The flip <em>swaps</em> heads and tails — that's the symmetry.</div>
+        <div>🍎 <strong>Bags:</strong> The "MIX" bag was the asymmetric one (mismatched in a unique way).</div>
+        <div>🍷 <strong>Wise Men:</strong> The Spokesman is the asymmetric role; the other 49 are interchangeable.</div>
+      </div>
+      <p class="master-quote">"Find the thing that's <em>not like the others</em>. That's your wedge."</p>
+    </div>
+  </section>
+
+  <!-- ===================== LEVEL SELECT ===================== -->
+  <section id="level-select" class="screen">
+    <button class="btn-home" onclick="goHub()">⌂ HOME</button>
+    <h1 id="level-puzzle-title">Coin Piles</h1>
+    <p class="level-subtitle" id="level-subtitle">Pick a level</p>
+
+    <div class="level-row" id="level-row"></div>
+  </section>
+
+  <!-- ===================== COIN GAME ===================== -->
+  <section id="coin-game" class="screen">
+    <div class="game-topbar">
+      <button class="btn-home" onclick="quitGame()">⌂</button>
+      <div class="level-tag" id="coin-level-tag">COIN PILES · L1</div>
+      <button class="btn-restart" onclick="startCoinLevel(coinLvl)">🔄</button>
+    </div>
+
+    <div class="goal-box" id="coin-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('coin')">🎓 Show me the trick (4-coin demo)</button></div>
+
+    <div class="coin-status">
+      <div class="cs-item">
+        <div class="cs-num" id="coin-pile-a-count">0</div>
+        <div class="cs-lab">In Pile A</div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-num" id="coin-need">10</div>
+        <div class="cs-lab">Suggested H</div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-num" id="coin-flipped">No</div>
+        <div class="cs-lab">Flipped?</div>
+      </div>
+    </div>
+
+    <div class="coin-arena">
+      <div class="pile-zone pile-a-zone">
+        <div class="zone-title">📦 PILE A</div>
+        <div class="coins-area" id="coin-pile-a"></div>
+      </div>
+      <div class="pile-zone table-zone">
+        <div class="zone-title">🪙 TABLE (rest become Pile B)</div>
+        <div class="coins-area" id="coin-table"></div>
+      </div>
+    </div>
+
+    <div class="game-actions">
+      <button class="btn-game btn-flip" id="btn-flip" onclick="coinFlipPileA()">🔄 FLIP PILE A</button>
+      <button class="btn-game btn-submit" id="btn-coin-submit" onclick="coinSubmit()">✅ REVEAL &amp; SUBMIT</button>
+    </div>
+
+    <div class="hint-bar" id="coin-hint"></div>
+  </section>
+
+  <!-- ===================== BAGS GAME ===================== -->
+  <section id="bags-game" class="screen">
+    <div class="game-topbar">
+      <button class="btn-home" onclick="quitGame()">⌂</button>
+      <div class="level-tag" id="bags-level-tag">BAG DETECTIVE · L1</div>
+      <button class="btn-restart" onclick="startBagsLevel(bagsLvl)">🔄</button>
+    </div>
+
+    <div class="goal-box" id="bags-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('bags')">🎓 Show me the trick</button></div>
+
+    <div class="coin-status">
+      <div class="cs-item">
+        <div class="cs-num" id="bags-picks">0</div>
+        <div class="cs-lab">Picks used</div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-num" id="bags-round">1 / 1</div>
+        <div class="cs-lab">Round</div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-num" id="bags-streak">0</div>
+        <div class="cs-lab">Perfect streak</div>
+      </div>
+    </div>
+
+    <div class="bags-arena" id="bags-arena"></div>
+
+    <div class="last-pick" id="bags-last-pick">Click a bag to pick a fruit.</div>
+
+    <div class="game-actions">
+      <button class="btn-game btn-submit" onclick="bagsStartGuessing()">🎯 I KNOW IT!</button>
+    </div>
+
+    <div id="bags-guess-form" class="guess-form hidden">
+      <h3>Assign each bag's REAL contents:</h3>
+      <div id="bags-guess-grid"></div>
+      <button class="btn-game btn-submit" onclick="bagsSubmit()">✓ SUBMIT</button>
+    </div>
+
+    <div class="hint-bar" id="bags-hint"></div>
+  </section>
+
+  <!-- ===================== WISE GAME ===================== -->
+  <section id="wise-game" class="screen">
+    <div class="game-topbar">
+      <button class="btn-home" onclick="quitGame()">⌂</button>
+      <div class="level-tag" id="wise-level-tag">THE SPOKESMAN · L1</div>
+      <button class="btn-restart" onclick="startWiseLevel(wiseLvl)">🔄</button>
+    </div>
+
+    <div class="goal-box" id="wise-goal"></div>
+    <div class="walk-trigger-row"><button class="btn-walk-trigger" onclick="openWalkthrough('wise')">🎓 Show me the trick (4-person demo)</button></div>
+
+    <div class="wise-hud">
+      <div class="wise-hud-item">
+        <div class="cs-num" id="wise-day">0</div>
+        <div class="cs-lab">Minutes</div>
+      </div>
+      <div class="glass-display">
+        <div class="glass-emoji" id="wise-glass">🍷</div>
+        <div class="cs-lab" id="wise-glass-label">bottom-down</div>
+      </div>
+      <div class="wise-hud-item">
+        <div class="cs-num"><span id="wise-count">0</span> / <span id="wise-target">9</span></div>
+        <div class="cs-lab">Your count</div>
+      </div>
+    </div>
+
+    <div class="visitor-area" id="wise-visitor">
+      <p class="visitor-text">Press <strong>NEXT</strong> to begin.</p>
+    </div>
+
+    <div class="wise-actions" id="wise-actions">
+      <button class="btn-game btn-next" onclick="wiseNext()" id="btn-wise-next">⏭ NEXT VISIT</button>
+    </div>
+
+    <div class="wise-actions hidden" id="wise-decide">
+      <p class="decide-prompt">🎩 You're called! The glass is <strong id="wise-decide-state">DOWN</strong>. Choose:</p>
+      <div class="decide-buttons">
+        <button class="btn-game btn-flip-action" onclick="wiseAction('flip')">⬆️ FLIP THE GLASS</button>
+        <button class="btn-game btn-skip" onclick="wiseAction('skip')">➡️ DO NOTHING</button>
+      </div>
+    </div>
+
+    <div class="wise-actions">
+      <button class="btn-game btn-declare" onclick="wiseDeclare()" id="btn-declare">🗣️ DECLARE: "ALL CALLED!"</button>
+    </div>
+
+    <div class="event-log" id="wise-log"></div>
+
+    <div class="hint-bar" id="wise-hint"></div>
+  </section>
+
+  <!-- ===================== RESULT MODAL ===================== -->
+  <div id="result-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="result-title">🎉 LEVEL COMPLETE!</h2>
+      <div class="result-stars" id="result-stars"></div>
+      <div class="result-body" id="result-body"></div>
+      <div class="modal-buttons">
+        <button class="btn-game btn-secondary" onclick="hideResult(); goLevelSelect();">📋 LEVEL SELECT</button>
+        <button class="btn-game btn-submit" id="btn-next-level" onclick="onNextLevel()">▶ NEXT LEVEL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== WALKTHROUGH MODAL ===================== -->
+  <div id="walk-modal" class="modal-overlay hidden">
+    <div class="walk-modal">
+      <div class="walk-header">
+        <div>
+          <div class="walk-puzzle" id="walk-puzzle"></div>
+          <div class="walk-step-count" id="walk-step-count">Step 1 of 7</div>
+        </div>
+        <button class="walk-close" onclick="closeWalkthrough()" title="Skip tutorial">✕</button>
+      </div>
+      <div class="walk-visual" id="walk-visual"></div>
+      <div class="walk-text" id="walk-text"></div>
+      <div class="walk-buttons">
+        <button class="btn-game btn-secondary" id="walk-back" onclick="walkStep(-1)">← Back</button>
+        <button class="btn-game btn-submit" id="walk-next" onclick="walkStep(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti container -->
+  <div id="confetti" class="confetti-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimathon! Fermi Problem Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Estimathon! 🎯</h1>
+    <p class="subtitle">Become a master estimator — guess the unguessable!</p>
+  </header>
+
+  <div class="learning-panel">
+    <div class="learning-icon">🧠</div>
+    <div class="learning-text">
+      <p><strong>How many cats are in America?</strong> You don't know exactly — but you can <em>estimate</em>!</p>
+      <p>Fermi problems are wild questions you solve by breaking them into smaller, easier guesses.</p>
+      <p>Work through the lessons, then play the Estimathon against a friend or your teacher!</p>
+    </div>
+  </div>
+
+  <nav class="stage-tabs">
+    <button class="tab active" data-stage="1">1. Fermi Problems</button>
+    <button class="tab" data-stage="2">2. Order of Magnitude</button>
+    <button class="tab" data-stage="3">3. Warm-Up</button>
+    <button class="tab" data-stage="4">4. Classic Problems</button>
+    <button class="tab" data-stage="5">5. Estimathon! 🏆</button>
+  </nav>
+
+  <!-- STAGE 1: What is a Fermi Problem? -->
+  <section id="stage-1" class="stage">
+    <div class="stage-content">
+      <h2>What Is a Fermi Problem?</h2>
+      <p>A puzzle you solve with smart guessing — not exact math.</p>
+
+      <div class="lesson-card">
+        <h3>Meet Enrico Fermi 👨‍🔬</h3>
+        <p>Enrico Fermi was a famous physicist who could estimate almost anything in his head.</p>
+        <p>His most famous question: <strong>"How many piano tuners work in Chicago?"</strong></p>
+        <p>Most people say "I have no idea!" But Fermi would calmly break it down:</p>
+        <div class="example-box">
+          <div class="step-list">
+            <div class="step">🏙️ Chicago has about <strong>3 million</strong> people.</div>
+            <div class="step">👨‍👩‍👧 With ~3 people per household, that's about <strong>1 million households</strong>.</div>
+            <div class="step">🎹 Maybe <strong>1 in 20</strong> households owns a piano → <strong>50,000 pianos</strong>.</div>
+            <div class="step">🎵 Pianos get tuned about <strong>once a year</strong> → 50,000 tunings/year.</div>
+            <div class="step">🔧 A tuner does ~<strong>4 tunings per day</strong>, ~250 days per year → 1,000 tunings/year per tuner.</div>
+            <div class="step result">🎯 So Chicago needs about <strong>50,000 ÷ 1,000 = 50 piano tuners</strong>.</div>
+          </div>
+          <p class="example-note">The real answer was around 150 — Fermi's estimate is in the right ballpark!</p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>The Big Idea 💡</h3>
+        <div class="key-idea">
+          <p><strong>1.</strong> You don't need the exact answer — you just need to be <em>close enough</em>.</p>
+          <p><strong>2.</strong> Break a HARD question into a few EASY questions.</p>
+          <p><strong>3.</strong> Use stuff you already know (population, prices, rough sizes).</p>
+          <p><strong>4.</strong> Multiply and divide your way to an answer.</p>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Why Bother? 🚀</h3>
+        <p>Scientists, engineers, and business people use estimation every single day:</p>
+        <div class="use-cases">
+          <div class="use-case">🚀 <strong>NASA:</strong> "How much fuel will we need?"</div>
+          <div class="use-case">💰 <strong>Startups:</strong> "How big is this market?"</div>
+          <div class="use-case">🏭 <strong>Factories:</strong> "How many widgets per hour?"</div>
+          <div class="use-case">🌍 <strong>Climate:</strong> "How much CO₂ in the atmosphere?"</div>
+          <div class="use-case">🎮 <strong>Game design:</strong> "How long will players play?"</div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Try Thinking Like Fermi 🧩</h3>
+        <p>Pick the better starting question for each Fermi problem:</p>
+        <div id="practice-1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 2: Order of Magnitude -->
+  <section id="stage-2" class="stage hidden">
+    <div class="stage-content">
+      <h2>Order of Magnitude</h2>
+      <p>The secret weapon of every estimator: thinking in powers of 10.</p>
+
+      <div class="lesson-card">
+        <h3>Powers of 10 🔟</h3>
+        <p>Each "order of magnitude" is 10 times bigger than the one before:</p>
+        <div class="oom-table">
+          <div class="oom-row"><span class="oom-power">10⁰</span><span class="oom-num">1</span><span class="oom-ex">a marble</span></div>
+          <div class="oom-row"><span class="oom-power">10¹</span><span class="oom-num">10</span><span class="oom-ex">fingers on two hands</span></div>
+          <div class="oom-row"><span class="oom-power">10²</span><span class="oom-num">100</span><span class="oom-ex">pages in a short book</span></div>
+          <div class="oom-row"><span class="oom-power">10³</span><span class="oom-num">1,000</span><span class="oom-ex">students in a school</span></div>
+          <div class="oom-row"><span class="oom-power">10⁴</span><span class="oom-num">10,000</span><span class="oom-ex">steps in a long day</span></div>
+          <div class="oom-row"><span class="oom-power">10⁵</span><span class="oom-num">100,000</span><span class="oom-ex">hairs on your head</span></div>
+          <div class="oom-row"><span class="oom-power">10⁶</span><span class="oom-num">1 million</span><span class="oom-ex">people in a big city</span></div>
+          <div class="oom-row"><span class="oom-power">10⁷</span><span class="oom-num">10 million</span><span class="oom-ex">people in NYC area</span></div>
+          <div class="oom-row"><span class="oom-power">10⁸</span><span class="oom-num">100 million</span><span class="oom-ex">cars in the USA</span></div>
+          <div class="oom-row"><span class="oom-power">10⁹</span><span class="oom-num">1 billion</span><span class="oom-ex">seconds in 32 years</span></div>
+          <div class="oom-row"><span class="oom-power">10¹⁰</span><span class="oom-num">10 billion</span><span class="oom-ex">heartbeats in a long life</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Find the Order of Magnitude 🔍</h3>
+        <p>The order of magnitude of a number is the power of 10 closest to it.</p>
+        <p>Type any number to see its order of magnitude:</p>
+        <div class="input-row">
+          <input type="text" id="oom-input" class="short-input" placeholder="e.g. 7500" value="7500">
+          <button class="btn-action" onclick="showOOM()">Find OOM</button>
+        </div>
+        <div id="oom-result" class="result-box"></div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Estimathon Scoring 🎯</h3>
+        <p>In estimation, getting the right <em>order of magnitude</em> is what counts. Here's how we score guesses:</p>
+        <div class="scoring-table">
+          <div class="score-row-card excellent">
+            <span class="score-icon">🎯</span>
+            <span class="score-desc">Within 2× of the answer</span>
+            <span class="score-pts">10 pts</span>
+          </div>
+          <div class="score-row-card great">
+            <span class="score-icon">🌟</span>
+            <span class="score-desc">Within 5× of the answer</span>
+            <span class="score-pts">7 pts</span>
+          </div>
+          <div class="score-row-card good">
+            <span class="score-icon">👍</span>
+            <span class="score-desc">Within 10× (same order of magnitude)</span>
+            <span class="score-pts">5 pts</span>
+          </div>
+          <div class="score-row-card ok">
+            <span class="score-icon">😅</span>
+            <span class="score-desc">Within 100× (off by 1-2 orders)</span>
+            <span class="score-pts">2 pts</span>
+          </div>
+          <div class="score-row-card miss">
+            <span class="score-icon">❌</span>
+            <span class="score-desc">Way off (more than 100×)</span>
+            <span class="score-pts">0 pts</span>
+          </div>
+        </div>
+        <p class="example-note">Example: Real answer is 1,000. Guessing 800 = 10 pts (within 2×). Guessing 200 = 5 pts (within 10×). Guessing 5 = 0 pts.</p>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Score Calculator 🧮</h3>
+        <p>Try entering a guess and the real answer to see how many points you'd score:</p>
+        <div class="input-row">
+          <label>Your guess: <input type="text" id="score-guess" class="short-input" placeholder="800"></label>
+          <label>Real answer: <input type="text" id="score-real" class="short-input" placeholder="1000"></label>
+          <button class="btn-action" onclick="calcScore()">Score it!</button>
+        </div>
+        <div id="score-calc-result" class="result-box"></div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Practice: Order of Magnitude</h3>
+        <div id="practice-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3: Warm-Up Problems -->
+  <section id="stage-3" class="stage hidden">
+    <div class="stage-content">
+      <h2>Warm-Up Problems 🔥</h2>
+      <p>Easy starters! Take your best guess, then click "Reveal Answer" to see how you did.</p>
+      <p class="hint-line">💡 Tip: Don't look up the answer. Just <em>think</em>. Break it down. Trust your math!</p>
+
+      <div id="warmup-problems"></div>
+    </div>
+  </section>
+
+  <!-- STAGE 4: Classic Hard Problems -->
+  <section id="stage-4" class="stage hidden">
+    <div class="stage-content">
+      <h2>Classic Fermi Problems 🏛️</h2>
+      <p>The legendary brain-twisters! Try to break each one down before peeking.</p>
+      <p class="hint-line">💡 First write down what you'd <em>need</em> to know. Then estimate each piece.</p>
+
+      <div id="classic-problems"></div>
+    </div>
+  </section>
+
+  <!-- STAGE 5: ESTIMATHON GAME -->
+  <section id="stage-5" class="stage hidden">
+    <div class="stage-content">
+      <h2>The Estimathon! 🏆</h2>
+      <p>A head-to-head estimation contest. Two players take turns guessing — best estimator wins!</p>
+
+      <!-- Setup screen -->
+      <div id="game-setup" class="lesson-card">
+        <h3>Set Up the Match ⚔️</h3>
+        <div class="setup-row">
+          <label>Player 1 name:
+            <input type="text" id="p1-name" class="short-input" style="width:160px" placeholder="Teacher" value="Teacher">
+          </label>
+          <label>Player 2 name:
+            <input type="text" id="p2-name" class="short-input" style="width:160px" placeholder="Student" value="Student">
+          </label>
+        </div>
+        <div class="setup-row">
+          <label>Number of rounds:
+            <select id="game-rounds">
+              <option value="3">3 (quick)</option>
+              <option value="5" selected>5 (standard)</option>
+              <option value="8">8 (full match)</option>
+              <option value="13">13 (champion)</option>
+            </select>
+          </label>
+        </div>
+        <p style="margin-top:12px;font-size:0.9rem;color:#555">
+          <strong>How it works:</strong> Each round shows a question. Both players type their guesses (Player 1 goes first while Player 2 looks away — no peeking! 👀). When both have guessed, click reveal. The closer guess wins points!
+        </p>
+        <button class="btn-action btn-big" onclick="startGame()">🚀 Start the Estimathon!</button>
+      </div>
+
+      <!-- Active game -->
+      <div id="game-active" class="hidden">
+        <div class="scoreboard">
+          <div class="player-score" id="p1-score-box">
+            <div class="player-name" id="p1-display">Player 1</div>
+            <div class="player-pts" id="p1-pts">0</div>
+          </div>
+          <div class="round-info">
+            <div class="round-label">Round</div>
+            <div class="round-num" id="round-num">1 / 5</div>
+          </div>
+          <div class="player-score" id="p2-score-box">
+            <div class="player-name" id="p2-display">Player 2</div>
+            <div class="player-pts" id="p2-pts">0</div>
+          </div>
+        </div>
+
+        <div class="lesson-card game-question-card">
+          <div class="question-icon">🎯</div>
+          <h3 id="game-question-text">Loading...</h3>
+
+          <!-- Phase 1: Player 1 guess (Player 2 looks away) -->
+          <div id="phase-p1" class="game-phase">
+            <p class="phase-label" id="phase-p1-label">📝 <strong>Player 1</strong>, enter your guess (Player 2, look away!):</p>
+            <div class="guess-row">
+              <input type="text" id="p1-guess" class="short-input" placeholder="Your guess..." style="width:200px" autocomplete="off">
+              <button class="btn-action" onclick="submitGuess(1)">Lock In Guess 🔒</button>
+            </div>
+            <p class="privacy-hint">(Your guess will be hidden until both players have submitted.)</p>
+          </div>
+
+          <!-- Phase 2: Player 2 guess -->
+          <div id="phase-p2" class="game-phase hidden">
+            <p class="phase-label" id="phase-p2-label">📝 <strong>Player 2</strong>, your turn! Enter your guess:</p>
+            <div class="guess-row">
+              <input type="text" id="p2-guess" class="short-input" placeholder="Your guess..." style="width:200px" autocomplete="off">
+              <button class="btn-action" onclick="submitGuess(2)">Lock In Guess 🔒</button>
+            </div>
+          </div>
+
+          <!-- Phase 3: Reveal -->
+          <div id="phase-reveal" class="game-phase hidden">
+            <button class="btn-action btn-big" onclick="revealRound()">🎲 Reveal The Answer!</button>
+          </div>
+
+          <!-- Phase 4: Results -->
+          <div id="phase-result" class="game-phase hidden">
+            <div class="answer-reveal" id="answer-reveal"></div>
+            <div class="round-results" id="round-results"></div>
+            <button class="btn-action btn-big" onclick="nextRound()" id="next-round-btn">➡️ Next Round</button>
+          </div>
+        </div>
+
+        <button class="btn-quit" onclick="quitGame()">🚪 Quit Match</button>
+      </div>
+
+      <!-- Final results -->
+      <div id="game-final" class="hidden">
+        <div class="lesson-card final-card">
+          <h2 id="winner-banner">🏆 Winner!</h2>
+          <div class="final-scores" id="final-scores"></div>
+          <div class="final-recap" id="final-recap"></div>
+          <button class="btn-action btn-big" onclick="resetGame()">🔄 Play Again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Score tracker -->
+  <div class="score-bar" id="score-bar">
+    <span id="score-display">Practice score: 0 / 0</span>
+    <button class="btn-reset-score" onclick="resetPracticeScore()">Reset</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

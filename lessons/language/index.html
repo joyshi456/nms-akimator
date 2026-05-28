@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>THE LANGUAGE LAB</h1>
+    <p class="subtitle">How human languages are structured — and how to engineer your own.</p>
+  </header>
+
+  <nav class="stage-tabs">
+    <button class="tab active" data-stage="1">1. What Is Language</button>
+    <button class="tab" data-stage="2">2. Sounds</button>
+    <button class="tab" data-stage="3">3. Words</button>
+    <button class="tab" data-stage="4">4. Sentences</button>
+    <button class="tab" data-stage="5">5. Types of Grammar</button>
+    <button class="tab" data-stage="6">6. Puzzles</button>
+    <button class="tab" data-stage="7">7. Build a Language</button>
+  </nav>
+
+  <!-- ============ STAGE 1 ============ -->
+  <section id="stage-1" class="stage">
+    <div class="stage-content">
+      <h2>What Is Language?</h2>
+      <p>Language is a system that maps <strong>sound</strong> to <strong>meaning</strong> through layered rules. The field that studies how it works is <strong>linguistics</strong>.</p>
+
+      <div class="lesson-card">
+        <h3>The Layers of Language</h3>
+        <p>Linguists analyze language as a stack of levels, from the smallest unit to the largest:</p>
+        <div class="levels-ladder">
+          <div class="level-step">
+            <span class="level-tag">Phonology</span>
+            <div>The inventory of speech <strong>sounds</strong> and the rules for combining them — <em>p, a, sh</em>.</div>
+          </div>
+          <div class="level-step">
+            <span class="level-tag">Morphology</span>
+            <div>How sounds form <strong>meaningful pieces</strong> (morphemes) and words — <em>cat, un-, -s</em>.</div>
+          </div>
+          <div class="level-step">
+            <span class="level-tag">Lexicon</span>
+            <div>The <strong>vocabulary</strong>: the full set of words a language has.</div>
+          </div>
+          <div class="level-step">
+            <span class="level-tag">Syntax</span>
+            <div>The rules for ordering words into <strong>sentences</strong> — <em>The cat runs</em>.</div>
+          </div>
+          <div class="level-step">
+            <span class="level-tag">Semantics</span>
+            <div>How sentences carry <strong>meaning</strong> and refer to the world.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Notable Facts</h3>
+        <div class="fact-grid">
+          <div class="fact">Roughly <strong>7,000</strong> languages are spoken today; about 40% are endangered.</div>
+          <div class="fact">Any healthy child can acquire <strong>any</strong> human language to native fluency.</div>
+          <div class="fact">Humans can produce ~<strong>150</strong> distinct speech sounds; each language selects a subset.</div>
+          <div class="fact">English uses ~<strong>44 sounds</strong> to build over a million words.</div>
+          <div class="fact">Invented languages (<strong>conlangs</strong>) like Klingon, Dothraki, and Elvish have full grammars.</div>
+          <div class="fact">All human languages can express the same ideas — none is "more primitive" than another.</div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Check Your Understanding</h3>
+        <div id="practice-1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 2: SOUNDS ============ -->
+  <section id="stage-2" class="stage hidden">
+    <div class="stage-content">
+      <h2>Sounds (Phonology)</h2>
+      <p>Every word is assembled from speech sounds, called <strong>phonemes</strong>. They fall into two broad classes.</p>
+
+      <div class="lesson-card">
+        <h3>Consonants vs Vowels</h3>
+        <div class="cv-compare">
+          <div class="cv-box consonant-box">
+            <h4>Consonants</h4>
+            <p>Airflow is <strong>obstructed</strong> by the lips, teeth, or tongue.</p>
+            <p class="cv-ex">p t k m s l</p>
+          </div>
+          <div class="cv-box vowel-box">
+            <h4>Vowels</h4>
+            <p>Air flows <strong>freely</strong>; only the tongue and lip shape change.</p>
+            <p class="cv-ex">a e i o u</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>The Sound Map</h3>
+        <p>Consonants are organized by their <strong>place of articulation</strong> — where in the vocal tract the airflow is constricted. Click any sound to hear it.</p>
+        <div id="sound-map"></div>
+        <p class="micro-note">Uses your device's speech synthesizer; samples a syllable like "pa" or "ka".</p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Relevance to Conlanging</h3>
+        <div class="key-idea">
+          <p>The first design decision for any language is its <strong>phoneme inventory</strong> — which consonants and vowels it permits.</p>
+          <p>Hawaiian uses only ~13 phonemes; Taa (a Khoisan language) uses over 100, including dozens of click consonants.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 3: WORDS ============ -->
+  <section id="stage-3" class="stage hidden">
+    <div class="stage-content">
+      <h2>Words (Morphology)</h2>
+      <p>Sounds combine into <strong>syllables</strong>, and meaningful pieces called <strong>morphemes</strong> combine into words.</p>
+
+      <div class="lesson-card">
+        <h3>Syllable Structure</h3>
+        <p>Using <strong>C</strong> for consonant and <strong>V</strong> for vowel, a syllable follows a pattern:</p>
+        <div class="syllable-examples">
+          <div class="syl-card"><span class="syl-pat">CV</span><span class="syl-word">ba, mi, to</span></div>
+          <div class="syl-card"><span class="syl-pat">CVC</span><span class="syl-word">cat, dog, sun</span></div>
+          <div class="syl-card"><span class="syl-pat">CCV</span><span class="syl-word">sto, gra, flu</span></div>
+          <div class="syl-card"><span class="syl-pat">CCVC</span><span class="syl-word">stop, frog, spin</span></div>
+          <div class="syl-card"><span class="syl-pat">VC</span><span class="syl-word">at, in, up</span></div>
+        </div>
+        <p class="example-note">Japanese and Hawaiian permit mostly simple CV syllables. English tolerates extremes like CCCVCCC ("strengths").</p>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Morphemes: The Atoms of Meaning</h3>
+        <p>A <strong>morpheme</strong> is the smallest unit that carries meaning. Words are built by combining them:</p>
+        <div class="morpheme-examples">
+          <div class="morph-row"><span class="morph">cat</span> + <span class="morph suffix">s</span> = <strong>cats</strong> <span class="morph-note">suffix marking plural</span></div>
+          <div class="morph-row"><span class="morph prefix">un</span> + <span class="morph">happy</span> = <strong>unhappy</strong> <span class="morph-note">prefix meaning "not"</span></div>
+          <div class="morph-row"><span class="morph prefix">re</span> + <span class="morph">play</span> + <span class="morph suffix">ed</span> = <strong>replayed</strong> <span class="morph-note">"again" + past tense</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Word Generator</h3>
+        <p>Choose a syllable pattern and length, then generate possible words.</p>
+        <div class="gen-controls">
+          <label>Syllable pattern
+            <select id="gen-pattern">
+              <option value="CV">CV</option>
+              <option value="CVC" selected>CVC</option>
+              <option value="CCV">CCV</option>
+              <option value="CVCV">CVCV</option>
+              <option value="CVCVC">CVCVC</option>
+            </select>
+          </label>
+          <label>Syllables
+            <select id="gen-syls">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+            </select>
+          </label>
+          <button class="btn-action" onclick="generateWords()">Generate 10 words</button>
+        </div>
+        <div id="gen-output" class="gen-output"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 4: SENTENCES ============ -->
+  <section id="stage-4" class="stage hidden">
+    <div class="stage-content">
+      <h2>Sentences (Syntax)</h2>
+      <p>Syntax is the set of rules that governs how words combine into well-formed sentences. A core parameter is <strong>word order</strong>.</p>
+
+      <div class="lesson-card">
+        <h3>Word Order Across Languages</h3>
+        <p>Most clauses contain a <strong>Subject</strong>, a <strong>Verb</strong>, and an <strong>Object</strong>. Languages differ in how they order them:</p>
+        <div class="order-table">
+          <div class="order-row"><span class="order-code sov">SOV</span><span class="order-pct">~45%</span><span class="order-ex">"I apple eat" — Japanese, Korean, Latin, Turkish</span></div>
+          <div class="order-row"><span class="order-code svo">SVO</span><span class="order-pct">~42%</span><span class="order-ex">"I eat apple" — English, Spanish, Mandarin</span></div>
+          <div class="order-row"><span class="order-code vso">VSO</span><span class="order-pct">~9%</span><span class="order-ex">"Eat I apple" — Irish, Welsh, Classical Arabic</span></div>
+          <div class="order-row"><span class="order-code other">rare</span><span class="order-pct">~4%</span><span class="order-ex">VOS, OVS, OSV — uncommon configurations</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>Word Order Machine</h3>
+        <p>Select the three constituents and an order; observe how the sentence rearranges.</p>
+        <div class="sentence-builder">
+          <label>Subject
+            <select id="sb-subject"><option>I</option><option>the cat</option><option>my friend</option><option>the robot</option></select>
+          </label>
+          <label>Verb
+            <select id="sb-verb"><option>eat</option><option>see</option><option>love</option><option>chase</option></select>
+          </label>
+          <label>Object
+            <select id="sb-object"><option>the apple</option><option>the ball</option><option>the moon</option><option>pizza</option></select>
+          </label>
+          <label>Order
+            <select id="sb-order" onchange="buildSentence()">
+              <option value="SVO" selected>SVO (English)</option>
+              <option value="SOV">SOV (Japanese)</option>
+              <option value="VSO">VSO (Irish)</option>
+              <option value="OSV">OSV (rare)</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn-action" onclick="buildSentence()">Arrange</button>
+        <div id="sentence-output" class="sentence-output"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 5: TYPES OF GRAMMAR ============ -->
+  <section id="stage-5" class="stage hidden">
+    <div class="stage-content">
+      <h2>Types of Grammar</h2>
+      <p>"Grammar" has two distinct meanings worth knowing: how languages <strong>package meaning into words</strong> (morphological typology), and how a system of <strong>rules generates valid sentences</strong> (formal grammar).</p>
+
+      <div class="lesson-card">
+        <h3>Part 1 — Morphological Typology</h3>
+        <p>Languages differ in how much grammatical information they pack into a single word.</p>
+        <div class="typology-grid">
+          <div class="typology-card">
+            <div class="typo-name">Isolating</div>
+            <div class="typo-desc">Words rarely change shape. Grammar comes from separate words and order.</div>
+            <div class="typo-ex"><strong>Mandarin:</strong> 我 吃 (wǒ chī, "I eat"). Past tense adds a separate particle 了 (le) rather than changing the verb.</div>
+          </div>
+          <div class="typology-card">
+            <div class="typo-name">Agglutinative</div>
+            <div class="typo-desc">Words stack clearly separable affixes, each with one meaning.</div>
+            <div class="typo-ex"><strong>Turkish:</strong> ev (house) → ev<em>ler</em> (houses) → ev<em>ler</em><em>im</em> (my houses) → ev<em>ler</em><em>im</em><em>de</em> (in my houses).</div>
+          </div>
+          <div class="typology-card">
+            <div class="typo-name">Fusional</div>
+            <div class="typo-desc">A single affix fuses several meanings together at once.</div>
+            <div class="typo-ex"><strong>Spanish:</strong> habl<em>o</em> ("I speak"). The single ending <em>-o</em> encodes person, number, tense, and mood all together.</div>
+          </div>
+          <div class="typology-card">
+            <div class="typo-name">Polysynthetic</div>
+            <div class="typo-desc">Whole sentences are packed into one very long word.</div>
+            <div class="typo-ex"><strong>Inuktitut:</strong> tusaatsiarunnanngittualuujunga ≈ "I can't hear very well" — a single word.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Common Grammatical Features</h3>
+        <div class="feature-grid">
+          <div class="feature"><strong>Gender / noun class</strong> — el/la in Spanish; Swahili has more than a dozen noun classes.</div>
+          <div class="feature"><strong>Case</strong> — marking a noun's role; Latin has 6, Finnish has 15.</div>
+          <div class="feature"><strong>Tense &amp; aspect</strong> — when an action happens and whether it's ongoing or complete.</div>
+          <div class="feature"><strong>Number</strong> — singular, plural, and sometimes dual (exactly two).</div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <h3>Part 2 — Formal Grammars</h3>
+        <p>In linguistics and computer science, a <strong>formal grammar</strong> is a finite set of <strong>rewrite rules</strong> that can generate an infinite number of valid sentences. A rule like <code>S → NP VP</code> means "an S can be replaced by an NP followed by a VP."</p>
+        <p>Noam Chomsky (1956) ranked grammars by power — the <strong>Chomsky hierarchy</strong>:</p>
+        <div class="hierarchy">
+          <div class="hier-row"><span class="hier-type">Type 3 · Regular</span><span class="hier-desc">Simplest. What regular expressions match. Recognized by finite automata.</span></div>
+          <div class="hier-row"><span class="hier-type">Type 2 · Context-free</span><span class="hier-desc">Handles nesting. Describes programming-language syntax and much of natural language.</span></div>
+          <div class="hier-row"><span class="hier-type">Type 1 · Context-sensitive</span><span class="hier-desc">Rules can depend on surrounding symbols. More powerful.</span></div>
+          <div class="hier-row"><span class="hier-type">Type 0 · Unrestricted</span><span class="hier-desc">Anything a computer can compute (Turing-complete).</span></div>
+        </div>
+      </div>
+
+      <div class="lesson-card interactive-card">
+        <h3>The Grammar Machine</h3>
+        <p>Below is a small <strong>context-free grammar</strong>. Starting from <code>S</code>, each rule is applied at random until only real words remain. A handful of rules can produce endless sentences.</p>
+        <div class="grammar-rules" id="grammar-rules"></div>
+        <button class="btn-action" onclick="generateGrammarSentence()">Generate a sentence</button>
+        <button class="btn-action btn-ghost" onclick="generateGrammarBatch()">Generate 5</button>
+        <div id="grammar-output" class="grammar-output"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 6: PUZZLES ============ -->
+  <section id="stage-6" class="stage hidden">
+    <div class="stage-content">
+      <h2>Language Puzzles</h2>
+      <p>Linguists are codebreakers. Each puzzle gives you a few <strong>clues</strong> and a hidden <strong>rule</strong>. Study the examples, crack the pattern, then decode the answer. No prior knowledge of any language needed — everything you need is in the clues.</p>
+      <div id="puzzle-sections"></div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 7: BUILD A LANGUAGE ============ -->
+  <section id="stage-7" class="stage hidden">
+    <div class="stage-content">
+      <h2>Build Your Own Language</h2>
+      <p>Apply every layer at once. Configure the options below, then generate a complete language — phoneme inventory, lexicon, grammar, and a writing system.</p>
+
+      <div class="lesson-card builder-card">
+        <h3>Step 1 — Name</h3>
+        <input type="text" id="lang-name" class="lang-name-input" value="Vaskr" maxlength="20" placeholder="Name your language">
+
+        <h3 style="margin-top:18px">Step 2 — Consonant Inventory</h3>
+        <p class="builder-hint">Select at least 4.</p>
+        <div id="consonant-picker" class="sound-picker"></div>
+
+        <h3 style="margin-top:18px">Step 3 — Vowel Inventory</h3>
+        <p class="builder-hint">Select at least 2.</p>
+        <div id="vowel-picker" class="sound-picker"></div>
+
+        <h3 style="margin-top:18px">Step 4 — Structure</h3>
+        <div class="gen-controls">
+          <label>Syllable pattern
+            <select id="lang-pattern">
+              <option value="CV">CV — open, flowing</option>
+              <option value="CVC" selected>CVC — balanced</option>
+              <option value="CCVC">CCVC — dense, consonant-heavy</option>
+            </select>
+          </label>
+          <label>Word order
+            <select id="lang-order">
+              <option value="SOV">SOV</option>
+              <option value="SVO" selected>SVO</option>
+              <option value="VSO">VSO</option>
+            </select>
+          </label>
+          <label>Grammar type
+            <select id="lang-grammar">
+              <option value="isolating">Isolating (separate grammar words)</option>
+              <option value="agglutinative" selected>Agglutinative (stacked affixes)</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="btn-generate" onclick="generateLanguage()">GENERATE LANGUAGE</button>
+      </div>
+
+      <div id="lang-result" class="hidden">
+        <div class="lesson-card">
+          <h3><span id="result-lang-name">Your Language</span> — Lexicon</h3>
+          <p class="builder-hint">Click the speaker to hear a word.</p>
+          <div id="lang-dictionary" class="lang-dictionary"></div>
+        </div>
+
+        <div class="lesson-card">
+          <h3>Grammar Rules</h3>
+          <div id="lang-grammar-rules" class="grammar-summary"></div>
+        </div>
+
+        <div class="lesson-card">
+          <h3>Sentences in <span id="result-lang-name-2">Your Language</span></h3>
+          <div id="lang-sentences" class="lang-sentences"></div>
+          <div class="custom-sentence">
+            <p>Compose your own:</p>
+            <div class="gen-controls">
+              <select id="cs-subject"></select>
+              <select id="cs-verb"></select>
+              <select id="cs-object"></select>
+              <label class="inline-check"><input type="checkbox" id="cs-past"> past tense</label>
+              <label class="inline-check"><input type="checkbox" id="cs-plural"> plural object</label>
+              <button class="btn-action" onclick="buildCustomSentence()">Say it</button>
+            </div>
+            <div id="cs-output" class="cs-output"></div>
+          </div>
+        </div>
+
+        <div class="lesson-card">
+          <h3>Writing System</h3>
+          <p class="builder-hint">Each phoneme is assigned a glyph. Type below to transcribe.</p>
+          <div id="lang-script" class="lang-script"></div>
+          <input type="text" id="script-input" class="word-input" placeholder="type letters" oninput="renderScriptWord()">
+          <div id="script-word-output" class="script-word-output"></div>
+        </div>
+
+        <div class="lesson-card summary-card">
+          <h3>Language Profile</h3>
+          <div id="lang-summary"></div>
+          <button class="btn-action" onclick="saveLanguage()">Save language</button>
+          <span id="save-status"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
