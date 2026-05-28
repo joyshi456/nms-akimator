@@ -676,7 +676,6 @@ function vennSectionHtml() {
       <div class="venn-items">${itemRows}</div>
       <div class="puzzle-input-row" style="margin-top:12px">
         <button class="btn-check" onclick="checkVenn()">Check all</button>
-        <button class="btn-mini" onclick="revealVenn()">Reveal</button>
       </div>
       <div class="puzzle-feedback" id="fb-venn"></div>
     </div>`;
@@ -700,16 +699,6 @@ function checkVenn() {
     fb.className = 'puzzle-feedback incorrect';
     document.getElementById('card-venn').classList.remove('solved');
   }
-}
-function revealVenn() {
-  VENN.items.forEach((it, i) => {
-    const sel = document.getElementById(`venn-sel-${i}`);
-    sel.value = String(it.region);
-    sel.style.borderColor = '#3fb950';
-  });
-  const fb = document.getElementById('fb-venn');
-  fb.innerHTML = 'Region 5 (the very center) is FRUIT + RED + SWEET — the strawberry. A region inside only one circle means the item has just that one property.';
-  fb.className = 'puzzle-feedback correct';
 }
 
 let puzzlesRendered = false;
@@ -735,7 +724,6 @@ function renderPuzzles() {
               onkeydown="if(event.key==='Enter') checkPuzzle('${p.id}')">
             <button class="btn-check" onclick="checkPuzzle('${p.id}')">Check</button>
             <button class="btn-mini" onclick="hintPuzzle('${p.id}')">Hint</button>
-            <button class="btn-mini" onclick="revealPuzzle('${p.id}')">Reveal</button>
           </div>
           <div class="puzzle-feedback" id="fb-${p.id}"></div>
         </div>`;
@@ -780,13 +768,6 @@ function hintPuzzle(id) {
   div.className = 'puzzle-hint';
   div.innerHTML = 'Hint: ' + p.hint;
   card.appendChild(div);
-}
-function revealPuzzle(id) {
-  const p = findPuzzle(id);
-  const input = document.getElementById(`ans-${id}`);
-  input.value = p.answers[0];
-  input.classList.add('correct');
-  showExplain(id);
 }
 function showExplain(id) {
   const p = findPuzzle(id);
