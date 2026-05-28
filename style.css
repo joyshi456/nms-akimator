@@ -231,6 +231,59 @@ select:focus { outline: none; border-color: #e5383b; }
 }
 .gen-sentence .deriv { display: block; font-family: 'Menlo','Courier New',monospace; font-size: 0.78rem; color: #8a7273; margin-top: 6px; font-weight: 400; }
 
+/* === PUZZLES === */
+.puzzle-section-title {
+  font-size: 1.3rem; color: #ff3b42; font-weight: 800; letter-spacing: 0.5px;
+  margin: 22px 0 6px; padding-bottom: 6px; border-bottom: 1px solid #3a1518;
+}
+.puzzle-section-blurb { color: #b8a8a8; font-size: 0.92rem; margin-bottom: 12px; }
+.puzzle-card {
+  background: #140a0c; border: 1px solid #3a1518; border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; transition: border-color 0.3s;
+}
+.puzzle-card.solved { border-color: #3fb950; }
+.puzzle-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.puzzle-title { font-weight: 800; color: #ff5a5f; font-size: 1.05rem; }
+.puzzle-diff { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 999px; }
+.puzzle-diff.easy { background: rgba(63,185,80,0.18); color: #7ee787; }
+.puzzle-diff.medium { background: rgba(232,162,74,0.18); color: #e8a24a; }
+.puzzle-diff.hard { background: rgba(229,56,59,0.2); color: #ff7b7f; }
+
+.puzzle-rules { background: #0c0506; border: 1px solid #2a1012; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+.clue-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.clue-table th { text-align: left; color: #8a7273; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-bottom: 1px solid #2a1012; }
+.clue-table td { padding: 6px 8px; border-bottom: 1px dashed #1f0c0e; }
+.clue-table td:first-child { font-family: 'Courier New', monospace; font-weight: 800; color: #ff8085; font-size: 1.05rem; }
+.clue-table td:last-child { color: #d4c6c6; }
+.clue-table tr:last-child td { border-bottom: none; }
+.glyph-legend { display: flex; flex-wrap: wrap; gap: 10px; }
+.glyph-pair { display: flex; flex-direction: column; align-items: center; background: #1a0c0e; border: 1px solid #3a1518; border-radius: 8px; padding: 8px 12px; min-width: 48px; }
+.glyph-pair .gp-glyph { font-size: 1.5rem; color: #ff5a5f; }
+.glyph-pair .gp-sound { font-family: 'Courier New', monospace; color: #8a7273; font-weight: 700; font-size: 0.85rem; }
+
+.puzzle-task { font-size: 1.05rem; color: #ecdede; margin-bottom: 12px; }
+.puzzle-task .target {
+  font-family: 'Courier New', monospace; font-weight: 800; color: #ff3b42; font-size: 1.3rem;
+  background: rgba(229,56,59,0.1); padding: 2px 10px; border-radius: 6px; letter-spacing: 2px;
+}
+.puzzle-input-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.puzzle-answer {
+  flex: 1; min-width: 160px; padding: 10px 14px; background: #120708; border: 1px solid #5a1f22;
+  border-radius: 8px; color: #f0d8d8; font-size: 1rem; font-weight: 600; outline: none; font-family: inherit;
+}
+.puzzle-answer:focus { border-color: #e5383b; }
+.puzzle-answer.correct { border-color: #3fb950; background: rgba(63,185,80,0.1); }
+.puzzle-answer.incorrect { border-color: #e5383b; background: rgba(229,56,59,0.1); }
+.btn-check { padding: 10px 16px; background: linear-gradient(135deg, #e5383b, #a4161a); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-mini { padding: 10px 14px; background: #1a0c0e; color: #c89a9c; border: 1px solid #5a1f22; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: inherit; }
+.btn-mini:hover { border-color: #e5383b; color: #ff5a5f; }
+.puzzle-feedback { margin-top: 10px; font-size: 0.95rem; font-weight: 600; min-height: 1.2em; }
+.puzzle-feedback.correct { color: #7ee787; }
+.puzzle-feedback.incorrect { color: #ff7b7f; }
+.puzzle-hint { margin-top: 10px; background: rgba(232,162,74,0.08); border-left: 3px solid #e8a24a; border-radius: 6px; padding: 10px 14px; font-size: 0.9rem; color: #e8c79a; }
+.puzzle-explain { margin-top: 10px; background: rgba(63,185,80,0.06); border-left: 3px solid #3fb950; border-radius: 6px; padding: 12px 14px; font-size: 0.92rem; color: #c6dcc6; line-height: 1.6; }
+.puzzle-explain strong { color: #7ee787; }
+
 /* === BUILDER === */
 .builder-card { border-color: #e5383b; }
 .lang-name-input {

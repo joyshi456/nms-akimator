@@ -34,7 +34,8 @@ function showStage(stage) {
   window.scrollTo(0, 0);
   if (stage === 2) renderSoundMap();
   if (stage === 5) renderGrammarRules();
-  if (stage === 6) initBuilder();
+  if (stage === 6) renderPuzzles();
+  if (stage === 7) initBuilder();
 }
 
 // === helpers ===
@@ -437,6 +438,218 @@ function saveLanguage() {
 }
 
 // ============================================================
+// PUZZLES
+// ============================================================
+function clueTable(pairs, head1, head2) {
+  return `<table class="clue-table"><thead><tr><th>${head1}</th><th>${head2}</th></tr></thead><tbody>` +
+    pairs.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('') + '</tbody></table>';
+}
+function glyphLegend(pairs) {
+  return `<div class="glyph-legend">` +
+    pairs.map(([g, s]) => `<div class="glyph-pair"><span class="gp-glyph">${g}</span><span class="gp-sound">${s}</span></div>`).join('') +
+    `</div>`;
+}
+
+const PUZZLE_SECTIONS = [
+  {
+    title: 'Secret Scripts',
+    blurb: 'A writing system maps symbols to sounds (or letters). Use the key to read the hidden message.',
+    puzzles: [
+      {
+        id: 'p1', diff: 'easy',
+        title: 'The Glyph Key',
+        rules: glyphLegend([['✦','m'],['◆','o'],['●','n'],['▲','s'],['⬡','u']]),
+        task: `Using the key above, decode this word: <span class="target">✦◆◆●</span>`,
+        answers: ['moon'],
+        hint: 'Replace each glyph with its sound, left to right: ✦=m, ◆=o, ◆=o, ●=n.',
+        explain: '✦◆◆● → m-o-o-n → <strong>moon</strong>. A glyph-to-sound mapping like this is exactly how real alphabets work.'
+      },
+      {
+        id: 'p2', diff: 'medium',
+        title: 'Shifted Cipher',
+        rules: `<p style="margin:0;color:#d4c6c6">Every letter has been shifted <strong>forward by one</strong> in the alphabet, so the original <code>a</code> was written as <code>b</code>, <code>b</code> as <code>c</code>, and so on.</p>`,
+        task: `Decode the coded word: <span class="target">dpx</span>`,
+        answers: ['cow'],
+        hint: 'Shift each letter BACK by one: d→c, p→o, x→w.',
+        explain: 'd→c, p→o, x→w → <strong>cow</strong>. This is a "Caesar cipher" — Julius Caesar really used shift-ciphers to hide military messages.'
+      },
+    ]
+  },
+  {
+    title: 'Rosetta Stone',
+    blurb: 'You\'re given sentences in a mystery language with English translations. Figure out which word means what, then translate something new.',
+    puzzles: [
+      {
+        id: 'p3', diff: 'easy',
+        title: 'Birds and Fish',
+        rules: clueTable([['tomi kasu','red bird'],['vana pelu','blue fish'],['grun kasu','green bird']], 'Mystery language', 'English'),
+        task: `Translate into English: <span class="target">tomi pelu</span>`,
+        answers: ['red fish', 'a red fish'],
+        hint: 'From "tomi kasu = red bird" and "vana pelu = blue fish", work out which word is the color and which is the animal.',
+        explain: 'tomi = red, kasu = bird, vana = blue, pelu = fish, grun = green. So <strong>tomi pelu = red fish</strong>.'
+      },
+      {
+        id: 'p4', diff: 'medium',
+        title: 'Say It Yourself',
+        rules: clueTable([['tomi kasu','red bird'],['vana pelu','blue fish'],['grun kasu','green bird']], 'Mystery language', 'English'),
+        task: `Now go the other way. How do you say <span class="target">blue bird</span> in the mystery language?`,
+        answers: ['vana kasu'],
+        hint: 'You know vana = blue (from "vana pelu") and kasu = bird (from "tomi kasu" / "grun kasu").',
+        explain: 'blue = vana, bird = kasu → <strong>vana kasu</strong>. The adjective comes first, just like in the examples.'
+      },
+    ]
+  },
+  {
+    title: 'Word Machines',
+    blurb: 'In agglutinative languages, words are built by stacking pieces (morphemes). Spot each piece, then assemble or take apart a word.',
+    puzzles: [
+      {
+        id: 'p5', diff: 'medium',
+        title: 'Building Houses',
+        rules: clueTable([['ev','house'],['evler','houses'],['evim','my house']], 'Word', 'Meaning'),
+        task: `Decode this stacked word: <span class="target">evlerim</span>`,
+        answers: ['my houses', 'houses my'],
+        hint: '-ler means "plural" (more than one), and -im means "my". The word is ev + ler + im.',
+        explain: 'ev (house) + ler (plural) + im (my) = <strong>my houses</strong>. This is real Turkish! Each ending adds one piece of meaning.'
+      },
+      {
+        id: 'p6', diff: 'medium',
+        title: 'Verb Stacks',
+        rules: clueTable([['jala','jump'],['jalak','jumped'],['jalamu','we jump']], 'Word', 'Meaning'),
+        task: `Decode: <span class="target">jalakmu</span>`,
+        answers: ['we jumped', 'jumped we'],
+        hint: '-k marks the past tense and -mu means "we". The word is jala + k + mu.',
+        explain: 'jala (jump) + k (past) + mu (we) = <strong>we jumped</strong>. The endings stack in order: root, then tense, then subject.'
+      },
+    ]
+  },
+  {
+    title: 'Counting Systems',
+    blurb: 'Languages build numbers in clever ways. Crack how this one counts.',
+    puzzles: [
+      {
+        id: 'p7', diff: 'medium',
+        title: 'Crack the Count',
+        rules: clueTable([['su','1'],['ne','2'],['vi','3'],['tan','10'],['tan su','11'],['ne tan','20'],['ne tan vi','23']], 'Words', 'Number'),
+        task: `What number is <span class="target">vi tan ne</span>?`,
+        answers: ['32'],
+        hint: 'A digit BEFORE "tan" multiplies it (ne tan = 2×10 = 20). A digit AFTER "tan" adds on (tan su = 10+1 = 11).',
+        explain: 'vi tan = 3×10 = 30, then + ne (2) = <strong>32</strong>. Many languages, like Welsh and French, build big numbers from "tens" and "ones" exactly like this.'
+      },
+      {
+        id: 'p8', diff: 'hard',
+        title: 'Count It Back',
+        rules: clueTable([['su','1'],['ne','2'],['vi','3'],['tan','10'],['tan su','11'],['ne tan','20'],['ne tan vi','23']], 'Words', 'Number'),
+        task: `Going the other way: how do you write <span class="target">31</span> in this system?`,
+        answers: ['vi tan su'],
+        hint: '31 = (3 × 10) + 1. Put the multiplier before "tan" and the ones after.',
+        explain: '3×10 + 1 → vi tan su → <strong>vi tan su</strong>.'
+      },
+    ]
+  },
+  {
+    title: 'Word Order',
+    blurb: 'Different languages arrange Subject, Object, and Verb differently. Match the pattern.',
+    puzzles: [
+      {
+        id: 'p9', diff: 'easy',
+        title: 'Verb Goes Last',
+        rules: clueTable([['fox hen eat','the fox eats the hen'],['cat fish eat','the cat eats the fish']], 'Mystery language', 'English'),
+        task: `This language puts the verb LAST (Subject-Object-Verb). How would it say <span class="target">the hen eats the fox</span>?`,
+        answers: ['hen fox eat'],
+        hint: 'Subject first (hen), then object (fox), then the verb (eat).',
+        explain: 'Subject (hen) + Object (fox) + Verb (eat) → <strong>hen fox eat</strong>. This SOV order is used by Japanese, Korean, Turkish, and Latin.'
+      },
+    ]
+  },
+];
+
+let puzzlesRendered = false;
+function renderPuzzles() {
+  const container = document.getElementById('puzzle-sections');
+  if (!container || puzzlesRendered) return;
+  puzzlesRendered = true;
+  let html = '';
+  PUZZLE_SECTIONS.forEach(sec => {
+    html += `<div class="puzzle-section-title">${sec.title}</div>`;
+    html += `<div class="puzzle-section-blurb">${sec.blurb}</div>`;
+    sec.puzzles.forEach(p => {
+      html += `
+        <div class="puzzle-card" id="card-${p.id}">
+          <div class="puzzle-head">
+            <span class="puzzle-title">${p.title}</span>
+            <span class="puzzle-diff ${p.diff}">${p.diff}</span>
+          </div>
+          <div class="puzzle-rules">${p.rules}</div>
+          <div class="puzzle-task">${p.task}</div>
+          <div class="puzzle-input-row">
+            <input type="text" class="puzzle-answer" id="ans-${p.id}" placeholder="your answer..."
+              onkeydown="if(event.key==='Enter') checkPuzzle('${p.id}')">
+            <button class="btn-check" onclick="checkPuzzle('${p.id}')">Check</button>
+            <button class="btn-mini" onclick="hintPuzzle('${p.id}')">Hint</button>
+            <button class="btn-mini" onclick="revealPuzzle('${p.id}')">Reveal</button>
+          </div>
+          <div class="puzzle-feedback" id="fb-${p.id}"></div>
+        </div>`;
+    });
+  });
+  container.innerHTML = html;
+}
+
+function findPuzzle(id) {
+  for (const sec of PUZZLE_SECTIONS) for (const p of sec.puzzles) if (p.id === id) return p;
+  return null;
+}
+function normalizeAns(s) {
+  return s.toLowerCase().trim().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ');
+}
+function checkPuzzle(id) {
+  const p = findPuzzle(id);
+  const input = document.getElementById(`ans-${id}`);
+  const fb = document.getElementById(`fb-${id}`);
+  const card = document.getElementById(`card-${id}`);
+  const val = normalizeAns(input.value);
+  if (!val) { fb.textContent = 'Type your answer first.'; fb.className = 'puzzle-feedback incorrect'; return; }
+  const ok = p.answers.some(a => normalizeAns(a) === val);
+  if (ok) {
+    input.classList.remove('incorrect'); input.classList.add('correct');
+    card.classList.add('solved');
+    fb.innerHTML = 'Correct! Well decoded.';
+    fb.className = 'puzzle-feedback correct';
+    showExplain(id);
+  } else {
+    input.classList.remove('correct'); input.classList.add('incorrect');
+    fb.textContent = 'Not quite — study the clues again, or tap Hint.';
+    fb.className = 'puzzle-feedback incorrect';
+  }
+}
+function hintPuzzle(id) {
+  const p = findPuzzle(id);
+  const card = document.getElementById(`card-${id}`);
+  if (card.querySelector('.puzzle-hint')) return;
+  const div = document.createElement('div');
+  div.className = 'puzzle-hint';
+  div.innerHTML = 'Hint: ' + p.hint;
+  card.appendChild(div);
+}
+function revealPuzzle(id) {
+  const p = findPuzzle(id);
+  const input = document.getElementById(`ans-${id}`);
+  input.value = p.answers[0];
+  input.classList.add('correct');
+  showExplain(id);
+}
+function showExplain(id) {
+  const p = findPuzzle(id);
+  const card = document.getElementById(`card-${id}`);
+  if (card.querySelector('.puzzle-explain')) return;
+  const div = document.createElement('div');
+  div.className = 'puzzle-explain';
+  div.innerHTML = 'Answer: <strong>' + p.answers[0] + '</strong>. ' + p.explain;
+  card.appendChild(div);
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function init() {
@@ -444,6 +657,7 @@ function init() {
   buildSentence();
   generateWords();
   renderGrammarRules();
+  renderPuzzles();
   showStage(1);
 }
 init();
