@@ -1,991 +1,386 @@
 // ============================================================
-// The Math of Words — script.js
+// The Language Lab — script.js
 // ============================================================
 
-// ===== WORD LIST (curated, ~400 words) =====
-const WORDS = [
-  // common 5-letter (Wordle answer pool)
-  'about','above','abuse','actor','adieu','admit','adopt','adult','after','again','agent','agree','ahead','aisle','alarm','album','alert','alike','alive','allow','alone','along','aloud','alpha','altar','amber','among','angel','anger','angle','angry','ankle','annex','apple','apply','arena','argue','arise','armor','aroma','array','arrow','aside','asset','audio','avoid','award','aware','away','awoke','badge','baker','basic','beach','beard','beast','began','begin','bench','bible','black','blade','blame','blank','blast','bleak','blend','bless','blind','block','blood','board','boast','bonus','boost','bored','brain','brand','brave','bread','break','breed','brick','brief','bring','broad','brown','brush','build','built','burnt','buyer','cabin','cable','candy','canoe','cargo','carve','catch','cause','cease','chain','chair','chalk','charm','chart','chase','cheap','check','chest','chief','child','china','chose','civic','civil','claim','class','clean','clear','climb','clock','close','cloth','cloud','clown','coach','coast','cocoa','color','comic','count','court','cover','crack','craft','crane','crash','crazy','cream','crime','crisp','cross','crowd','crown','crude','curse','curve','daddy','daily','dance','death','debit','delay','delta','depth','digit','dimes','dirty','dizzy','dough','dozen','draft','drain','drama','drank','dream','dress','drift','drill','drink','drive','drove','drown','dwarf','eager','eagle','early','earth','eaten','elbow','elder','elite','empty','enemy','enjoy','enter','entry','equal','error','event','every','exact','exist','extra','fable','faint','fairy','faith','false','fancy','fault','favor','feast','fence','fever','fewer','fiber','field','fifty','fight','final','first','fixed','flame','flash','flask','fleet','flesh','flick','flier','float','flock','flood','floor','flour','flush','folly','force','forge','forth','forty','found','frame','fresh','fried','front','frost','fruit','fully','funny','gauge','gazer','genre','ghost','giant','given','glass','glory','glove','goose','grace','grade','grand','grant','grape','graph','grass','grave','great','green','greet','grief','groan','group','grove','grown','guard','guess','guest','guide','gully','habit','happy','harsh','haste','haunt','heard','heart','heavy','hedge','hello','hence','hover','human','humor','hurry','image','imply','index','inner','input','irony','issue','jelly','jewel','jolly','judge','juice','kayak','knack','knead','kneel','knelt','knife','knock','known','label','labor','large','laser','later','laugh','layer','learn','least','leave','legal','lemon','level','light','liked','liver','local','logic','loose','lover','lucky','lunch','lying','madam','magic','major','maker','manor','maple','march','match','maybe','mayor','meant','medal','media','melon','mercy','merit','metal','meter','might','minor','minus','mixed','model','money','month','moose','moral','motor','mound','mount','mouse','mouth','movie','mover','music','naive','naked','named','nasty','naval','needy','nerve','never','newly','nicer','night','ninth','noble','noise','north','nosey','noted','notes','novel','nurse','occur','ocean','octet','offer','often','olive','onion','opera','orbit','order','organ','other','ought','outer','owner','paint','panel','panic','paper','parry','party','paste','patch','pause','peace','peach','pearl','penny','perch','peril','phase','phone','photo','piano','pilot','pixel','pizza','place','plain','plane','plant','plate','plaza','plead','plumb','plump','poach','point','poker','polar','porch','poser','pouch','pound','power','prank','press','price','pride','prime','print','prior','prize','probe','prone','proof','proud','prove','prune','psalm','pulse','punch','queen','quest','queue','quick','quiet','quill','quilt','quirk','quite','quote','rabbi','radar','radio','raise','rajah','rally','ranch','range','rapid','ratio','razor','reach','ready','realm','rebar','rebel','rebut','rebid','recap','reset','rider','ridge','rifle','right','rigid','rinse','ripen','risen','river','roast','robin','robot','rocky','rodeo','rogue','roman','roomy','roost','rotor','rough','round','route','royal','rural','salad','sandy','sauce','scale','scarf','scare','scene','scent','scoop','scope','score','scorn','scout','scram','scrap','scrub','seedy','seize','sense','seven','sever','shade','shake','shaky','shame','shape','share','shark','sharp','sheen','sheep','sheer','sheet','shelf','shell','shift','shine','shiny','shirt','shock','shoot','shore','short','shout','shove','shown','shrub','shrug','sigma','silly','since','sixty','skate','skill','skirt','skull','slept','slice','slide','slimy','sling','sloop','small','smart','smell','smile','smoke','snail','snake','sneak','snore','snowy','sober','solar','solid','solve','sonar','sorry','sound','south','space','spare','spark','speak','speed','spell','spend','spent','spice','spicy','spike','spine','spirit','spite','splat','split','spoil','spoke','spool','spoon','sport','spree','spray','staff','stage','stair','stake','stale','stalk','stamp','stand','stare','start','state','steel','steep','steer','stern','stiff','still','sting','stink','stock','stole','stomp','stone','stony','store','storm','story','strap','straw','strip','stuck','study','stuff','stump','style','sugar','suite','sunny','super','swamp','swarm','sweat','sweep','sweet','swept','swift','swing','swims','sworn','table','taken','taker','tasty','taunt','teach','tease','tepee','terry','testy','thank','theft','their','theme','there','these','thick','thief','thigh','thing','think','third','thong','those','threw','throw','thumb','tiger','tight','timer','tired','title','toast','today','token','tooth','topic','torch','total','touch','tough','tower','toxic','trade','train','trait','trash','tread','treat','trend','trial','tribe','trick','tried','tries','trout','truck','truly','trump','trust','truth','twist','tying','ultra','uncle','under','undid','union','unite','unity','until','unzip','upset','urban','usage','usual','utter','vague','valid','valor','value','vapor','vault','vegan','venom','venue','verge','verse','vicar','video','vigil','viola','vital','vivid','vocal','vodka','vogue','voice','voted','vowel','wagon','waist','waive','wakes','watch','water','weary','weave','wedge','weigh','weird','whale','wharf','wheat','wheel','where','which','while','whine','whirl','whisk','white','whole','whose','widen','widow','width','wield','wince','windy','wiped','wiper','wired','wires','wiser','witch','woman','woods','world','worry','worse','worst','worth','would','wound','woven','wreck','wrist','write','wrong','wrote','yacht','yeast','yield','young','youth','zebra','zesty','zoned',
-  // shorter & longer extras
-  'a','i','am','an','as','at','be','by','do','go','he','hi','if','in','is','it','me','my','no','of','on','or','so','to','up','us','we','cat','dog','god','tac','rat','tar','art','sun','tip','pit','red','der','noon','mom','dad','pop','eye','wow','sos','sis','oxo','oho','mow','toot','poop','peep','deed','noon','solos','tenet','rotor','minim','radar',
-  'ant','bat','car','egg','fox','hat','ice','jet','kid','log','net','owl','pen','queen','rip','sit','tea','umbra','van','win','xray','yes','zoo',
-  'apricot','banana','cherry','dragon','elephant','flower','garden','helicopter','iguana','jungle','kangaroo','library','mountain','number','octopus','penguin','question','rainbow','spider','telephone','umbrella','volcano','window','xylophone','yellow','zipper',
-  'palindrome','symmetric','alphabet','vowel','consonant','almost','biopsy','cousins','dialog','effort','fluffy','gummy','happily','imply','jumbo','knight','lovely','mostly','nightly','onion','pretty','quirky','rusty','simply','tongue','useful','virtual','whoosh','xerox','yummy','zenith'
-];
-
-// Sanitize: lowercase, alphabetic only, dedupe
-const _wordSet = new Set();
-const ALL_WORDS = [];
-for (const w of WORDS) {
-  const c = String(w).toLowerCase().replace(/[^a-z]/g, '');
-  if (c && !_wordSet.has(c)) { _wordSet.add(c); ALL_WORDS.push(c); }
+// === Speech ===
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.75;
+    u.pitch = 1.0;
+    speechSynthesis.speak(u);
+  } catch (e) { /* ignore */ }
 }
-// Ensure SOREN is in the pool
-if (!_wordSet.has('soren')) { ALL_WORDS.push('soren'); _wordSet.add('soren'); }
-const FIVE_LETTER_WORDS = ALL_WORDS.filter(w => w.length === 5);
 
-// Weighted target pool: SOREN appears 150x, every other 5-letter word appears once.
-const WORDLE_TARGET_POOL = (() => {
-  const pool = [...FIVE_LETTER_WORDS];
-  for (let i = 0; i < 149; i++) pool.push('soren'); // 1 base + 149 extras = 150
-  return pool;
-})();
+// === Sound data ===
+const CONSONANTS = {
+  'Lips 👄': ['p', 'b', 'm', 'w', 'f', 'v'],
+  'Tongue tip 👅': ['t', 'd', 'n', 's', 'z', 'l', 'r'],
+  'Back of mouth 🗣️': ['k', 'g', 'h'],
+  'Special blends ✨': ['sh', 'ch', 'th', 'j', 'ng'],
+};
+const ALL_CONSONANTS = Object.values(CONSONANTS).flat();
+const VOWELS = ['a', 'e', 'i', 'o', 'u', 'ai', 'ee', 'oo'];
 
-// ============================================================
-// NAVIGATION
-// ============================================================
+// === NAV ===
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => showStage(parseInt(tab.dataset.stage)));
 });
 function showStage(stage) {
   document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
   document.getElementById(`stage-${stage}`).classList.remove('hidden');
-  document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', parseInt(t.dataset.stage) === stage);
-  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', parseInt(t.dataset.stage) === stage));
   window.scrollTo(0, 0);
-  if (stage === 1) analyzeWord();
-  if (stage === 2) {
-    checkPalindrome(); showVCPattern(); showDistance(); showAlphabetic(); showRotation();
-    initWhiteboard();
-  }
-  if (stage === 3) renderToolbox(), renderChallengeTabs(), loadChallenge(currentChallenge);
-  if (stage === 4 && !wordleState) newWordleGame();
-  if (stage === 4 && wordleState) updateWordleMath();
+  if (stage === 2) renderSoundMap();
+  if (stage === 5) initBuilder();
 }
+
+// === helpers ===
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 // ============================================================
-// HELPERS used by both UI and IDE
+// STAGE 1: PRACTICE
 // ============================================================
-function isVowel(ch) { return 'aeiouAEIOU'.includes(ch); }
-function vowelsOf(w) { return [...w].filter(isVowel); }
-function reverseStr(s) { return [...s].reverse().join(''); }
-function isPalindrome(w) {
-  const s = String(w).toLowerCase().replace(/[^a-z]/g, '');
-  return s.length > 0 && s === reverseStr(s);
-}
-function letterIndex(c) { return c.toLowerCase().charCodeAt(0) - 96; } // a=1, z=26
-function alphabetDistance(w) {
-  const s = String(w).toLowerCase().replace(/[^a-z]/g, '');
-  let total = 0;
-  for (let i = 1; i < s.length; i++) total += Math.abs(letterIndex(s[i]) - letterIndex(s[i - 1]));
-  return total;
-}
-function longestAlphabeticSubstring(w) {
-  const s = String(w).toLowerCase().replace(/[^a-z]/g, '');
-  let bestStart = 0, bestLen = 1, curStart = 0, curLen = 1;
-  for (let i = 1; i < s.length; i++) {
-    if (s.charCodeAt(i) >= s.charCodeAt(i - 1)) curLen++;
-    else { curStart = i; curLen = 1; }
-    if (curLen > bestLen) { bestLen = curLen; bestStart = curStart; }
-  }
-  return { substring: s.slice(bestStart, bestStart + bestLen), start: bestStart, length: bestLen };
-}
-// Letters that look the same rotated 180°
-const ROTATE_SAFE = new Set(['h','i','n','o','s','x','z','m','w']);
-const ROTATE_MAP = { 'b':'q','q':'b','d':'p','p':'d','h':'h','i':'i','l':'l','m':'w','w':'m','n':'n','o':'o','s':'s','x':'x','z':'z' };
-function isRotationallySymmetric(w) {
-  const s = String(w).toLowerCase().replace(/[^a-z]/g, '');
-  for (let i = 0; i < s.length; i++) {
-    const a = s[i], b = s[s.length - 1 - i];
-    if (!ROTATE_MAP[a] || ROTATE_MAP[a] !== b) return false;
-  }
-  return s.length > 0;
-}
+const Q1 = [
+  {
+    q: 'Which level of language is about the actual SOUNDS your mouth makes?',
+    options: [{v:'A',t:'Syntax'},{v:'B',t:'Phonology'},{v:'C',t:'Semantics'}],
+    correct: 'B',
+    explain: 'Phonology is the study of speech sounds — the bottom of the language ladder.'
+  },
+  {
+    q: '"un-" + "happy" = "unhappy". The piece "un-" is called a…',
+    options: [{v:'A',t:'Suffix (goes at the end)'},{v:'B',t:'Prefix (goes at the start)'},{v:'C',t:'Sentence'}],
+    correct: 'B',
+    explain: 'A prefix attaches to the FRONT of a word. "un-" means "not".'
+  },
+  {
+    q: 'English usually puts words in which order?',
+    options: [{v:'A',t:'Subject–Verb–Object ("I eat apples")'},{v:'B',t:'Verb–Subject–Object ("Eat I apples")'},{v:'C',t:'Object–Subject–Verb ("Apples I eat")'}],
+    correct: 'A',
+    explain: 'English is an SVO language. About 42% of the world\'s languages share this order.'
+  },
+];
 
-// ============================================================
-// STAGE 1: WORD ANALYZER
-// ============================================================
-function analyzeWord() {
-  const raw = document.getElementById('analyzer-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('analyzer-input').value = w;
-  if (!w) { document.getElementById('analyzer-result').innerHTML = '<em>Type a word above.</em>'; return; }
-
-  const positions = [...w].map(c => `<span class="letter-position">${c}<span class="small">${letterIndex(c)}</span></span>`).join('');
-  const sum = [...w].reduce((s, c) => s + letterIndex(c), 0);
-  const numV = vowelsOf(w).length;
-  const reversed = reverseStr(w);
-  const palin = isPalindrome(w);
-
-  document.getElementById('analyzer-result').innerHTML = `
-    <div class="analyzer-row"><span class="ar-label">📏 Length</span><span class="ar-value"><strong>${w.length}</strong> letters</span></div>
-    <div class="analyzer-row"><span class="ar-label">🔢 Positions</span><span class="ar-value">${positions}</span></div>
-    <div class="analyzer-row"><span class="ar-label">➕ Sum</span><span class="ar-value">${[...w].map(c => letterIndex(c)).join(' + ')} = <strong>${sum}</strong></span></div>
-    <div class="analyzer-row"><span class="ar-label">🎵 Vowels</span><span class="ar-value"><strong>${numV}</strong> (${vowelsOf(w).join(', ') || 'none'})</span></div>
-    <div class="analyzer-row"><span class="ar-label">🪞 Reversed</span><span class="ar-value">${reversed}</span></div>
-    <div class="analyzer-row"><span class="ar-label">🔁 Palindrome?</span><span class="ar-value">${palin ? '<span class="green">✅ YES</span>' : '<span class="red">No</span>'}</span></div>
-  `;
-}
-
-// ============================================================
-// STAGE 2: PROPERTY EXPLORERS
-// ============================================================
-function checkPalindrome() {
-  const raw = document.getElementById('palin-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('palin-input').value = w;
-  const out = document.getElementById('palin-result');
-  if (!w) { out.innerHTML = '<em>Type a word…</em>'; out.className = 'prop-result'; return; }
-  const rev = reverseStr(w);
-  const yes = w === rev;
-  out.className = 'prop-result ' + (yes ? 'yes' : 'no');
-  out.innerHTML = `
-    <div class="big-result">${yes ? '✅ Palindrome!' : '❌ Not a palindrome'}</div>
-    <div><strong>${w}</strong> reversed = <strong>${rev}</strong></div>
-    ${yes ? '<div style="margin-top:6px">Same forwards and back. Cool!</div>' :
-            '<div style="margin-top:6px">Try: LEVEL, NOON, KAYAK, REFER, MADAM, RACECAR</div>'}
-  `;
-}
-
-function showVCPattern() {
-  const raw = document.getElementById('vc-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('vc-input').value = w;
-  const out = document.getElementById('vc-result');
-  if (!w) { out.innerHTML = '<em>Type a word…</em>'; out.className = 'prop-result'; return; }
-  const pat = [...w].map(c => isVowel(c) ? 'V' : 'C').join('');
-  const visual = [...w].map(c => `<span class="${isVowel(c) ? 'vc-v' : 'vc-c'}">${c}</span>`).join('');
-  out.className = 'prop-result';
-  out.innerHTML = `
-    <div class="vc-pattern">${visual}</div>
-    <div style="margin-top:6px"><strong>Pattern:</strong> <span style="font-family:'Courier New',monospace;font-size:1.1rem;font-weight:800;color:#ffd4c2">${pat}</span></div>
-    <div style="margin-top:4px;color:#d8c4b0;font-size:0.9rem">${vowelsOf(w).length} vowel(s), ${w.length - vowelsOf(w).length} consonant(s).</div>
-  `;
-}
-
-function showDistance() {
-  const raw = document.getElementById('dist-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('dist-input').value = w;
-  const out = document.getElementById('dist-result');
-  if (!w || w.length < 2) { out.innerHTML = '<em>Type at least 2 letters…</em>'; out.className = 'prop-result'; return; }
-  const steps = [];
-  let total = 0;
-  for (let i = 1; i < w.length; i++) {
-    const d = Math.abs(letterIndex(w[i]) - letterIndex(w[i - 1]));
-    steps.push(`<strong>${w[i-1]}→${w[i]}</strong>: ${d}`);
-    total += d;
-  }
-  out.className = 'prop-result';
-  out.innerHTML = `
-    <div class="big-result">Total distance: <span class="green">${total}</span></div>
-    <div style="margin-top:6px;line-height:1.7">${steps.join(' &nbsp;·&nbsp; ')}</div>
-    <div style="margin-top:6px;color:#d8c4b0;font-size:0.9rem">Aaronson's longest 5-letter "alphabet traveler" is <strong>RAYAS</strong> (distance 83).</div>
-  `;
-}
-
-function showAlphabetic() {
-  const raw = document.getElementById('alpha-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('alpha-input').value = w;
-  const out = document.getElementById('alpha-result');
-  if (!w) { out.innerHTML = '<em>Type a word…</em>'; out.className = 'prop-result'; return; }
-  const result = longestAlphabeticSubstring(w);
-  const before = w.slice(0, result.start);
-  const middle = w.slice(result.start, result.start + result.length);
-  const after = w.slice(result.start + result.length);
-  out.className = 'prop-result';
-  out.innerHTML = `
-    <div class="big-result">Longest alphabetic chunk: <span class="green">${result.substring.toUpperCase()}</span> (${result.length} letters)</div>
-    <div style="font-family:'Courier New',monospace;font-size:1.2rem;letter-spacing:2px;margin-top:6px">
-      <span style="opacity:0.4">${before}</span><span style="background:#538d4e;padding:2px 4px;border-radius:4px">${middle.toUpperCase()}</span><span style="opacity:0.4">${after}</span>
-    </div>
-  `;
-}
-
-function showRotation() {
-  const raw = document.getElementById('rot-input').value;
-  const w = raw.toUpperCase().replace(/[^A-Z]/g, '');
-  document.getElementById('rot-input').value = w;
-  const out = document.getElementById('rot-result');
-  if (!w) { out.innerHTML = '<em>Type a word…</em>'; out.className = 'prop-result'; return; }
-  const yes = isRotationallySymmetric(w);
-  out.className = 'prop-result ' + (yes ? 'yes' : 'no');
-  out.innerHTML = `
-    <div class="rotation-canvas">
-      <div class="rot-side ${yes ? 'match' : ''}">
-        <div class="rot-label">Original</div>
-        <div class="rot-word" id="rot-original-word">${w}</div>
+function renderMC(containerId, problems) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  problems.forEach((prob, idx) => {
+    const id = `${containerId}-${idx}`;
+    const card = document.createElement('div');
+    card.className = 'problem-card';
+    card.innerHTML = `
+      <div class="problem-text">${prob.q}</div>
+      <div class="mc-options" id="opts-${id}">
+        ${prob.options.map(o => `<button class="mc-option" data-v="${o.v}">${o.v}) ${o.t}</button>`).join('')}
       </div>
-      <button class="rot-spin-btn" onclick="spinRotation()" title="Spin it!">🔄</button>
-      <div class="rot-side ${yes ? 'match' : ''}">
-        <div class="rot-label">Rotated 180°</div>
-        <div class="rot-word rotated">${w}</div>
-      </div>
-    </div>
-    <div class="big-result" style="margin-top:8px;text-align:center">
-      ${yes ? '✅ <strong>Same upside-down!</strong> The boxes look identical.' : '↕️ <strong>Different when flipped.</strong> Notice how the letters don\'t line up.'}
-    </div>
-    <div style="margin-top:6px;color:#d8c4b0;font-size:0.9rem;text-align:center">
-      ${yes ? 'Click 🔄 to watch it spin. Try also: NOON, MOM, WOW, SIS, OHO, SWIMS, NOON.' :
-              'Try a real-rotation word: NOON, MOM, WOW, SIS, OHO, SWIMS, BOOB.'}
-    </div>
+      <div class="mc-feedback" id="fb-${id}"></div>`;
+    c.appendChild(card);
+    card.querySelectorAll('.mc-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fb = document.getElementById(`fb-${id}`);
+        if (fb.dataset.answered) return;
+        fb.dataset.answered = '1';
+        const correct = btn.dataset.v === prob.correct;
+        card.querySelectorAll('.mc-option').forEach(o => {
+          o.style.pointerEvents = 'none';
+          if (o.dataset.v === prob.correct) o.classList.add('correct');
+          else if (o.dataset.v === btn.dataset.v) o.classList.add('incorrect');
+        });
+        fb.innerHTML = (correct ? '✅ Correct! ' : `❌ The answer is ${prob.correct}. `) + `<em>${prob.explain}</em>`;
+        fb.className = 'mc-feedback ' + (correct ? 'correct' : 'incorrect');
+      });
+    });
+  });
+}
+
+// ============================================================
+// STAGE 2: SOUND MAP
+// ============================================================
+function renderSoundMap() {
+  const map = document.getElementById('sound-map');
+  if (!map || map.dataset.built) return;
+  map.dataset.built = '1';
+  let html = '';
+  for (const [group, sounds] of Object.entries(CONSONANTS)) {
+    html += `<div class="sound-group"><div class="sound-group-title">${group}</div><div class="sound-row">`;
+    html += sounds.map(s => `<button class="sound-btn" data-sound="${s}">${s}</button>`).join('');
+    html += `</div></div>`;
+  }
+  html += `<div class="sound-group"><div class="sound-group-title">Vowels 🌬️</div><div class="sound-row">`;
+  html += VOWELS.map(v => `<button class="sound-btn vowel" data-sound="${v}">${v}</button>`).join('');
+  html += `</div></div>`;
+  map.innerHTML = html;
+  map.querySelectorAll('.sound-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = btn.dataset.sound;
+      const isVowel = btn.classList.contains('vowel');
+      // make a pronounceable sample: consonant + "ah", or just the vowel
+      const sample = isVowel ? s : s + 'a';
+      speak(sample);
+      btn.classList.add('playing');
+      setTimeout(() => btn.classList.remove('playing'), 500);
+    });
+  });
+}
+
+// ============================================================
+// STAGE 3: WORD GENERATOR
+// ============================================================
+function genSyllable(pattern, cons, vows) {
+  return [...pattern].map(ch => {
+    if (ch === 'C') return pick(cons);
+    if (ch === 'V') return pick(vows);
+    return ch;
+  }).join('');
+}
+function genWord(pattern, syls, cons, vows) {
+  let w = '';
+  for (let i = 0; i < syls; i++) w += genSyllable(pattern, cons, vows);
+  return w;
+}
+function generateWords() {
+  const pattern = document.getElementById('gen-pattern').value;
+  const syls = parseInt(document.getElementById('gen-syls').value);
+  const cons = ['p','t','k','m','n','s','l','r','b','d','g'];
+  const vows = ['a','e','i','o','u'];
+  const out = document.getElementById('gen-output');
+  out.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const w = genWord(pattern, syls, cons, vows);
+    const span = document.createElement('span');
+    span.className = 'gen-word';
+    span.textContent = w;
+    span.title = 'Click to hear it!';
+    span.addEventListener('click', () => speak(w));
+    out.appendChild(span);
+  }
+}
+
+// ============================================================
+// STAGE 4: SENTENCE BUILDER
+// ============================================================
+function orderWords(order, s, v, o) {
+  const map = { S: `<span class="role-s">${s}</span>`, V: `<span class="role-v">${v}</span>`, O: `<span class="role-o">${o}</span>` };
+  return [...order].map(ch => map[ch]).join(' ');
+}
+function buildSentence() {
+  const s = document.getElementById('sb-subject').value;
+  const v = document.getElementById('sb-verb').value;
+  const o = document.getElementById('sb-object').value;
+  const order = document.getElementById('sb-order').value;
+  document.getElementById('sentence-output').innerHTML = orderWords(order, s, v, o) + ' .';
+}
+
+// ============================================================
+// STAGE 5: LANGUAGE BUILDER
+// ============================================================
+let builderInit = false;
+let conlang = null;
+
+// "alien" glyph pool (runes + geometric symbols)
+const GLYPHS = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ','ᛣ','ᛤ','ᛥ','◆','◇','○','●','△','▽','□','◫','⬡','⬢','✦','✧','⟁','⌬'];
+
+const CONCEPTS = [
+  // [english, role]  role: noun, verb, pronoun, adj
+  ['I', 'pronoun'], ['you', 'pronoun'], ['we', 'pronoun'],
+  ['water', 'noun'], ['sun', 'noun'], ['food', 'noun'], ['friend', 'noun'], ['tree', 'noun'], ['star', 'noun'], ['house', 'noun'],
+  ['see', 'verb'], ['eat', 'verb'], ['love', 'verb'], ['go', 'verb'], ['make', 'verb'],
+  ['big', 'adj'], ['good', 'adj'], ['happy', 'adj'],
+];
+
+function initBuilder() {
+  if (builderInit) return;
+  builderInit = true;
+
+  // Consonant picker
+  const cp = document.getElementById('consonant-picker');
+  cp.innerHTML = ALL_CONSONANTS.map(c =>
+    `<button class="pick-chip${['p','t','k','m','n','s','l'].includes(c) ? ' selected' : ''}" data-sound="${c}">${c}</button>`).join('');
+  cp.querySelectorAll('.pick-chip').forEach(b => b.addEventListener('click', () => b.classList.toggle('selected')));
+
+  // Vowel picker
+  const vp = document.getElementById('vowel-picker');
+  vp.innerHTML = VOWELS.map(v =>
+    `<button class="pick-chip vowel${['a','i','u'].includes(v) ? ' selected' : ''}" data-sound="${v}">${v}</button>`).join('');
+  vp.querySelectorAll('.pick-chip').forEach(b => b.addEventListener('click', () => b.classList.toggle('selected')));
+
+  // Load saved language if any
+  const saved = localStorage.getItem('langlab-conlang');
+  if (saved) {
+    try {
+      conlang = JSON.parse(saved);
+      restoreBuilderUI();
+      renderLanguage();
+    } catch (e) { /* ignore */ }
+  }
+}
+
+function restoreBuilderUI() {
+  if (!conlang) return;
+  document.getElementById('lang-name').value = conlang.name;
+  document.getElementById('lang-pattern').value = conlang.pattern;
+  document.getElementById('lang-order').value = conlang.order;
+  document.querySelectorAll('#consonant-picker .pick-chip').forEach(b =>
+    b.classList.toggle('selected', conlang.consonants.includes(b.dataset.sound)));
+  document.querySelectorAll('#vowel-picker .pick-chip').forEach(b =>
+    b.classList.toggle('selected', conlang.vowels.includes(b.dataset.sound)));
+}
+
+function generateLanguage() {
+  const name = (document.getElementById('lang-name').value.trim() || 'Mylang');
+  const cons = [...document.querySelectorAll('#consonant-picker .pick-chip.selected')].map(b => b.dataset.sound);
+  const vows = [...document.querySelectorAll('#vowel-picker .pick-chip.selected')].map(b => b.dataset.sound);
+  const pattern = document.getElementById('lang-pattern').value;
+  const order = document.getElementById('lang-order').value;
+
+  if (cons.length < 4) { alert('Pick at least 4 consonants!'); return; }
+  if (vows.length < 2) { alert('Pick at least 2 vowels!'); return; }
+
+  // Build lexicon (unique words per concept)
+  const used = new Set();
+  const lexicon = {};
+  CONCEPTS.forEach(([eng]) => {
+    let w, tries = 0;
+    do {
+      const syls = randInt(1, 2);
+      w = genWord(pattern, syls, cons, vows);
+      tries++;
+    } while (used.has(w) && tries < 50);
+    used.add(w);
+    lexicon[eng] = w;
+  });
+
+  // Build a glyph map for all used sounds
+  const allSounds = [...cons, ...vows];
+  const shuffledGlyphs = [...GLYPHS].sort(() => Math.random() - 0.5);
+  const script = {};
+  allSounds.forEach((s, i) => { script[s] = shuffledGlyphs[i % shuffledGlyphs.length]; });
+
+  conlang = { name, consonants: cons, vowels: vows, pattern, order, lexicon, script };
+  renderLanguage();
+  document.getElementById('lang-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderLanguage() {
+  if (!conlang) return;
+  document.getElementById('lang-result').classList.remove('hidden');
+  document.getElementById('result-lang-name').textContent = conlang.name;
+  document.getElementById('result-lang-name-2').textContent = conlang.name;
+
+  // Dictionary
+  const dict = document.getElementById('lang-dictionary');
+  dict.innerHTML = CONCEPTS.map(([eng]) => {
+    const w = conlang.lexicon[eng];
+    return `<div class="dict-entry">
+      <span class="dict-english">${eng}</span>
+      <span class="dict-conlang">${w}</span>
+      <button class="dict-speak" onclick="speak('${w}')" title="Hear it">🔊</button>
+    </div>`;
+  }).join('');
+
+  // Sample sentences
+  const samples = [
+    ['I', 'see', 'sun'],
+    ['you', 'eat', 'food'],
+    ['we', 'love', 'friend'],
+  ];
+  document.getElementById('lang-sentences').innerHTML = samples.map(([s,v,o]) => {
+    const conSentence = makeSentence(s, v, o);
+    return `<div class="lang-sentence">
+      <span class="ls-conlang">${conSentence}</span>
+      <span class="ls-english">"${cap(s)} ${v} ${o}"</span>
+    </div>`;
+  }).join('');
+
+  // Custom sentence dropdowns
+  const pronouns = CONCEPTS.filter(([,r]) => r === 'pronoun').map(([e]) => e);
+  const verbs = CONCEPTS.filter(([,r]) => r === 'verb').map(([e]) => e);
+  const nouns = CONCEPTS.filter(([,r]) => r === 'noun').map(([e]) => e);
+  document.getElementById('cs-subject').innerHTML = pronouns.map(p => `<option>${p}</option>`).join('');
+  document.getElementById('cs-verb').innerHTML = verbs.map(v => `<option>${v}</option>`).join('');
+  document.getElementById('cs-object').innerHTML = nouns.map(n => `<option>${n}</option>`).join('');
+
+  // Script glyphs
+  const scriptDiv = document.getElementById('lang-script');
+  scriptDiv.innerHTML = Object.entries(conlang.script).map(([letter, glyph]) =>
+    `<div class="script-glyph-card"><div class="script-glyph">${glyph}</div><div class="script-letter">${letter}</div></div>`
+  ).join('');
+  document.getElementById('script-input').value = '';
+  document.getElementById('script-word-output').textContent = '';
+
+  // Summary
+  document.getElementById('lang-summary').innerHTML = `
+    <div>📛 <strong>Name:</strong> ${conlang.name}</div>
+    <div>👄 <strong>Consonants (${conlang.consonants.length}):</strong> ${conlang.consonants.join(' ')}</div>
+    <div>🌬️ <strong>Vowels (${conlang.vowels.length}):</strong> ${conlang.vowels.join(' ')}</div>
+    <div>🧩 <strong>Syllable style:</strong> ${conlang.pattern}</div>
+    <div>🔀 <strong>Word order:</strong> ${conlang.order}</div>
+    <div>📖 <strong>Words created:</strong> ${Object.keys(conlang.lexicon).length}</div>
+    <div>✍️ <strong>Alphabet glyphs:</strong> ${Object.keys(conlang.script).length}</div>
   `;
+  document.getElementById('save-status').textContent = '';
 }
 
-function spinRotation() {
-  const orig = document.getElementById('rot-original-word');
-  if (!orig) return;
-  orig.classList.remove('spinning');
-  void orig.offsetWidth;
-  orig.classList.add('spinning');
+function makeSentence(s, v, o) {
+  const ws = conlang.lexicon[s] || s;
+  const wv = conlang.lexicon[v] || v;
+  const wo = conlang.lexicon[o] || o;
+  const map = { S: ws, V: wv, O: wo };
+  return cap([...conlang.order].map(ch => map[ch]).join(' '));
 }
 
-// ============================================================
-// AMBIGRAM WHITEBOARD
-// ============================================================
-let wbInitialized = false;
-let wbPen = { color: '#ffd4c2', size: 6, eraser: false };
-let wbDrawing = false;
-let wbLast = { x: 0, y: 0 };
+function buildCustomSentence() {
+  const s = document.getElementById('cs-subject').value;
+  const v = document.getElementById('cs-verb').value;
+  const o = document.getElementById('cs-object').value;
+  const conSentence = makeSentence(s, v, o);
+  document.getElementById('cs-output').innerHTML =
+    `${conSentence}<div style="font-size:0.8rem;color:#888;font-family:'Segoe UI',sans-serif;margin-top:6px">"${cap(s)} ${v} ${o}"</div>`;
+  speak(conSentence);
+}
 
-function initWhiteboard() {
-  if (wbInitialized) return;
-  const canvas = document.getElementById('whiteboard-draw');
-  const mirror = document.getElementById('whiteboard-mirror');
-  if (!canvas || !mirror) return;
-  wbInitialized = true;
-  const ctx = canvas.getContext('2d');
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-
-  function getPos(evt) {
-    const r = canvas.getBoundingClientRect();
-    const e = evt.touches ? evt.touches[0] : evt;
-    return {
-      x: (e.clientX - r.left) * (canvas.width / r.width),
-      y: (e.clientY - r.top) * (canvas.height / r.height),
-    };
-  }
-  function start(evt) {
-    evt.preventDefault();
-    wbDrawing = true;
-    wbLast = getPos(evt);
-  }
-  function move(evt) {
-    if (!wbDrawing) return;
-    evt.preventDefault();
-    const p = getPos(evt);
-    ctx.lineWidth = wbPen.size;
-    if (wbPen.eraser) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.strokeStyle = 'rgba(0,0,0,1)';
-    } else {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = wbPen.color;
+function renderScriptWord() {
+  const raw = document.getElementById('script-input').value.toLowerCase();
+  const out = document.getElementById('script-word-output');
+  if (!conlang) return;
+  // greedily match multi-letter sounds (sh, ch, th, ng, ai, ee, oo) first
+  const sounds = Object.keys(conlang.script).sort((a, b) => b.length - a.length);
+  let result = '';
+  let i = 0;
+  while (i < raw.length) {
+    let matched = false;
+    for (const snd of sounds) {
+      if (raw.startsWith(snd, i)) { result += conlang.script[snd] + ' '; i += snd.length; matched = true; break; }
     }
-    ctx.beginPath();
-    ctx.moveTo(wbLast.x, wbLast.y);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    wbLast = p;
-    updateMirror();
-  }
-  function end(evt) {
-    if (!wbDrawing) return;
-    if (evt) evt.preventDefault();
-    wbDrawing = false;
-    updateMirror();
-  }
-  canvas.addEventListener('mousedown', start);
-  canvas.addEventListener('mousemove', move);
-  window.addEventListener('mouseup', end);
-  canvas.addEventListener('mouseleave', () => { if (wbDrawing) updateMirror(); });
-  canvas.addEventListener('touchstart', start, { passive: false });
-  canvas.addEventListener('touchmove', move, { passive: false });
-  canvas.addEventListener('touchend', end, { passive: false });
-  canvas.addEventListener('touchcancel', end);
-
-  // Color swatches
-  document.querySelectorAll('.color-swatch').forEach(s => {
-    s.addEventListener('click', () => {
-      wbPen.color = s.dataset.color;
-      wbPen.eraser = false;
-      document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
-      s.classList.add('active');
-      document.getElementById('btn-eraser').classList.remove('active');
-    });
-  });
-
-  // Pen size
-  const sizeInput = document.getElementById('pen-size');
-  const sizeLabel = document.getElementById('pen-size-label');
-  sizeInput.addEventListener('input', () => {
-    wbPen.size = parseInt(sizeInput.value);
-    sizeLabel.textContent = wbPen.size;
-  });
-
-  // Eraser toggle
-  document.getElementById('btn-eraser').addEventListener('click', () => {
-    wbPen.eraser = !wbPen.eraser;
-    document.getElementById('btn-eraser').classList.toggle('active', wbPen.eraser);
-  });
-
-  updateMirror();
-}
-
-function updateMirror() {
-  const canvas = document.getElementById('whiteboard-draw');
-  const mirror = document.getElementById('whiteboard-mirror');
-  if (!canvas || !mirror) return;
-  const mctx = mirror.getContext('2d');
-  mctx.save();
-  mctx.clearRect(0, 0, mirror.width, mirror.height);
-  mctx.translate(mirror.width, mirror.height);
-  mctx.rotate(Math.PI);
-  mctx.drawImage(canvas, 0, 0);
-  mctx.restore();
-}
-
-function clearWhiteboard() {
-  const canvas = document.getElementById('whiteboard-draw');
-  if (!canvas) return;
-  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-  updateMirror();
-}
-
-// ============================================================
-// STAGE 3: CODE LAB
-// ============================================================
-
-const TOOLBOX_DEFS = [
-  { name: 'words', desc: 'List of all words available' },
-  { name: 'five_letter', desc: 'Only 5-letter words' },
-  { name: 'print(...)', desc: 'Show something in the output' },
-  { name: 'input(prompt)', desc: 'Ask the user a question' },
-  { name: 'is_vowel(c)', desc: 'True if c is a, e, i, o, or u' },
-  { name: 'vowels(w)', desc: 'List of vowels in w' },
-  { name: 'reverse(w)', desc: 'Flip the word backwards' },
-  { name: 'is_palindrome(w)', desc: 'True if w reads the same backwards' },
-  { name: 'letters(w)', desc: 'List of letters in w' },
-  { name: 'len(w)', desc: 'Length of word w' },
-  { name: 'sort_by_length(arr)', desc: 'Sort words by length' },
-];
-
-function renderToolbox() {
-  const tb = document.getElementById('toolbox');
-  tb.innerHTML = TOOLBOX_DEFS.map(t =>
-    `<div class="tool-chip"><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div></div>`
-  ).join('');
-}
-
-const CHALLENGES = [
-  {
-    id: 'hello',
-    title: 'Hello, you!',
-    desc: 'A tiny warm-up. Ask the user their name, then say hello and tell them how many vowels are in it.',
-    starter: `# Tiny warm-up: ask the user a question.
-name = input("What is your name? ")
-print("Hello,", name, "!")
-print("Your name has", len(vowels(name)), "vowels.")`,
-    solution: `name = input("What is your name? ")
-print("Hello,", name, "!")
-print("Your name has", len(vowels(name)), "vowels.")`,
-  },
-  {
-    id: 'palindromes',
-    title: 'Find all palindromes',
-    desc: 'Look through every word, print the ones that read the same backwards.',
-    starter: `# Print every palindrome in the word list.
-for w in words:
-    if is_palindrome(w):
-        print(w)`,
-    solution: `for w in words:
-    if is_palindrome(w):
-        print(w)`,
-  },
-  {
-    id: 'most-vowels',
-    title: 'Word with the most vowels',
-    desc: 'Go through every word, count its vowels, keep the best one. Print it at the end.',
-    starter: `# Find the word with the most vowels.
-best = ""
-best_count = 0
-for w in words:
-    n = len(vowels(w))
-    if n > best_count:
-        best_count = n
-        best = w
-print(best, "has", best_count, "vowels")`,
-    solution: `best = ""
-best_count = 0
-for w in words:
-    n = len(vowels(w))
-    if n > best_count:
-        best_count = n
-        best = w
-print(best, "has", best_count, "vowels")`,
-  },
-  {
-    id: 'no-vowels',
-    title: 'Words with NO vowels',
-    desc: 'Some real words have zero vowels (like "hm" or "tsk"). Find them all.',
-    starter: `# Print words that have no vowels at all.
-for w in words:
-    if len(vowels(w)) == 0:
-        print(w)`,
-    solution: `for w in words:
-    if len(vowels(w)) == 0:
-        print(w)`,
-  },
-  {
-    id: 'reversed-pairs',
-    title: 'Word pairs that reverse',
-    desc: 'Find pairs of words where one is the reverse of the other (like CAT/TAC, DOG/GOD).',
-    starter: `# Find pairs where one word is the reverse of another.
-word_set = set(words)
-for w in words:
-    r = reverse(w)
-    if r != w and r in word_set and w < r:
-        print(w, "<->", r)`,
-    solution: `word_set = set(words)
-for w in words:
-    r = reverse(w)
-    if r != w and r in word_set and w < r:
-        print(w, "<->", r)`,
-  },
-  {
-    id: 'longest-alpha',
-    title: 'Top "alphabet runs"',
-    desc: 'For each word, find its longest run of letters in ABC order. Print the words with runs of length 4 or more.',
-    starter: `# Find words with a long ABC-ordered run.
-def longest_alpha(w):
-    best = 1
-    cur = 1
-    for i in range(1, len(w)):
-        if w[i] >= w[i-1]:
-            cur += 1
-        else:
-            cur = 1
-        if cur > best:
-            best = cur
-    return best
-
-for w in words:
-    if longest_alpha(w) >= 4:
-        print(w, "(run of", longest_alpha(w), ")")`,
-    solution: `def longest_alpha(w):
-    best = 1
-    cur = 1
-    for i in range(1, len(w)):
-        if w[i] >= w[i-1]:
-            cur += 1
-        else:
-            cur = 1
-        if cur > best:
-            best = cur
-    return best
-
-for w in words:
-    if longest_alpha(w) >= 4:
-        print(w, "(run of", longest_alpha(w), ")")`,
-  },
-];
-
-let currentChallenge = 0;
-let solvedChallenges = JSON.parse(localStorage.getItem('mow-solved') || '{}');
-
-function renderChallengeTabs() {
-  const c = document.getElementById('challenge-tabs');
-  c.innerHTML = CHALLENGES.map((ch, i) =>
-    `<button class="challenge-tab${i === currentChallenge ? ' active' : ''}${solvedChallenges[ch.id] ? ' solved' : ''}" onclick="loadChallenge(${i})">${i + 1}. ${ch.title}</button>`
-  ).join('');
-}
-
-function loadChallenge(i) {
-  currentChallenge = i;
-  const ch = CHALLENGES[i];
-  document.getElementById('challenge-title').textContent = `Challenge ${i + 1}: ${ch.title}`;
-  document.getElementById('challenge-desc').textContent = ch.desc;
-  document.getElementById('code-editor').value = ch.starter;
-  document.getElementById('code-output').textContent = 'Click ▶ RUN to see the result.';
-  document.getElementById('code-output').classList.remove('error');
-  renderChallengeTabs();
-}
-
-function loadStarter() { document.getElementById('code-editor').value = CHALLENGES[currentChallenge].starter; }
-function loadSolution() { document.getElementById('code-editor').value = CHALLENGES[currentChallenge].solution; }
-function clearOutput() {
-  document.getElementById('code-output').innerHTML = '';
-}
-
-// === Terminal output helpers ===
-function terminalAppend(text, cls) {
-  const out = document.getElementById('code-output');
-  // Skulpt sends text including \n; split on newlines so we can style each line
-  const span = document.createElement('span');
-  if (cls) span.className = cls;
-  span.textContent = text;
-  out.appendChild(span);
-  out.scrollTop = out.scrollHeight;
-}
-function terminalErrorBlock(html) {
-  const out = document.getElementById('code-output');
-  const div = document.createElement('div');
-  div.className = 'out-err';
-  div.innerHTML = html;
-  out.appendChild(div);
-  out.scrollTop = out.scrollHeight;
-}
-function terminalWarn(text) {
-  const out = document.getElementById('code-output');
-  const div = document.createElement('div');
-  div.className = 'out-warn';
-  div.textContent = text;
-  out.appendChild(div);
-  out.scrollTop = out.scrollHeight;
-}
-function terminalInput(promptText) {
-  return new Promise((resolve) => {
-    const out = document.getElementById('code-output');
-    const line = document.createElement('div');
-    line.className = 'input-line';
-    if (promptText) {
-      const p = document.createElement('span');
-      p.className = 'out-prompt';
-      p.textContent = promptText;
-      line.appendChild(p);
-    }
-    const caret = document.createElement('span');
-    caret.className = 'caret';
-    caret.textContent = '› ';
-    line.appendChild(caret);
-    const inp = document.createElement('input');
-    inp.type = 'text';
-    inp.autocomplete = 'off';
-    inp.spellcheck = false;
-    line.appendChild(inp);
-    out.appendChild(line);
-    out.scrollTop = out.scrollHeight;
-    setTimeout(() => inp.focus(), 30);
-    const submit = () => {
-      const val = inp.value;
-      inp.disabled = true;
-      // append a visible newline so subsequent output starts fresh
-      const nl = document.createElement('span');
-      nl.textContent = '\n';
-      out.appendChild(nl);
-      resolve(val);
-    };
-    inp.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); submit(); }
-    });
-  });
-}
-
-// === Soft-fix common Python typos ===
-function softFixPython(code) {
-  // 1) Tabs to 4 spaces
-  let fixed = code.replace(/\t/g, '    ');
-  const notices = [];
-
-  // 2) Auto-add missing colons after if / elif / else / for / while / def / class / try / except / finally / with
-  const colonRegex = /^(\s*(?:if|elif|else|for|while|def|class|try|except(?:\s+\w+(?:\s+as\s+\w+)?)?|finally|with)\b[^#\n]*?)\s*$/gm;
-  fixed = fixed.replace(colonRegex, (m, prefix) => {
-    const trimmed = prefix.replace(/\s+$/, '');
-    if (trimmed.endsWith(':')) return trimmed;
-    notices.push(`auto-added missing ":" to line: "${trimmed.trim()}"`);
-    return trimmed + ':';
-  });
-
-  // 3) Curly-quote → straight-quote (smart quote fix). Use explicit unicode escapes.
-  const CURLY = /[“”‘’]/;
-  if (CURLY.test(fixed)) {
-    fixed = fixed.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
-    notices.push('replaced curly quotes with straight quotes');
-  }
-
-  // 4) Common JS-isms: `console.log` → `print`, `===` → `==`
-  if (/console\.log/.test(fixed)) {
-    fixed = fixed.replace(/console\.log/g, 'print');
-    notices.push('changed console.log → print (this is Python!)');
-  }
-  if (/(?<![<>!=])===/.test(fixed)) {
-    fixed = fixed.replace(/===/g, '==');
-    notices.push('changed === → == (Python uses double-equals)');
-  }
-  if (/!==/.test(fixed)) {
-    fixed = fixed.replace(/!==/g, '!=');
-    notices.push('changed !== → != (Python uses != for not-equal)');
-  }
-
-  return { code: fixed, notices };
-}
-
-// === Friendly error wrapping ===
-function friendlyPyError(err) {
-  let msg = err && err.toString ? err.toString() : String(err);
-  // Skulpt error includes line numbers in [<file>] format
-  let extra = '';
-  if (msg.includes('SyntaxError')) extra = '<br><em style="color:#ffd96a">💡 Tip: check for missing colons (:) after if/for/def, mismatched ( ) or " ", or wrong indentation.</em>';
-  else if (msg.includes('IndentationError')) extra = '<br><em style="color:#ffd96a">💡 Tip: every indented line should use the same number of spaces (4 spaces is standard).</em>';
-  else if (msg.includes('NameError')) extra = '<br><em style="color:#ffd96a">💡 Tip: you used a name that isn\'t defined yet. Spelled correctly? Snake_case helpers (is_vowel, not isVowel).</em>';
-  else if (msg.includes('TypeError')) extra = '<br><em style="color:#ffd96a">💡 Tip: a value didn\'t match what the function expected. Maybe a missing string conversion?</em>';
-  else if (msg.includes('ValueError')) extra = '<br><em style="color:#ffd96a">💡 Tip: a value was the right type but the wrong value. Double-check ranges and arguments.</em>';
-  // Strip leading "Error:" if duplicated
-  return `<strong>❌ ${escapeHtml(msg)}</strong>${extra}`;
-}
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-// === Skulpt setup: prelude that injects Python helpers + word lists ===
-function buildPrelude() {
-  const wordsLit = '[' + ALL_WORDS.map(w => `'${w}'`).join(',') + ']';
-  const fiveLit  = '[' + FIVE_LETTER_WORDS.map(w => `'${w}'`).join(',') + ']';
-  return `
-words = ${wordsLit}
-five_letter = ${fiveLit}
-def is_vowel(c):
-    return str(c).lower() in 'aeiou'
-def vowels(w):
-    return [c for c in str(w) if is_vowel(c)]
-def reverse(w):
-    return str(w)[::-1]
-def is_palindrome(w):
-    s = str(w).lower()
-    return len(s) > 0 and s == s[::-1]
-def letters(w):
-    return list(str(w))
-def sort_by_length(arr):
-    return sorted(arr, key=len)
-`;
-}
-
-let codeRunning = false;
-
-function runCode() {
-  if (codeRunning) { terminalWarn('Already running. Hit Clear if it gets stuck.'); return; }
-  if (typeof Sk === 'undefined') {
-    terminalErrorBlock('Python engine isn\'t loaded yet. Check your internet connection and refresh.');
-    return;
-  }
-  const rawCode = document.getElementById('code-editor').value;
-  clearOutput();
-
-  // Soft fix
-  const { code: fixedCode, notices } = softFixPython(rawCode);
-  notices.forEach(n => terminalWarn('🤖 ' + n));
-
-  const fullCode = buildPrelude() + '\n' + fixedCode + '\n';
-
-  // Configure Skulpt
-  Sk.configure({
-    output: (text) => terminalAppend(text, 'out-line'),
-    read: (file) => {
-      if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[file] === undefined) {
-        throw "File not found: '" + file + "'";
-      }
-      return Sk.builtinFiles.files[file];
-    },
-    inputfun: (prompt) => terminalInput(prompt || ''),
-    inputfunTakesPrompt: true,
-    __future__: Sk.python3,
-    execLimit: 12000, // 12 sec safety
-  });
-
-  codeRunning = true;
-  document.querySelector('.btn-run').disabled = true;
-  Sk.misceval.asyncToPromise(() => Sk.importMainWithBody('<stdin>', false, fullCode, true))
-    .then(() => {
-      const out = document.getElementById('code-output');
-      if (!out.textContent.trim()) terminalWarn('(program ran, but printed nothing)');
-      // Mark solved
-      solvedChallenges[CHALLENGES[currentChallenge].id] = true;
-      localStorage.setItem('mow-solved', JSON.stringify(solvedChallenges));
-      renderChallengeTabs();
-    })
-    .catch((err) => {
-      terminalErrorBlock(friendlyPyError(err));
-    })
-    .finally(() => {
-      codeRunning = false;
-      document.querySelector('.btn-run').disabled = false;
-    });
-}
-
-// Tab key inside editor → insert spaces
-document.addEventListener('keydown', (e) => {
-  if (e.target && e.target.id === 'code-editor' && e.key === 'Tab') {
-    e.preventDefault();
-    const ta = e.target;
-    const s = ta.selectionStart, t = ta.selectionEnd;
-    ta.value = ta.value.slice(0, s) + '  ' + ta.value.slice(t);
-    ta.selectionStart = ta.selectionEnd = s + 2;
-  }
-});
-
-// ============================================================
-// STAGE 4: WORDLE
-// ============================================================
-let wordleState = null;
-// { target, guesses: [], current: '', won: false, lost: false, letterStates: {a:'absent', ...} }
-
-// ===== Pattern + entropy helpers (3B1B-style) =====
-function getPattern(guess, target) {
-  const states = new Array(5).fill(0); // 0=absent, 1=present, 2=correct
-  const counts = {};
-  for (const c of target) counts[c] = (counts[c] || 0) + 1;
-  for (let i = 0; i < 5; i++) {
-    if (guess[i] === target[i]) { states[i] = 2; counts[guess[i]]--; }
-  }
-  for (let i = 0; i < 5; i++) {
-    if (states[i] !== 2 && counts[guess[i]] > 0) {
-      states[i] = 1; counts[guess[i]]--;
+    if (!matched) {
+      // single char not in script
+      if (raw[i] === ' ') result += '  ';
+      else result += '·';
+      i++;
     }
   }
-  // encode as base-3 number for fast hashing
-  return states[0] * 81 + states[1] * 27 + states[2] * 9 + states[3] * 3 + states[4];
+  out.textContent = result;
 }
 
-function entropyOfGuess(guess, candidates) {
-  const buckets = {};
-  for (const c of candidates) {
-    const p = getPattern(guess, c);
-    buckets[p] = (buckets[p] || 0) + 1;
-  }
-  let H = 0;
-  const total = candidates.length;
-  for (const k in buckets) {
-    const pi = buckets[k] / total;
-    H -= pi * Math.log2(pi);
-  }
-  return H;
+function saveLanguage() {
+  if (!conlang) return;
+  localStorage.setItem('langlab-conlang', JSON.stringify(conlang));
+  document.getElementById('save-status').textContent = '✓ Saved! It\'ll be here next time.';
 }
-
-function bestGuessFor(candidates, pool) {
-  let best = null, bestH = -Infinity;
-  for (const g of pool) {
-    const H = entropyOfGuess(g, candidates);
-    if (H > bestH) { bestH = H; best = g; }
-  }
-  return { word: best, bits: bestH };
-}
-
-function newWordleGame() {
-  const target = WORDLE_TARGET_POOL[Math.floor(Math.random() * WORDLE_TARGET_POOL.length)];
-  wordleState = {
-    target,
-    guesses: [],
-    current: '',
-    won: false,
-    lost: false,
-    letterStates: {},
-    candidates: [...FIVE_LETTER_WORDS],
-    bitsHistory: [],
-  };
-  document.getElementById('wordle-status').textContent = `Guess the 5-letter word!`;
-  document.getElementById('wordle-message').textContent = '';
-  document.getElementById('wordle-message').className = 'wordle-message';
-  document.getElementById('wmath-suggestion').innerHTML = '';
-  document.getElementById('wmath-history').innerHTML = '';
-  renderWordleGrid();
-  renderWordleKeyboard();
-  updateWordleMath();
-}
-
-function renderWordleGrid() {
-  const grid = document.getElementById('wordle-grid');
-  grid.innerHTML = '';
-  for (let r = 0; r < 6; r++) {
-    const row = document.createElement('div');
-    row.className = 'wordle-row';
-    let word, states;
-    if (r < wordleState.guesses.length) {
-      word = wordleState.guesses[r].word;
-      states = wordleState.guesses[r].states;
-    } else if (r === wordleState.guesses.length && !wordleState.won && !wordleState.lost) {
-      word = wordleState.current.padEnd(5, ' ');
-      states = null;
-    } else {
-      word = '     ';
-      states = null;
-    }
-    for (let c = 0; c < 5; c++) {
-      const cell = document.createElement('div');
-      cell.className = 'wordle-cell';
-      const ch = (word[c] || '').trim();
-      if (ch) cell.textContent = ch.toUpperCase();
-      if (states) cell.classList.add(states[c], 'flip');
-      else if (ch) cell.classList.add('filled');
-      row.appendChild(cell);
-    }
-    grid.appendChild(row);
-  }
-}
-
-const KEYBOARD = [
-  ['q','w','e','r','t','y','u','i','o','p'],
-  ['a','s','d','f','g','h','j','k','l'],
-  ['ENTER','z','x','c','v','b','n','m','BACK'],
-];
-
-function renderWordleKeyboard() {
-  const kb = document.getElementById('wordle-keyboard');
-  kb.innerHTML = '';
-  KEYBOARD.forEach(row => {
-    const r = document.createElement('div');
-    r.className = 'kb-row';
-    row.forEach(key => {
-      const b = document.createElement('button');
-      b.className = 'kb-key';
-      if (key === 'ENTER' || key === 'BACK') b.classList.add('wide');
-      b.textContent = key === 'BACK' ? '⌫' : key === 'ENTER' ? 'Enter' : key.toUpperCase();
-      const state = wordleState.letterStates[key];
-      if (state) b.classList.add(state);
-      b.addEventListener('click', () => handleWordleKey(key));
-      r.appendChild(b);
-    });
-    kb.appendChild(r);
-  });
-}
-
-function handleWordleKey(key) {
-  if (wordleState.won || wordleState.lost) return;
-  if (key === 'ENTER') return submitWordleGuess();
-  if (key === 'BACK') { wordleState.current = wordleState.current.slice(0, -1); renderWordleGrid(); return; }
-  if (wordleState.current.length >= 5) return;
-  wordleState.current += key.toLowerCase();
-  renderWordleGrid();
-}
-
-function submitWordleGuess() {
-  if (wordleState.current.length !== 5) {
-    flash('Need 5 letters!');
-    return;
-  }
-  const guess = wordleState.current;
-  // Score
-  const target = wordleState.target;
-  const states = new Array(5).fill('absent');
-  const targetCounts = {};
-  for (const c of target) targetCounts[c] = (targetCounts[c] || 0) + 1;
-  // First pass: correct
-  for (let i = 0; i < 5; i++) {
-    if (guess[i] === target[i]) { states[i] = 'correct'; targetCounts[guess[i]]--; }
-  }
-  // Second pass: present
-  for (let i = 0; i < 5; i++) {
-    if (states[i] !== 'correct' && targetCounts[guess[i]] > 0) {
-      states[i] = 'present'; targetCounts[guess[i]]--;
-    }
-  }
-  wordleState.guesses.push({ word: guess, states });
-  // === 3B1B math: filter candidates and record bits gained ===
-  const before = wordleState.candidates.length;
-  const patternCode = getPattern(guess, target);
-  wordleState.candidates = wordleState.candidates.filter(c => getPattern(guess, c) === patternCode);
-  const after = Math.max(1, wordleState.candidates.length);
-  const bitsGained = Math.log2(before / after);
-  wordleState.bitsHistory.push({ guess, before, after: wordleState.candidates.length, bits: bitsGained });
-  updateWordleMath();
-  // Update letter states (only upgrade, never downgrade)
-  for (let i = 0; i < 5; i++) {
-    const ch = guess[i];
-    const cur = wordleState.letterStates[ch];
-    const newS = states[i];
-    if (cur === 'correct') continue;
-    if (cur === 'present' && newS === 'absent') continue;
-    wordleState.letterStates[ch] = newS;
-  }
-  wordleState.current = '';
-  if (guess === target) {
-    wordleState.won = true;
-    const msgs = ['🎉 GENIUS!', '🌟 BRILLIANT!', '🎯 NICE!', '✨ GREAT!', '👏 PHEW!', '😅 BARELY!'];
-    flash(msgs[wordleState.guesses.length - 1] + `  The word was ${target.toUpperCase()}.`, 'win');
-  } else if (wordleState.guesses.length >= 6) {
-    wordleState.lost = true;
-    flash(`Out of tries! The word was ${target.toUpperCase()}.`, 'lose');
-  }
-  renderWordleGrid();
-  renderWordleKeyboard();
-}
-
-function updateWordleMath() {
-  if (!wordleState) return;
-  const left = wordleState.candidates.length || 1;
-  const bits = Math.log2(left);
-  document.getElementById('wmath-left').textContent = left;
-  document.getElementById('wmath-bits').textContent = bits.toFixed(2);
-
-  const last = wordleState.bitsHistory[wordleState.bitsHistory.length - 1];
-  const gainEl = document.getElementById('wmath-gain');
-  if (last) {
-    gainEl.textContent = '+' + last.bits.toFixed(2);
-    gainEl.classList.add('delta-pos');
-  } else {
-    gainEl.textContent = '—';
-    gainEl.classList.remove('delta-pos');
-  }
-
-  // history
-  document.getElementById('wmath-history').innerHTML =
-    wordleState.bitsHistory.map(h =>
-      `<div class="hist-line">"<span class="hist-word">${h.guess.toUpperCase()}</span>": ${h.before} → ${h.after} words &nbsp;<span class="bits-gained">+${h.bits.toFixed(2)} bits</span></div>`
-    ).join('');
-}
-
-function toggleMathHelp() {
-  document.getElementById('wmath-help').classList.toggle('hidden');
-}
-
-function suggestBestGuess() {
-  if (!wordleState) return;
-  const out = document.getElementById('wmath-suggestion');
-  if (wordleState.won || wordleState.lost) { out.innerHTML = '<em>Start a new game first.</em>'; return; }
-  if (wordleState.candidates.length === 1) {
-    out.innerHTML = `Only 1 word left! It must be <span class="sugg-word">${wordleState.candidates[0].toUpperCase()}</span>`;
-    return;
-  }
-  out.innerHTML = '⏳ thinking...';
-  // Compute on next tick so UI updates
-  setTimeout(() => {
-    // Pool = remaining candidates + a small set of "all-purpose" probes to ensure coverage
-    // For simplicity, use the remaining candidates as the guess pool
-    const pool = wordleState.candidates.length <= 2
-      ? wordleState.candidates
-      : wordleState.candidates;
-    const { word, bits } = bestGuessFor(wordleState.candidates, pool);
-    out.innerHTML = `Try <span class="sugg-word">${word.toUpperCase()}</span> — it'll give you <span class="sugg-bits">≈ ${bits.toFixed(2)} bits</span> of info on average.`;
-  }, 30);
-}
-
-function flash(msg, cls) {
-  const m = document.getElementById('wordle-message');
-  m.textContent = msg;
-  m.className = 'wordle-message' + (cls ? ' ' + cls : ' shake');
-  if (!cls) setTimeout(() => m.classList.remove('shake'), 500);
-}
-
-function giveUp() {
-  if (!wordleState || wordleState.won) return;
-  wordleState.lost = true;
-  flash(`The word was ${wordleState.target.toUpperCase()}.`, 'lose');
-  renderWordleGrid();
-}
-
-// Keyboard input for Wordle
-document.addEventListener('keydown', (e) => {
-  if (!document.getElementById('stage-4').classList.contains('hidden')) {
-    if (!wordleState || wordleState.won || wordleState.lost) return;
-    if (e.key === 'Enter') { e.preventDefault(); handleWordleKey('ENTER'); }
-    else if (e.key === 'Backspace') { e.preventDefault(); handleWordleKey('BACK'); }
-    else if (/^[a-zA-Z]$/.test(e.key)) handleWordleKey(e.key.toLowerCase());
-  }
-});
 
 // ============================================================
 // INIT
 // ============================================================
 function init() {
-  analyzeWord();
-  checkPalindrome();
-  showVCPattern();
-  showDistance();
-  showAlphabetic();
-  showRotation();
-  renderToolbox();
-  renderChallengeTabs();
-  loadChallenge(0);
+  renderMC('practice-1', Q1);
+  buildSentence();
+  generateWords();
   showStage(1);
 }
 init();
